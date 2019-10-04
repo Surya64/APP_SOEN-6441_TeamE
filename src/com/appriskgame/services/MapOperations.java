@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashSet;
 
 import com.appriskgame.model.Continent;
 import com.appriskgame.model.Country;
@@ -14,15 +15,6 @@ import com.appriskgame.model.Map;
 public class MapOperations {
 
 	Map map = new Map();
-
-	public static void main(String[] args) throws IOException {
-		String inputMapName = "C:\\Users\\saich\\Desktop\\Test\\ameroki.map";
-		String ouputMapName = "C:\\Users\\saich\\Desktop\\Result\\out.map";
-		MapOperations loadMap = new MapOperations();
-		loadMap.readMap(inputMapName);
-		loadMap.writeMap(ouputMapName);
-
-	}
 
 	public void readMap(String inputMapName) {
 		String data = "";
@@ -141,6 +133,15 @@ public class MapOperations {
 			boundariesDetails = boundariesDetails + "\n" + boundaryDetails;
 		}
 		return boundariesDetails;
+	}
+
+	public boolean connectivity() {
+		ConnectedGraph connected = new ConnectedGraph(new HashSet<Country>(map.getCountries()));
+
+		if (!connected.isConnected()) {
+			return false;
+		}
+		return true;
 	}
 
 }
