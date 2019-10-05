@@ -6,23 +6,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashSet;
 
 import com.appriskgame.model.Continent;
 import com.appriskgame.model.Country;
-import com.appriskgame.model.Map;
+import com.appriskgame.model.GameMap;
 
 public class MapOperations {
 
-	Map map = new Map();
-
-	public static void main(String[] args) throws IOException {
-		String inputMapName = "C:\\Users\\saich\\Desktop\\Test\\ameroki.map";
-		String ouputMapName = "C:\\Users\\saich\\Desktop\\Result\\out.map";
-		MapOperations loadMap = new MapOperations();
-		loadMap.readMap(inputMapName);
-		loadMap.writeMap(ouputMapName);
-
-	}
+	GameMap map = new GameMap();
 
 	public void readMap(String inputMapName) {
 		String data = "";
@@ -81,7 +73,7 @@ public class MapOperations {
 				int neighbourCountryNumber = Integer.parseInt(arrayOfCountries[j]) - 1;
 				Country neighbourCountry = map.getCountries().get(neighbourCountryNumber);
 				Country currentCountry = map.getCountries().get(currentCountryNumber - 1);
-				currentCountry.getNeighbourCountries().add(neighbourCountry);
+				currentCountry.getNeighbourCountriesToAdd().add(neighbourCountry);
 			}
 
 		}
@@ -134,13 +126,22 @@ public class MapOperations {
 		for (int i = 0; i < map.getCountries().size(); i++) {
 			String boundaryDetails = i + 1 + " ";
 
-			for (int j = 0; j < map.getCountries().get(i).getNeighbourCountries().size(); j++) {
+			for (int j = 0; j < map.getCountries().get(i).getNeighbourCountriesToAdd().size(); j++) {
 				boundaryDetails = boundaryDetails
-						+ map.getCountries().get(i).getNeighbourCountries().get(j).getCountryNumber() + " ";
+						+ map.getCountries().get(i).getNeighbourCountriesToAdd().get(j).getCountryNumber() + " ";
 			}
 			boundariesDetails = boundariesDetails + "\n" + boundaryDetails;
 		}
 		return boundariesDetails;
+	}
+
+	public boolean connectivity() {
+		ConnectedGraph connected = new ConnectedGraph(new HashSet<Country>(map.getCountries()));
+
+		if (!connected.isConnected()) {
+			return false;
+		}
+		return true;
 	}
 
 }
