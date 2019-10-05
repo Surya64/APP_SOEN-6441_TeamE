@@ -22,7 +22,7 @@ public class ConnectedGraph {
 
 	private void depthFirstTraversal(Country startCountry) {
 		visited.put(startCountry, true);
-		Iterator<Country> it = startCountry.getNeighbourCountries().iterator();
+		Iterator<Country> it = startCountry.getNeighbourCountriesToAdd().iterator();
 		while (it.hasNext()) {
 			Country neighbourCountry = it.next();
 			if (!visited.get(neighbourCountry)) {

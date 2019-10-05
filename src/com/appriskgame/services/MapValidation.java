@@ -1,0 +1,452 @@
+package com.appriskgame.services;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import com.appriskgame.model.Continent;
+import com.appriskgame.model.Country;
+import com.appriskgame.model.GameMap;
+
+public class MapValidation {
+	private GameMap gameMap;
+	private ArrayList<Country> listOfCountries;
+	private ArrayList<Continent> listOfContinent;
+	private static String errorMessage, adjancencyError;
+
+	public static String getError() {
+		return errorMessage;
+	}
+
+	/**
+	 * This method is used to validate the list of continents which are present in
+	 * the uploaded file and check the correct format.
+	 * 
+	 * @param tagData Value of the continent tag
+	 * @return flag to check if entered continents are valid
+	 */
+	public boolean validateContinents(String tagData) {
+
+		listOfContinent = new ArrayList<Continent>();
+		HashMap<String, String> visitedContinent = new HashMap<String, String>();
+		boolean duplicateData = true, formatData = true;
+		String formatError = new String();
+		String DuplicateError = new String();
+		String[] metaData = tagData.split("\n");
+		if (metaData.length != 1) {
+			for (int i = 1; i < metaData.length; i++) {
+				String data = metaData[i].trim().toUpperCase();
+				Pattern pattern = Pattern.compile("[a-zA-Z\\s]+ [0-9]+");
+				if (!data.trim().isEmpty()) {
+					Continent continent = new Continent();
+					Matcher match = pattern.matcher(data.trim());
+					if (!match.matches()) {
+						formatError = formatError
+								.concat("Invalid Continent Details. " + data.trim() + " is not the correct format.\n");
+						formatData = false;
+					} else {
+						if (visitedContinent.containsKey(data.split(" ")[0])) {
+							DuplicateError = DuplicateError
+									.concat(data.split(" ")[0] + " is already defined. Duplicate Entry Found.\n");
+							duplicateData = false;
+						} else {
+							String field = data.split(" ")[0];
+							int value = Integer.parseInt(data.split(" ")[1]);
+							continent.setContinentName(field);
+							continent.setContinentControlValue(value);
+							listOfContinent.add(continent);
+							visitedContinent.put(field, data);
+						}
+					}
+				}
+			}
+			if (duplicateData && formatData) {
+				return true;
+			} else {
+				errorMessage = errorMessage.concat(formatError).concat(DuplicateError);
+				return false;
+			}
+		} else {
+			errorMessage = errorMessage.concat("No Continents defined under Countinent tag.\n");
+			return false;
+		}
+	}
+
+	/**
+	 * This method is used to validate the list of countries which are present in
+	 * the uploaded file and check the correct format.
+	 * 
+	 * @param tagData Value of the country tag
+	 * @return flag to check if entered countries are valid
+	 */
+	public boolean validateCountries(String tagData) {
+
+		listOfCountries = new ArrayList<Country>();
+		HashMap<String, String> visited = new HashMap<String, String>();
+		boolean duplicateData = true, formatData = true, continentData = true;
+		String formatError = new String(), DuplicateError = new String(), continentError = new String();
+		String[] countryData = tagData.split("\\n");
+		for (int i = 1; i < countryData.length; i++) {
+			String data = countryData[i].trim().toUpperCase();
+			Pattern pattern = Pattern.compile("[0-9]+ [a-zA-Z_\\s]+ [0-9]+");
+			if (!data.trim().isEmpty()) {
+				Matcher match = pattern.matcher(data.trim());
+				if (!match.matches()) {
+					formatError = formatError.concat(
+							"Invalid Country Details. " + data.trim() + " is not defined in required format.\n");
+					formatData = false;
+					continue;
+				}
+
+				else {
+					if (visited.containsKey(data.split(" ")[1])) {
+						DuplicateError = DuplicateError
+								.concat(data.split(" ")[1] + " is already defined. Duplicate Entry Found.\n");
+						duplicateData = false;
+						continue;
+					} else {
+						Country country = new Country();
+						String[] countrydetail = data.split(" ");
+						String name = countrydetail[1];
+
+						boolean continentAvailable = false;
+						if (listOfContinent != null && !listOfContinent.isEmpty()) {
+							Continent newcontinent;
+							int continentValue = Integer.parseInt(data.split(" ")[2]);
+
+							if (continentValue <= listOfContinent.size()) {
+								newcontinent = listOfContinent.get(continentValue - 1);
+								country.setPartOfContinent(newcontinent);
+								continentAvailable = true;
+								continentData = true;
+							}
+
+						} else {
+							continentError = continentError.concat("No Valid continents available.\n");
+							continentData = false;
+							break;
+						}
+						if (!continentAvailable) {
+							continentError = continentError.concat(data.split(" ")[2]+ " is not defined as Continent.\n");
+							continentData = false;
+							continue;
+						}
+
+						country.setCountryName(name);
+						listOfCountries.add(country);
+						visited.put(name, data);
+					}
+				}
+			}
+
+		}
+
+		if (duplicateData == true && formatData == true && continentData == true) {
+			return true;
+		} else {
+			errorMessage = errorMessage.concat(formatError).concat(DuplicateError).concat(continentError);
+			return false;
+		}
+	}
+
+	/**
+	 * This method is used to validate the list of boundary countries which are present in
+	 * the uploaded file and check the correct format.
+	 * 
+	 * @param tagData Value of the boundary countries tag
+	 * @return flag to check if entered boundary countries are valid
+	 */
+	public boolean validateBoundaries(String tagData) {
+
+		HashMap<String, String> visited = new HashMap<String, String>();
+		boolean duplicatedata = true, formatdata = true, adjacentdata = true, continentdata = true;
+		ArrayList<String> adjacentcountries;
+		String formaterror = new String(), Duplicateerror = new String(), continenterror = new String(),
+				adjacencyerror = new String();
+		String[] boundaryData = tagData.split("\\n");
+		if (boundaryData.length - 1 == listOfCountries.size()) {
+			for (int i = 1; i < boundaryData.length; i++) {
+				String data = boundaryData[i].trim();
+				Pattern pattern = Pattern.compile("[0-9]+( [0-9]+)*");
+				if (!data.trim().isEmpty()) {
+					Matcher match = pattern.matcher(data.trim());
+					if (!match.matches()) {
+						formaterror = formaterror.concat(
+								"Invalid Boundary Details. " + data.trim() + " is not defined in required format.\n");
+						formatdata = false;
+						continue;
+					}
+
+					else {
+						if (visited.containsKey(data.split(" ")[0])) {
+							Duplicateerror = Duplicateerror.concat(data.split(" ")[1] + " is already defined. Duplicate Entry Found .\n");
+							duplicatedata = false;
+							continue;
+						} else {
+							String[] countrydetail = data.split(" ");
+							int countryIndex = Integer.parseInt(countrydetail[0]);
+							String name = listOfCountries.get(countryIndex - 1).getCountryName();
+
+							adjacentcountries = new ArrayList<>();
+							if (!(countrydetail.length < 1)) {
+								for (int j = 1; j < countrydetail.length; j++) {
+									int adjcountryIndex = Integer.parseInt(countrydetail[j]);
+									String adjCountryName = listOfCountries.get(adjcountryIndex - 1).getCountryName();
+									adjacentcountries.add(adjCountryName);
+								}
+							} else {
+								adjacencyerror = adjacencyerror
+										.concat("No Adjacent Country defined for " + name + ".\n");
+								adjacentdata = false;
+								continue;
+							}
+
+							for (int k = 0; k < listOfCountries.size(); k++) {
+								if (listOfCountries.get(k).getCountryName() == name) {
+									listOfCountries.get(k).setNeighbourCountries(adjacentcountries);
+								}
+
+							}
+
+							visited.put(name, data);
+						}
+					}
+				}
+
+			}
+		} else {
+			formaterror = formaterror.concat(" Invalid Number of Borders ");
+			formatdata = false;
+		}
+
+		if (duplicatedata == true && formatdata == true && adjacentdata == true && continentdata == true) {
+			return true;
+		} else {
+			errorMessage = errorMessage.concat(formaterror).concat(Duplicateerror).concat(continenterror)
+					.concat(adjacencyerror);
+			return false;
+		}
+	}
+
+	/**
+	 * This method is used to check adjacency between countries in the uploaded file
+	 * and check for correct format.
+	 * 
+	 * @return flag returns boolean value if adjacency are defined correctly.
+	 * @throws IOException - throws input output exception
+	 */
+	public boolean checkCountryAdjacency() throws IOException {
+
+		String adjError = new String(), contError = new String(), connectedError = new String();
+		ArrayList<String> adjacentCountries = new ArrayList<>();
+		ArrayList<String> availableContinent = new ArrayList<>();
+		ArrayList<String> connectivity = new ArrayList<>();
+
+		boolean flag = false, continentFlag = true, adjacencyFlag = true, connectedFlag = true;
+
+		if (listOfCountries != null && !listOfCountries.isEmpty()) {
+			for (Country country1 : listOfCountries) {
+
+				adjacentCountries = country1.getNeighbourCountries();
+				if (!adjacentCountries.isEmpty()) {
+					for (String adjCountryName : adjacentCountries) {
+						for (Country country2 : listOfCountries) {
+							if (country2.getCountryName().equals(adjCountryName)) {
+								if (country2.getNeighbourCountries().contains(country1.getCountryName())) {
+									flag = true;
+
+									// To check for Connectivity of the Graph adding the connected continents in the
+									// list
+
+									if (country1.getPartOfContinent() != null && country2.getPartOfContinent() != null) {
+										if (!country2.getPartOfContinent().getContinentName()
+												.equals(country1.getPartOfContinent().getContinentName())) {
+											connectivity.add(country2.getPartOfContinent().getContinentName());
+											connectivity.add(country1.getPartOfContinent().getContinentName());
+										}
+									}
+
+									break;
+
+								} else
+									flag = false;
+							} else
+								flag = false;
+						}
+						if (!flag) {
+							adjacencyFlag = false;
+							adjError = adjError.concat(country1.getCountryName() + " and " + adjCountryName
+									+ " are not defined properly as adjacent countries.\n");
+						}
+					}
+				} else {
+					adjacencyFlag = false;
+					adjError = adjError.concat(country1.getCountryName()
+							+ " does not have any Adjacents Countries. There should be atleast one adjacent country\n");
+				}
+			}
+		}
+		if (listOfContinent.size() < 2) {
+			continentFlag = false;
+			contError = "Minimum number of continents should be two to play the games. PLease add one more continent and respective countries.\n";
+		}
+		if (listOfCountries != null && !listOfCountries.isEmpty()) {
+			listOfCountries.forEach(country -> {
+				if (!availableContinent.contains(country.getCountryName())) {
+					availableContinent.add(country.getPartOfContinent().getContinentName());
+				}
+			});
+		}
+
+		for (Continent continent : listOfContinent) {
+			boolean flag4 = true;
+			for (String continentname : availableContinent) {
+				if (continent.getContinentName().equalsIgnoreCase(continentname)) {
+					flag4 = false;
+				}
+			}
+			if (flag4) {
+				continentFlag = false;
+				contError = contError.concat(continent.getContinentName()
+						+ " does not have any defined Country. Should have atleast one country.\n");
+			}
+			flag4 = true;
+			for (String connectedContinent : connectivity) {
+				if (connectedContinent.equalsIgnoreCase(continent.getContinentName())) {
+					flag4 = false;
+				}
+			}
+			if (flag4) {
+				connectedFlag = false;
+				connectedError = connectedError.concat("  # Countries from " + continent.getContinentName()
+						+ " are not connected to any of the countries of the other " + (listOfContinent.size() - 1)
+						+ " available continents.\n");
+			}
+		}
+
+		if (flag && continentFlag && adjacencyFlag && connectedFlag) {
+			return true;
+
+		}
+
+		else {
+
+			adjancencyError = "\n".concat(contError).concat(adjError);
+			if (!connectedFlag) {
+				connectedError = "\n Map Graph is not Connected - \n".concat(connectedError);
+				adjancencyError = adjancencyError.concat(connectedError);
+			}
+			return false;
+		}
+
+	}
+
+	/**
+	 * 
+	 * This method validates the map which is loaded and stores the details of valid
+	 * data in the form of GameMap object.
+	 * 
+	 * @param fileName - Name of file which will be loaded.
+	 * @return flag - To check if file content is valid.
+	 * @throws IOException -throws for input output
+	 */
+	public boolean validateMap(String fileName) throws IOException {
+
+		BufferedReader read = new BufferedReader(new FileReader(fileName));
+		String fileData = new String(Files.readAllBytes(Paths.get(fileName)), StandardCharsets.UTF_8);
+		String tagerror = new String();
+		errorMessage = new String();
+		if (!fileData.trim().isEmpty()) {
+			gameMap = new GameMap();
+			Pattern p = Pattern.compile("\\n\\n");
+			String[] result = p.split(fileData);
+			ArrayList<String> visitedtag = new ArrayList<String>();
+			boolean invalidtag = true, validatecontinentdata = true, validatecountrydata = true,
+					validateboundarydata = true;
+
+			for (String tagdetails : result) {
+				String tag = tagdetails.split("\\n")[0].trim();
+				if (tag.equalsIgnoreCase("[continents]") || tag.equalsIgnoreCase("[countries]")
+						|| tag.equalsIgnoreCase("[borders]") || tag.equalsIgnoreCase("[files]")) {
+					if (tag.equalsIgnoreCase("[continents]")) {
+						if (!visitedtag.contains(tag)) {
+							if (validateContinents(tagdetails)) {
+								gameMap.setContinents(listOfContinent);
+								visitedtag.add(tag);
+							} else
+								validatecontinentdata = false;
+						} else {
+							errorMessage = errorMessage.concat("Duplicate Entry for [continents] Tag Found.\n");
+							validatecontinentdata = false;
+						}
+
+					} else if (tag.equalsIgnoreCase("[countries]")) {
+						if (!visitedtag.contains(tag)) {
+
+							if (validateCountries(tagdetails)) {
+								gameMap.setCountries(listOfCountries);
+								visitedtag.add(tag);
+							} else
+								validatecountrydata = false;
+
+						} else {
+							errorMessage = errorMessage.concat("Duplicate Entry for [countries] Tag Found.\n");
+							validatecountrydata = false;
+						}
+					} else if (tag.equalsIgnoreCase("[borders]")) {
+						if (!visitedtag.contains(tag)) {
+
+							if (validateBoundaries(tagdetails)) {
+								gameMap.setCountries(listOfCountries);
+								visitedtag.add(tag);
+							} else
+								validateboundarydata = false;
+
+						} else {
+							errorMessage = errorMessage.concat("Duplicate Entry for [borders] Tag Found.\n");
+							validatecountrydata = false;
+						}
+
+					}
+				} else {
+					tagerror = tagerror.concat("Invalid " + tag + " found.\n");
+					invalidtag = false;
+				}
+			}
+
+			if (invalidtag == true && validatecontinentdata == true && validatecountrydata == true
+					&& validateboundarydata == true) {
+				if (checkCountryAdjacency()) {
+					read.close();
+					return true;
+				} else {
+					errorMessage = "Loaded Map have below provided error. Please resolve below errors.\n\n";
+					errorMessage = errorMessage.concat(adjancencyError);
+					read.close();
+					return false;
+				}
+
+			} else {
+
+				errorMessage = tagerror.concat(errorMessage);
+				errorMessage = "Loaded Map have below provided error. Please resolve below errors.\n" + errorMessage;
+				read.close();
+				return false;
+			}
+		} else
+
+		{
+			errorMessage = "File is Empty.\n";
+			read.close();
+			return false;
+		}
+
+	}
+}
