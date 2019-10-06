@@ -1,14 +1,14 @@
 package com.appriskgame.model;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Country {
 
 	private String countryName;
-	private int continentNumber;
-	private int countryNumber;
+	private String continentName;
 
-	private List<Country> neighbourCountries = new ArrayList<Country>();
+	private List<Country> neighbourCountriesToAdd  = new ArrayList<Country>();
 
 	public String getCountryName() {
 		return countryName;
@@ -18,28 +18,20 @@ public class Country {
 		this.countryName = countryName;
 	}
 
-	public int getContinentNumber() {
-		return continentNumber;
+	public List<Country> getneighbourCountriesToAdd () {
+		return neighbourCountriesToAdd ;
 	}
 
-	public void setContinentNumber(int continentNumber) {
-		this.continentNumber = continentNumber;
+	public void setneighbourCountriesToAdd (List<Country> neighbourCountriesToAdd ) {
+		this.neighbourCountriesToAdd  = neighbourCountriesToAdd ;
 	}
 
-	public int getCountryNumber() {
-		return countryNumber;
+	public String getContinentName() {
+		return continentName;
 	}
 
-	public void setCountryNumber(int countryNumber) {
-		this.countryNumber = countryNumber;
-	}
-
-	public List<Country> getNeighbourCountries() {
-		return neighbourCountries;
-	}
-
-	public void setNeighbourCountries(List<Country> neighbourCountries) {
-		this.neighbourCountries = neighbourCountries;
+	public void setContinentName(String continentName) {
+		this.continentName = continentName;
 	}
 
 }
