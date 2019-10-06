@@ -7,8 +7,8 @@ public class Country {
 
 	private String countryName;
 	private String continentName;
-
-	private List<Country> neighbourCountriesToAdd  = new ArrayList<Country>();
+	private ArrayList<String> neighbourCountries = new ArrayList<String>();
+	private List<Country> neighbourCountriesToAdd = new ArrayList<Country>();
 
 	public String getCountryName() {
 		return countryName;
@@ -18,12 +18,12 @@ public class Country {
 		this.countryName = countryName;
 	}
 
-	public List<Country> getneighbourCountriesToAdd () {
-		return neighbourCountriesToAdd ;
+	public List<Country> getneighbourCountriesToAdd() {
+		return neighbourCountriesToAdd;
 	}
 
-	public void setneighbourCountriesToAdd (List<Country> neighbourCountriesToAdd ) {
-		this.neighbourCountriesToAdd  = neighbourCountriesToAdd ;
+	public void setneighbourCountriesToAdd(List<Country> neighbourCountriesToAdd) {
+		this.neighbourCountriesToAdd = neighbourCountriesToAdd;
 	}
 
 	public String getContinentName() {
@@ -32,6 +32,14 @@ public class Country {
 
 	public void setContinentName(String continentName) {
 		this.continentName = continentName;
+	}
+
+	public ArrayList<String> getNeighbourCountries() {
+		return neighbourCountries;
+	}
+
+	public void setNeighbourCountries(ArrayList<String> neighbourCountries) {
+		this.neighbourCountries = neighbourCountries;
 	}
 
 }
