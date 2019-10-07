@@ -152,11 +152,12 @@ public class MapOperations {
 
 	public boolean isMapExists(String mapFileName) {
 
+		String mapFileNameWithExtention=mapFileName+".map";
 		File mapFolder = new File("C:\\Users\\saich\\Desktop\\VersionController\\APP_SOEN-6441_TeamE\\resources\\maps");
 		File[] listFiles = mapFolder.listFiles();
 		for (int i = 0; i < listFiles.length; i++) {
 //			System.out.println("File Name"+listFiles[i].getName());
-			if (mapFileName.equals(listFiles[i].getName())) {
+			if (mapFileNameWithExtention.equals(listFiles[i].getName())) {
 				return true;
 			}
 		}
