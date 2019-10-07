@@ -24,6 +24,10 @@ public class MapValidation {
 	public static String getError() {
 		return errorMessage;
 	}
+	
+	public GameMap getMapGraph() {
+		return gameMap;
+	}
 
 	/**
 	 * This method is used to validate the list of continents which are present in
