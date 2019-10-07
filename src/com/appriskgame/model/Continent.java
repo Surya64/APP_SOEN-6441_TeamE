@@ -32,9 +32,6 @@ public class Continent {
 		this.listOfCountries = listOfCountries;
 	}
 
-<<<<<<< HEAD
-}
-=======
 	@Override
 	public String toString() {
 		return "Continents: \n[continentName=" + continentName + ", controlValue=" + continentControlValue
@@ -42,4 +39,3 @@ public class Continent {
 	}
 
 }
->>>>>>> d80079d83a8e2a46d46a48cbc62a5c9691927e31
