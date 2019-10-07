@@ -8,7 +8,7 @@ public class Country {
 	private String countryName;
 	private String continentName;
 	private int continentNumber;
-	private ArrayList<String> neighbourCountries;
+	private ArrayList<String> neighbourCountries=new ArrayList<String>();;
 	private List<Country> neighbourCountriesToAdd = new ArrayList<Country>();
 	private Continent partOfContinent;
 	private int armiesCount;
