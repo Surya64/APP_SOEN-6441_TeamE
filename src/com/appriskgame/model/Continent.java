@@ -1,13 +1,12 @@
 package com.appriskgame.model;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Continent {
 
 	private String continentName;
 	private int continentControlValue;
-	private List<Country> listOfCountries = new ArrayList<Country>();
+	private ArrayList<Country> listOfCountries = new ArrayList<Country>();
 
 	public String getContinentName() {
 		return continentName;
@@ -25,12 +24,22 @@ public class Continent {
 		this.continentControlValue = continentControlValue;
 	}
 
-	public List<Country> getListOfCountries() {
+	public ArrayList<Country> getListOfCountries() {
 		return listOfCountries;
 	}
 
-	public void setListOfCountries(List<Country> listOfCountries) {
+	public void setListOfCountries(ArrayList<Country> listOfCountries) {
 		this.listOfCountries = listOfCountries;
 	}
 
+<<<<<<< HEAD
 }
+=======
+	@Override
+	public String toString() {
+		return "Continents: \n[continentName=" + continentName + ", controlValue=" + continentControlValue
+				+ ", listOfCountries=" + listOfCountries + "]/n";
+	}
+
+}
+>>>>>>> d80079d83a8e2a46d46a48cbc62a5c9691927e31
