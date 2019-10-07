@@ -20,6 +20,7 @@ public class MapOperations {
 
 	public static void main(String[] args) throws IOException {
 
+		
 		MapOperations loadGameMap = new MapOperations();
 //		For Read and write the GameMap
 		
@@ -36,15 +37,15 @@ public class MapOperations {
 			String[] cmdDetails = command.split(" ");
 			String cmdType = cmdDetails[0];
 			String opsType="";
-//			if(!cmdType.equals("showmap"))
-//			{
-//				opsType= cmdDetails[1];
-//			}
+			if(!cmdType.equals("showmap"))
+			{
+				opsType= cmdDetails[1];
+			}
 			if(cmdDetails.length>1)
 			{
 				opsType= cmdDetails[1];
 			}
-			opsType= cmdDetails[1];
+//			opsType= cmdDetails[1];
 			if (cmdType.equals("editcontinent")) {
 
 				if (opsType.equals("-add")) {
@@ -120,9 +121,9 @@ public class MapOperations {
 				if(cmdDetails.length==2)
 				{
 					String fileName=cmdDetails[1];
-					String ouputGameMapName = "C:\\Users\\saich\\Desktop\\Result\\"+fileName+".map";
+					String ouputGameMapName = "C:\\Users\\saich\\Desktop\\VersionController\\APP_SOEN-6441_TeamE\\resources\\maps\\"+fileName+".map";
 					// Write to File
-					loadGameMap.writeGameMap(ouputGameMapName);
+					loadGameMap.writeGameMap(ouputGameMapName,fileName);
 				}
 				else
 				{
@@ -138,7 +139,7 @@ public class MapOperations {
 					
 					if(loadGameMap.isMapExists(mapFileName))
 					{
-						String inputGameMapName = "C:\\Users\\saich\\Desktop\\Test\\"+mapFileName+".map";			
+						String inputGameMapName = "C:\\Users\\saich\\Desktop\\VersionController\\APP_SOEN-6441_TeamE\\resources\\maps\\"+mapFileName+".map";			
 						loadGameMap.readGameMap(inputGameMapName);
 					}
 					else
@@ -148,7 +149,7 @@ public class MapOperations {
 						if(createNewMap==1)
 						{
 							String outputmapFileName = "C:\\Users\\saich\\Desktop\\Result\\"+mapFileName+".map";	
-							loadGameMap.writeGameMap(outputmapFileName);
+							loadGameMap.writeGameMap(outputmapFileName,mapFileName);
 						}
 					}
 					
@@ -171,7 +172,20 @@ public class MapOperations {
 
 	public boolean isMapExists(String mapFileName)
 	{
-		return true;
+		
+		File mapFolder= new File("C:\\Users\\saich\\Desktop\\VersionController\\APP_SOEN-6441_TeamE\\resources\\maps");
+		File[] listFiles=mapFolder.listFiles();
+		for(int i=0;i<listFiles.length;i++)
+		{
+//			System.out.println("File Name"+listFiles[i].getName());
+			if(mapFileName.equals(listFiles[i].getName()))
+			{
+				return true;
+			}
+		}
+		
+		
+		return false;
 	}
 	
 	public void readGameMap(String inputGameMapName) {
@@ -179,14 +193,16 @@ public class MapOperations {
 		String GameMapName = inputGameMapName;
 		try {
 			data = new String(Files.readAllBytes(Paths.get(GameMapName)));
+			String[] requiredData=data.split("name");
+			data=requiredData[1];
 		} catch (IOException e) {
 
 			e.printStackTrace();
 		}
 		String[] formattedData = data.split("\\r\\n\\r\\n");
-		fillContinentsInGameMap(formattedData[3]);
-		fillCountriesInGameMap(formattedData[4]);
-		fillNeighboringCountriesInGameMap(formattedData[5]);
+		fillContinentsInGameMap(formattedData[2]);
+		fillCountriesInGameMap(formattedData[3]);
+		fillNeighboringCountriesInGameMap(formattedData[4]);
 
 	}
 
@@ -277,39 +293,38 @@ public class MapOperations {
 		}
 	}
 
-	public void writeGameMap(String ouputGameMapName) throws IOException {
+	public void writeGameMap(String ouputGameMapName,String mapFileName) throws IOException {
 
 		File GameMapName = new File(ouputGameMapName);
 		FileWriter fw = new FileWriter(GameMapName);
 		BufferedWriter bw = new BufferedWriter(fw);
+		String fileData=getFileTags(mapFileName);
+		bw.write(fileData);
+		bw.write("\r\n\r\n");
 		String continentsData = getContinents();
 		bw.write(continentsData);
-		bw.write("\n");
-		bw.write("\n");
+		bw.write("\r\n\r\n");
 		String countriesData = getCountries();
 		bw.write(countriesData);
-		bw.write("\n");
-		bw.write("\n");
+		bw.write("\r\n\r\n");
 		String boundariesData = getBoundaries();
 		bw.write(boundariesData);
 		bw.close();
 
 	}
-//	public String getTags {
-//		String continentsDetails = "[files]";
-//		for (int i = 0; i < GameMap.getContinents().size(); i++) {
-//			Continent continent = GameMap.getContinents().get(i);
-//			String continentDetails = continent.getContinentName() + " " + continent.getContinentControlValue();
-//			continentsDetails = continentsDetails + "\n" + continentDetails;
-//		}
-//		return continentsDetails;
-//	} 
+	public String getFileTags(String ouputGameMapName) {
+		String mapNameDetails="\r\n\r\nname "+ouputGameMapName+" Map";
+		String fileTag = "\r\n\r\n[files]\n";
+		String pic="pic "+ouputGameMapName+"_pic.png";
+		String fullFormat=mapNameDetails+fileTag+pic;
+		return fullFormat;
+	} 
 	public String getContinents() {
 		String continentsDetails = "[continents]";
 		for (int i = 0; i < GameMap.getContinents().size(); i++) {
 			Continent continent = GameMap.getContinents().get(i);
 			String continentDetails = continent.getContinentName() + " " + continent.getContinentControlValue();
-			continentsDetails = continentsDetails + "\n" + continentDetails;
+			continentsDetails = continentsDetails + "\r\n" + continentDetails;
 		}
 		return continentsDetails;
 	}
@@ -322,7 +337,7 @@ public class MapOperations {
 			String countryDetails = (i + 1) + " " + country.getCountryName() + " "
 					+ getContinentNumber(country.getContinentName());
 
-			countriesDetails = countriesDetails + "\n" + countryDetails;
+			countriesDetails = countriesDetails + "\r\n" + countryDetails;
 		}
 		return countriesDetails;
 	}
@@ -339,7 +354,7 @@ public class MapOperations {
 								GameMap.getCountries().get(i).getneighbourCountriesToAdd().get(j).getCountryName())
 						+ " ";
 			}
-			boundariesDetails = boundariesDetails + "\n" + boundaryDetails;
+			boundariesDetails = boundariesDetails + "\r\n" + boundaryDetails;
 		}
 		return boundariesDetails;
 	}
