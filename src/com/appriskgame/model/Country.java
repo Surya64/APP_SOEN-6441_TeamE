@@ -6,6 +6,11 @@ import java.util.List;
 public class Country {
 
 	private String countryName;
+
+	private String continentName;
+	private ArrayList<String> neighbourCountries = new ArrayList<String>();
+	private List<Country> neighbourCountriesToAdd = new ArrayList<Country>();
+
 	private int continentNumber;
 	private int countryNumber;
 	private ArrayList<String> neighbourCountries;
@@ -13,6 +18,7 @@ public class Country {
 	private Continent partOfContinent;
 	private int armiesCount;
 	private String player;
+>>>>>>> d80079d83a8e2a46d46a48cbc62a5c9691927e31
 
 	public String getCountryName() {
 		return countryName;
@@ -22,22 +28,28 @@ public class Country {
 		this.countryName = countryName;
 	}
 
-	public int getContinentNumber() {
-		return continentNumber;
+	public List<Country> getneighbourCountriesToAdd() {
+		return neighbourCountriesToAdd;
 	}
 
-	public void setContinentNumber(int continentNumber) {
-		this.continentNumber = continentNumber;
+	public void setneighbourCountriesToAdd(List<Country> neighbourCountriesToAdd) {
+		this.neighbourCountriesToAdd = neighbourCountriesToAdd;
 	}
 
-	public int getCountryNumber() {
-		return countryNumber;
+	public String getContinentName() {
+		return continentName;
 	}
 
-	public void setCountryNumber(int countryNumber) {
-		this.countryNumber = countryNumber;
+	public void setContinentName(String continentName) {
+		this.continentName = continentName;
 	}
 
+<<<<<<< HEAD
+	public ArrayList<String> getNeighbourCountries() {
+		return neighbourCountries;
+	}
+
+=======
 	public List<Country> getNeighbourCountriesToAdd() {
 		return neighbourCountriesToAdd;
 	}
@@ -62,10 +74,14 @@ public class Country {
 	public ArrayList<String> getNeighbourCountries() {
 		return neighbourCountries;
 	}
+>>>>>>> d80079d83a8e2a46d46a48cbc62a5c9691927e31
 	public void setNeighbourCountries(ArrayList<String> neighbourCountries) {
 		this.neighbourCountries = neighbourCountries;
 	}
 
+<<<<<<< HEAD
+}
+=======
 	/**
 	 * Get the continent name to which country belongs to.
 	 * 
@@ -105,3 +121,4 @@ public class Country {
 	}
 
 }
+>>>>>>> d80079d83a8e2a46d46a48cbc62a5c9691927e31
