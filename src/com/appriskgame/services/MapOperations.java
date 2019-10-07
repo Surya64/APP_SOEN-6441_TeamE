@@ -1,7 +1,6 @@
 
 package com.appriskgame.services;
 
-import java.awt.List;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -21,11 +20,8 @@ public class MapOperations {
 
 	public static void main(String[] args) throws IOException {
 
-		
 		MapOperations loadGameMap = new MapOperations();
 //		For Read and write the GameMap
-		
-
 
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Do you want to continue?");
@@ -37,14 +33,12 @@ public class MapOperations {
 			String command = sc.nextLine();
 			String[] cmdDetails = command.split(" ");
 			String cmdType = cmdDetails[0];
-			String opsType="";
-			if(!cmdType.equals("showmap"))
-			{
-				opsType= cmdDetails[1];
+			String opsType = "";
+			if (!cmdType.equals("showmap")) {
+				opsType = cmdDetails[1];
 			}
-			if(cmdDetails.length>1)
-			{
-				opsType= cmdDetails[1];
+			if (cmdDetails.length > 1) {
+				opsType = cmdDetails[1];
 			}
 //			opsType= cmdDetails[1];
 			if (cmdType.equals("editcontinent")) {
@@ -112,90 +106,71 @@ public class MapOperations {
 					}
 
 				}
-			}
-			else if(cmdType.equals("showmap"))
-					{
+			} else if (cmdType.equals("showmap")) {
 				loadGameMap.showmapDetails();
-					}
-			else if(cmdType.equals("savemap"))
-			{
-				if(cmdDetails.length==2)
-				{
-					String fileName=cmdDetails[1];
-					String ouputGameMapName = "C:\\Users\\saich\\Desktop\\VersionController\\APP_SOEN-6441_TeamE\\resources\\maps\\"+fileName+".map";
+			} else if (cmdType.equals("savemap")) {
+				if (cmdDetails.length == 2) {
+					String fileName = cmdDetails[1];
+					String ouputGameMapName = "C:\\Users\\saich\\Desktop\\VersionController\\APP_SOEN-6441_TeamE\\resources\\maps\\"
+							+ fileName + ".map";
 					// Write to File
-					loadGameMap.writeGameMap(ouputGameMapName,fileName);
-				}
-				else
-				{
+					loadGameMap.writeGameMap(ouputGameMapName, fileName);
+				} else {
 					System.out.println("Please enter in a correct Format: savemap filename");
-				}			
-				
-			}
-			else if(cmdType.equals("editmap"))
-			{
-				if(cmdDetails.length==2)
-				{
-					String mapFileName=cmdDetails[1];
-					
-					if(loadGameMap.isMapExists(mapFileName))
-					{
-						String inputGameMapName = "C:\\Users\\saich\\Desktop\\VersionController\\APP_SOEN-6441_TeamE\\resources\\maps\\"+mapFileName+".map";			
+				}
+
+			} else if (cmdType.equals("editmap")) {
+				if (cmdDetails.length == 2) {
+					String mapFileName = cmdDetails[1];
+
+					if (loadGameMap.isMapExists(mapFileName)) {
+						String inputGameMapName = "C:\\Users\\saich\\Desktop\\VersionController\\APP_SOEN-6441_TeamE\\resources\\maps\\"
+								+ mapFileName + ".map";
 						loadGameMap.readGameMap(inputGameMapName);
-					}
-					else
-					{
+					} else {
 						System.out.println("Do you want to create a map from scratch?Please enter 1");
-						int createNewMap=sc.nextInt();
-						if(createNewMap==1)
-						{
-							String outputmapFileName = "C:\\Users\\saich\\Desktop\\Result\\"+mapFileName+".map";	
-							loadGameMap.writeGameMap(outputmapFileName,mapFileName);
+						int createNewMap = sc.nextInt();
+						if (createNewMap == 1) {
+							String outputmapFileName = "C:\\Users\\saich\\Desktop\\Result\\" + mapFileName + ".map";
+							loadGameMap.writeGameMap(outputmapFileName, mapFileName);
 						}
 					}
-					
-				}
-				else
-				{
+
+				} else {
 					System.out.println("Please enter in a correct Format: savemap filename");
-				}			
-				
+				}
+
 			}
 
 			System.out.println("Enter 1 to continue");
 			ops = sc.nextInt();
 		}
 
-		
 		System.out.println();
 
 	}
 
-	public boolean isMapExists(String mapFileName)
-	{
-		
-		File mapFolder= new File("C:\\Users\\saich\\Desktop\\VersionController\\APP_SOEN-6441_TeamE\\resources\\maps");
-		File[] listFiles=mapFolder.listFiles();
-		for(int i=0;i<listFiles.length;i++)
-		{
+	public boolean isMapExists(String mapFileName) {
+
+		File mapFolder = new File("C:\\Users\\saich\\Desktop\\VersionController\\APP_SOEN-6441_TeamE\\resources\\maps");
+		File[] listFiles = mapFolder.listFiles();
+		for (int i = 0; i < listFiles.length; i++) {
 //			System.out.println("File Name"+listFiles[i].getName());
-			if(mapFileName.equals(listFiles[i].getName()))
-			{
+			if (mapFileName.equals(listFiles[i].getName())) {
 				return true;
 			}
 		}
-		
-		
+
 		return false;
 	}
-	
+
 	public void readGameMap(String inputGameMapName) {
 		String data = "";
 		String GameMapName = inputGameMapName;
 		try {
 			data = new String(Files.readAllBytes(Paths.get(GameMapName)));
-			String[] requiredData=data.split("name");
-			data=requiredData[1];
+			String[] requiredData = data.split("name");
+			data = requiredData[1];
 		} catch (IOException e) {
 
 			e.printStackTrace();
@@ -294,12 +269,12 @@ public class MapOperations {
 		}
 	}
 
-	public void writeGameMap(String ouputGameMapName,String mapFileName) throws IOException {
+	public void writeGameMap(String ouputGameMapName, String mapFileName) throws IOException {
 
 		File GameMapName = new File(ouputGameMapName);
 		FileWriter fw = new FileWriter(GameMapName);
 		BufferedWriter bw = new BufferedWriter(fw);
-		String fileData=getFileTags(mapFileName);
+		String fileData = getFileTags(mapFileName);
 		bw.write(fileData);
 		bw.write("\r\n\r\n");
 		String continentsData = getContinents();
@@ -313,13 +288,15 @@ public class MapOperations {
 		bw.close();
 
 	}
+
 	public String getFileTags(String ouputGameMapName) {
-		String mapNameDetails="\r\n\r\nname "+ouputGameMapName+" Map";
+		String mapNameDetails = "\r\n\r\nname " + ouputGameMapName + " Map";
 		String fileTag = "\r\n\r\n[files]\n";
-		String pic="pic "+ouputGameMapName+"_pic.png";
-		String fullFormat=mapNameDetails+fileTag+pic;
+		String pic = "pic " + ouputGameMapName + "_pic.png";
+		String fullFormat = mapNameDetails + fileTag + pic;
 		return fullFormat;
-	} 
+	}
+
 	public String getContinents() {
 		String continentsDetails = "[continents]";
 		for (int i = 0; i < GameMap.getContinents().size(); i++) {
@@ -501,7 +478,7 @@ public class MapOperations {
 		for (int i = 0; i < GameMap.getContinents().size(); i++) {
 			System.out.println(GameMap.getContinents().get(i).getContinentName());
 		}
-        System.out.println();
+		System.out.println();
 		System.out.println("Countries");
 		System.out.println("----------");
 		for (int i = 0; i < GameMap.getCountries().size(); i++) {
