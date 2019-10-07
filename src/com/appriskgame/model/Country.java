@@ -6,9 +6,9 @@ import java.util.List;
 public class Country {
 
 	private String countryName;
+	private String continentName;
 	private int continentNumber;
-	private int countryNumber;
-	private ArrayList<String> neighbourCountries;
+	private ArrayList<String> neighbourCountries=new ArrayList<String>();;
 	private List<Country> neighbourCountriesToAdd = new ArrayList<Country>();
 	private Continent partOfContinent;
 	private int armiesCount;
@@ -22,20 +22,20 @@ public class Country {
 		this.countryName = countryName;
 	}
 
-	public int getContinentNumber() {
-		return continentNumber;
+	public List<Country> getneighbourCountriesToAdd() {
+		return neighbourCountriesToAdd;
 	}
 
-	public void setContinentNumber(int continentNumber) {
-		this.continentNumber = continentNumber;
+	public void setneighbourCountriesToAdd(List<Country> neighbourCountriesToAdd) {
+		this.neighbourCountriesToAdd = neighbourCountriesToAdd;
 	}
 
-	public int getCountryNumber() {
-		return countryNumber;
+	public String getContinentName() {
+		return continentName;
 	}
 
-	public void setCountryNumber(int countryNumber) {
-		this.countryNumber = countryNumber;
+	public void setContinentName(String continentName) {
+		this.continentName = continentName;
 	}
 
 	public List<Country> getNeighbourCountriesToAdd() {
@@ -62,6 +62,7 @@ public class Country {
 	public ArrayList<String> getNeighbourCountries() {
 		return neighbourCountries;
 	}
+
 	public void setNeighbourCountries(ArrayList<String> neighbourCountries) {
 		this.neighbourCountries = neighbourCountries;
 	}
