@@ -22,10 +22,8 @@ public class MapOperations {
 
 		MapOperations loadGameMap = new MapOperations();
 //		For Read and write the GameMap
-		String inputGameMapName = "C:\\Users\\saich\\Desktop\\Test\\ameroki.map";
-		String ouputGameMapName = "C:\\Users\\saich\\Desktop\\Result\\out.map";
-		loadGameMap.readGameMap(inputGameMapName);
-		loadGameMap.printDetails();
+		
+
 
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Do you want to continue?");
@@ -37,8 +35,16 @@ public class MapOperations {
 			String command = sc.nextLine();
 			String[] cmdDetails = command.split(" ");
 			String cmdType = cmdDetails[0];
-			String opsType = cmdDetails[1];
-
+			String opsType="";
+//			if(!cmdType.equals("showmap"))
+//			{
+//				opsType= cmdDetails[1];
+//			}
+			if(cmdDetails.length>1)
+			{
+				opsType= cmdDetails[1];
+			}
+			opsType= cmdDetails[1];
 			if (cmdType.equals("editcontinent")) {
 
 				if (opsType.equals("-add")) {
@@ -105,18 +111,69 @@ public class MapOperations {
 
 				}
 			}
+			else if(cmdType.equals("showmap"))
+					{
+				loadGameMap.showmapDetails();
+					}
+			else if(cmdType.equals("savemap"))
+			{
+				if(cmdDetails.length==2)
+				{
+					String fileName=cmdDetails[1];
+					String ouputGameMapName = "C:\\Users\\saich\\Desktop\\Result\\"+fileName+".map";
+					// Write to File
+					loadGameMap.writeGameMap(ouputGameMapName);
+				}
+				else
+				{
+					System.out.println("Please enter in a correct Format: savemap filename");
+				}			
+				
+			}
+			else if(cmdType.equals("editmap"))
+			{
+				if(cmdDetails.length==2)
+				{
+					String mapFileName=cmdDetails[1];
+					
+					if(loadGameMap.isMapExists(mapFileName))
+					{
+						String inputGameMapName = "C:\\Users\\saich\\Desktop\\Test\\"+mapFileName+".map";			
+						loadGameMap.readGameMap(inputGameMapName);
+					}
+					else
+					{
+						System.out.println("Do you want to create a map from scratch?Please enter 1");
+						int createNewMap=sc.nextInt();
+						if(createNewMap==1)
+						{
+							String outputmapFileName = "C:\\Users\\saich\\Desktop\\Result\\"+mapFileName+".map";	
+							loadGameMap.writeGameMap(outputmapFileName);
+						}
+					}
+					
+				}
+				else
+				{
+					System.out.println("Please enter in a correct Format: savemap filename");
+				}			
+				
+			}
 
 			System.out.println("Enter 1 to continue");
 			ops = sc.nextInt();
 		}
 
-		// Write to File
-		loadGameMap.writeGameMap(ouputGameMapName);
-		loadGameMap.printDetails();
+		
 		System.out.println();
 
 	}
 
+	public boolean isMapExists(String mapFileName)
+	{
+		return true;
+	}
+	
 	public void readGameMap(String inputGameMapName) {
 		String data = "";
 		String GameMapName = inputGameMapName;
@@ -127,7 +184,6 @@ public class MapOperations {
 			e.printStackTrace();
 		}
 		String[] formattedData = data.split("\\r\\n\\r\\n");
-
 		fillContinentsInGameMap(formattedData[3]);
 		fillCountriesInGameMap(formattedData[4]);
 		fillNeighboringCountriesInGameMap(formattedData[5]);
@@ -239,7 +295,15 @@ public class MapOperations {
 		bw.close();
 
 	}
-
+//	public String getTags {
+//		String continentsDetails = "[files]";
+//		for (int i = 0; i < GameMap.getContinents().size(); i++) {
+//			Continent continent = GameMap.getContinents().get(i);
+//			String continentDetails = continent.getContinentName() + " " + continent.getContinentControlValue();
+//			continentsDetails = continentsDetails + "\n" + continentDetails;
+//		}
+//		return continentsDetails;
+//	} 
 	public String getContinents() {
 		String continentsDetails = "[continents]";
 		for (int i = 0; i < GameMap.getContinents().size(); i++) {
@@ -387,7 +451,7 @@ public class MapOperations {
 
 		ArrayList<String> removeCountriesNames = new ArrayList<String>();
 		for (int i = 0; i < removeCountries.size(); i++) {
-			System.out.println(removeCountries.get(i).getCountryName());
+//			System.out.println(removeCountries.get(i).getCountryName());
 			removeCountriesNames.add(removeCountries.get(i).getCountryName());
 		}
 		for (int i = 0; i < removeCountriesNames.size(); i++) {
@@ -414,14 +478,14 @@ public class MapOperations {
 		return false;
 	}
 
-	public void printDetails() {
+	public void showmapDetails() {
 
 		System.out.println("Continents");
 		System.out.println("----------");
 		for (int i = 0; i < GameMap.getContinents().size(); i++) {
 			System.out.println(GameMap.getContinents().get(i).getContinentName());
 		}
-
+        System.out.println();
 		System.out.println("Countries");
 		System.out.println("----------");
 		for (int i = 0; i < GameMap.getCountries().size(); i++) {
