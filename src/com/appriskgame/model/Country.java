@@ -94,9 +94,9 @@ public class Country {
 
 	@Override
 	public String toString() {
-		return "Country [name=" + countryName + ", partOfContinent=" + partOfContinent + ", adjacentCountries="
+		return "[Countryname=" + countryName + ", partOfContinent=" + partOfContinent + ", adjacentCountries="
 				+ neighbourCountries + ", noOfArmies=" + armiesCount + ", continent=" + continentNumber + ", player="
-				+ player + "]";
+				+ player + "]\n";
 	}
 
 }
