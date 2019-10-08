@@ -3,7 +3,6 @@ package com.appriskgame.services;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -24,7 +23,7 @@ public class MapValidation {
 	public static String getError() {
 		return errorMessage;
 	}
-	
+
 	public GameMap getMapGraph() {
 		return gameMap;
 	}
@@ -43,11 +42,11 @@ public class MapValidation {
 		boolean duplicateData = true, formatData = true;
 		String formatError = new String();
 		String DuplicateError = new String();
-		String[] metaData = tagData.split("\n");
+		String[] metaData = tagData.split("\r\n");
 		if (metaData.length != 1) {
 			for (int i = 1; i < metaData.length; i++) {
 				String data = metaData[i].trim().toUpperCase();
-				Pattern pattern = Pattern.compile("[a-zA-Z\\s]+ [0-9]+");
+				Pattern pattern = Pattern.compile("[a-zA-Z-]+ [0-9]+ [a-zA-Z0-9#]+");
 				if (!data.trim().isEmpty()) {
 					Continent continent = new Continent();
 					Matcher match = pattern.matcher(data.trim());
@@ -96,10 +95,10 @@ public class MapValidation {
 		HashMap<String, String> visited = new HashMap<String, String>();
 		boolean duplicateData = true, formatData = true, continentData = true;
 		String formatError = new String(), DuplicateError = new String(), continentError = new String();
-		String[] countryData = tagData.split("\\n");
+		String[] countryData = tagData.split("\\r\\n");
 		for (int i = 1; i < countryData.length; i++) {
 			String data = countryData[i].trim().toUpperCase();
-			Pattern pattern = Pattern.compile("[0-9]+ [a-zA-Z_\\s]+ [0-9]+");
+			Pattern pattern = Pattern.compile("[0-9]+ [a-zA-Z_-]+ [0-9]+ [0-9 ]*");
 			if (!data.trim().isEmpty()) {
 				Matcher match = pattern.matcher(data.trim());
 				if (!match.matches()) {
@@ -138,7 +137,8 @@ public class MapValidation {
 							break;
 						}
 						if (!continentAvailable) {
-							continentError = continentError.concat(data.split(" ")[2]+ " is not defined as Continent.\n");
+							continentError = continentError
+									.concat(data.split(" ")[2] + " is not defined as Continent.\n");
 							continentData = false;
 							continue;
 						}
@@ -161,8 +161,8 @@ public class MapValidation {
 	}
 
 	/**
-	 * This method is used to validate the list of boundary countries which are present in
-	 * the uploaded file and check the correct format.
+	 * This method is used to validate the list of boundary countries which are
+	 * present in the uploaded file and check the correct format.
 	 * 
 	 * @param tagData Value of the boundary countries tag
 	 * @return flag to check if entered boundary countries are valid
@@ -174,7 +174,7 @@ public class MapValidation {
 		ArrayList<String> adjacentcountries;
 		String formaterror = new String(), Duplicateerror = new String(), continenterror = new String(),
 				adjacencyerror = new String();
-		String[] boundaryData = tagData.split("\\n");
+		String[] boundaryData = tagData.split("\\r\\n");
 		if (boundaryData.length - 1 == listOfCountries.size()) {
 			for (int i = 1; i < boundaryData.length; i++) {
 				String data = boundaryData[i].trim();
@@ -190,7 +190,8 @@ public class MapValidation {
 
 					else {
 						if (visited.containsKey(data.split(" ")[0])) {
-							Duplicateerror = Duplicateerror.concat(data.split(" ")[1] + " is already defined. Duplicate Entry Found .\n");
+							Duplicateerror = Duplicateerror
+									.concat(data.split(" ")[1] + " is already defined. Duplicate Entry Found .\n");
 							duplicatedata = false;
 							continue;
 						} else {
@@ -269,7 +270,8 @@ public class MapValidation {
 									// To check for Connectivity of the Graph adding the connected continents in the
 									// list
 
-									if (country1.getPartOfContinent() != null && country2.getPartOfContinent() != null) {
+									if (country1.getPartOfContinent() != null
+											&& country2.getPartOfContinent() != null) {
 										if (!country2.getPartOfContinent().getContinentName()
 												.equals(country1.getPartOfContinent().getContinentName())) {
 											connectivity.add(country2.getPartOfContinent().getContinentName());
@@ -299,7 +301,7 @@ public class MapValidation {
 		}
 		if (listOfContinent.size() < 2) {
 			continentFlag = false;
-			contError = "Minimum number of continents should be two to play the games. PLease add one more continent and respective countries.\n";
+			contError = "Minimum number of continents should be two to play the games.\n";
 		}
 		if (listOfCountries != null && !listOfCountries.isEmpty()) {
 			listOfCountries.forEach(country -> {
@@ -364,25 +366,35 @@ public class MapValidation {
 	public boolean validateMap(String fileName) throws IOException {
 
 		BufferedReader read = new BufferedReader(new FileReader(fileName));
-		String fileData = new String(Files.readAllBytes(Paths.get(fileName)), StandardCharsets.UTF_8);
+		String fileData;
 		String tagerror = new String();
+		fileData = new String(Files.readAllBytes(Paths.get(fileName)));
+		String[] requiredData = fileData.split("files");
+		fileData = "[files" + requiredData[1];
+
 		errorMessage = new String();
 		if (!fileData.trim().isEmpty()) {
 			gameMap = new GameMap();
-			Pattern p = Pattern.compile("\\n\\n");
+			Pattern p = Pattern.compile("\\r\\n\\r\\n");
 			String[] result = p.split(fileData);
 			ArrayList<String> visitedtag = new ArrayList<String>();
 			boolean invalidtag = true, validatecontinentdata = true, validatecountrydata = true,
-					validateboundarydata = true;
+					validateboundarydata = true, validatefilesdata = true;
 
 			for (String tagdetails : result) {
-				String tag = tagdetails.split("\\n")[0].trim();
+				String tag = tagdetails.split("\\r\\n")[0].trim();
 				if (tag.equalsIgnoreCase("[continents]") || tag.equalsIgnoreCase("[countries]")
 						|| tag.equalsIgnoreCase("[borders]") || tag.equalsIgnoreCase("[files]")) {
+					if (tag.equalsIgnoreCase("[files]")) {
+						if (!visitedtag.contains(tag)) {
+						} else {
+							errorMessage = errorMessage.concat("Duplicate Entry for [files] Tag Found.\n");
+							validatefilesdata = false;
+						}
+					}
 					if (tag.equalsIgnoreCase("[continents]")) {
 						if (!visitedtag.contains(tag)) {
 							if (validateContinents(tagdetails)) {
-								gameMap.setContinents(listOfContinent);
 								visitedtag.add(tag);
 							} else
 								validatecontinentdata = false;
@@ -395,7 +407,6 @@ public class MapValidation {
 						if (!visitedtag.contains(tag)) {
 
 							if (validateCountries(tagdetails)) {
-								gameMap.setCountries(listOfCountries);
 								visitedtag.add(tag);
 							} else
 								validatecountrydata = false;
@@ -408,7 +419,6 @@ public class MapValidation {
 						if (!visitedtag.contains(tag)) {
 
 							if (validateBoundaries(tagdetails)) {
-								gameMap.setCountries(listOfCountries);
 								visitedtag.add(tag);
 							} else
 								validateboundarydata = false;
@@ -425,13 +435,13 @@ public class MapValidation {
 				}
 			}
 
-			if (invalidtag == true && validatecontinentdata == true && validatecountrydata == true
-					&& validateboundarydata == true) {
+			if (invalidtag == true && validatefilesdata == true && validatecontinentdata == true
+					&& validatecountrydata == true && validateboundarydata == true) {
 				if (checkCountryAdjacency()) {
 					read.close();
 					return true;
 				} else {
-					errorMessage = "Loaded Map have below provided error. Please resolve below errors.\n\n";
+					errorMessage = "Loaded Map have below provided error.\n\n";
 					errorMessage = errorMessage.concat(adjancencyError);
 					read.close();
 					return false;
@@ -440,7 +450,7 @@ public class MapValidation {
 			} else {
 
 				errorMessage = tagerror.concat(errorMessage);
-				errorMessage = "Loaded Map have below provided error. Please resolve below errors.\n" + errorMessage;
+				errorMessage = "Loaded Map have below provided error\n" + errorMessage;
 				read.close();
 				return false;
 			}
