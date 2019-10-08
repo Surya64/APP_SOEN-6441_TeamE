@@ -566,9 +566,9 @@ public class MapOperations {
 					flag = false;
 				}
 			}
-			/*else if (cmdType.equals("validatemap")) {
-				//validate
-			}*/
+			/*
+			 * else if (cmdType.equals("validatemap")) { //validate }
+			 */
 		}
 		System.out.println("Do you want to Save the Map File? Yes/No");
 		String choice = br.readLine().trim();
@@ -578,7 +578,7 @@ public class MapOperations {
 		}
 
 		if (choice.equalsIgnoreCase("Yes")) {
-			//validate
+			// validate
 			System.out.println("Enter the command to save the Map File");
 			String command = br.readLine().trim();
 			String[] cmdDetails = command.split(" ");
@@ -620,7 +620,7 @@ public class MapOperations {
 					if (isMapExists(mapFileName)) {
 						String inputGameMapName = mapLocation + mapFileName + ".map";
 						readGameMap(inputGameMapName);
-						//validate
+						// validate
 						System.out.println("Loaded Successfully");
 					} else {
 						System.out.println("Do you want to create a map from scratch? Yes/No");
