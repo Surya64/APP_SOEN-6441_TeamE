@@ -21,8 +21,6 @@ public class MapOperations {
 	String mapLocation = workingDir + "/resources/maps/";
 	GameMap gameMap = new GameMap();
 
-	
-
 	public boolean isMapExists(String mapFileName) {
 
 		String mapFileNameWithExtention = mapFileName + ".map";
@@ -54,7 +52,7 @@ public class MapOperations {
 		fillContinentsInGameMap(formattedData[2]);
 		fillCountriesInGameMap(formattedData[3]);
 		fillNeighboringCountriesInGameMap(formattedData[4]);
-		//validation
+		// validation
 		gameMap.getCountries().forEach(country -> {
 			countrySet.put(country.getCountryName(), country);
 			gameMap.setCountrySet(countrySet);
@@ -399,17 +397,13 @@ public class MapOperations {
 		return true;
 	}
 
-    public boolean isContinentRuleSatisfied()
-    {
-    	if(gameMap.getContinents().size()>2)
-    	{
-    		return true;
-    	}
-    	else
-    	{
-    		return false;
-    	}
-    }
+	public boolean isContinentRuleSatisfied() {
+		if (gameMap.getContinents().size() > 2) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 	public GameMap editMap() throws IOException {
 
@@ -447,35 +441,33 @@ public class MapOperations {
 					}
 
 				} else if (opsType.equals("-remove")) {
-					if(isContinentRuleSatisfied())
-					{
+					if (isContinentRuleSatisfied()) {
 
-					if (doesContinentExit(cmdDetails[2])) {
-						removeContinentFromGameMap(cmdDetails[2]);
-						System.out.println("Do you want to perform other map operations? Yes/No");
-						String choice = br.readLine().trim();
-						while (!(choice.equalsIgnoreCase("Yes") || choice.equalsIgnoreCase("No") || choice == null)) {
-							System.err.println("\nPlease enter the choice as either Yes or No:");
-							choice = br.readLine().trim();
-						}
+						if (doesContinentExit(cmdDetails[2])) {
+							removeContinentFromGameMap(cmdDetails[2]);
+							System.out.println("Do you want to perform other map operations? Yes/No");
+							String choice = br.readLine().trim();
+							while (!(choice.equalsIgnoreCase("Yes") || choice.equalsIgnoreCase("No")
+									|| choice == null)) {
+								System.err.println("\nPlease enter the choice as either Yes or No:");
+								choice = br.readLine().trim();
+							}
 
-						if (choice.equalsIgnoreCase("Yes")) {
-							flag = true;
+							if (choice.equalsIgnoreCase("Yes")) {
+								flag = true;
+							} else {
+								flag = false;
+							}
 						} else {
-							flag = false;
+							System.out.println(cmdDetails[2] + "  " + "Continent is not present in the GameMap");
+							flag = true;
 						}
-					} else {
-						System.out.println(cmdDetails[2] + "  " + "Continent is not present in the GameMap");
-						flag = true;
-					}
 
-				}
-					else {
+					} else {
 						System.out.println("There should be atleast 2 Continents in the GameMap");
 					}
-					
+
 				}
-				
 
 			} else if (cmdType.equals("editcountry")) {
 				if (opsType.equals("-add")) {
@@ -539,29 +531,28 @@ public class MapOperations {
 				if (opsType.equals("-add")) {
 					if (doesCountryExit(cmdDetails[2])) {
 						if (doesCountryExit(cmdDetails[3])) {
-							
-							if (isBorderUnique(cmdDetails[2], cmdDetails[3])) {	
-							addNeighborCountryToGameMap(cmdDetails[2], cmdDetails[3]);
-							addNeighborCountryToGameMap(cmdDetails[3], cmdDetails[2]);
-							System.out.println("Do you want to perform other map operations? Yes/No");
-							String choice = br.readLine().trim();
-							while (!(choice.equalsIgnoreCase("Yes") || choice.equalsIgnoreCase("No")
-									|| choice == null)) {
-								System.err.println("\nPlease enter the choice as either Yes or No:");
-								choice = br.readLine().trim();
-							}
 
-							if (choice.equalsIgnoreCase("Yes")) {
-								flag = true;
+							if (isBorderUnique(cmdDetails[2], cmdDetails[3])) {
+								addNeighborCountryToGameMap(cmdDetails[2], cmdDetails[3]);
+								addNeighborCountryToGameMap(cmdDetails[3], cmdDetails[2]);
+								System.out.println("Do you want to perform other map operations? Yes/No");
+								String choice = br.readLine().trim();
+								while (!(choice.equalsIgnoreCase("Yes") || choice.equalsIgnoreCase("No")
+										|| choice == null)) {
+									System.err.println("\nPlease enter the choice as either Yes or No:");
+									choice = br.readLine().trim();
+								}
+
+								if (choice.equalsIgnoreCase("Yes")) {
+									flag = true;
+								} else {
+									flag = false;
+								}
 							} else {
-								flag = false;
-							}
-							}
-							else {
 								System.out.println(cmdDetails[2] + cmdDetails[3] + "  "
 										+ "Boundary is Already present in the GameMap");
 								flag = true;
-							}	
+							}
 						} else {
 							System.out.println(cmdDetails[3] + "  " + "Country is not present in the GameMap");
 							flag = true;

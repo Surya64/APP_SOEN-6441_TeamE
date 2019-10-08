@@ -95,8 +95,9 @@ public class StartupPhase {
 		} while (proceed);
 
 		for (String player : playerNames) {
-			gameplayer.setPlayerName(player);
-			playersList.add(gameplayer);
+			GamePlayer gamePlayers = new GamePlayer();
+			gamePlayers.setPlayerName(player);
+			playersList.add(gamePlayers);
 		}
 
 		do {
@@ -116,41 +117,83 @@ public class StartupPhase {
 		initialArmyAllocation(gameMap);
 
 		RoundRobinAllocator roundRobin = new RoundRobinAllocator(playersList);
-		while (gameplayer.getNoOfArmies() > 0) {
-			for (int round = 1; round <= playersList.size(); round++) {
-				gameplayer = roundRobin.nextTurn();
-				boolean placeArmyFlag = true;
-				System.out.println("Name: " + gameplayer.getPlayerName());
-				System.out.println("Countries: " + gameplayer.getPlayerCountries());
-				System.out.println("No of Armies remaining: " + gameplayer.getNoOfArmies());
-				do {
-					placeArmyFlag = false;
-					System.out.println("Enter Command to place Army to Country");
-					String input = br.readLine().trim();
-					String[] data = input.split(" ");
-					Pattern commandName = Pattern.compile("placearmy");
-					Matcher commandMatch = commandName.matcher(data[0]);
-					if (!commandMatch.matches() || input.isEmpty()) {
-						System.out.println("\nIncorrect Command");
-						placeArmyFlag = true;
-					}
-					Country selectedCountry = new Country();
-					selectedCountry.setCountryName(data[0]);
-					if (gameplayer.getPlayerCountries().contains(selectedCountry)) {
-						if (gameplayer.getNoOfArmies() >= 1) {
-							selectedCountry.setNoOfArmies(selectedCountry.getNoOfArmies() + 1);
-							gameplayer.setNoOfArmies(selectedCountry.getNoOfArmies() - 1);
-						} else {
-							System.out.println("All armies are placed.\n");
+		System.out.println("Do you want to place army Individually? Yes/No");
+		String choice = br.readLine().trim();
+		while (!(choice.equalsIgnoreCase("Yes") || choice.equalsIgnoreCase("No") || choice == null)) {
+			System.err.println("\nPlease enter the choice as either Yes or No:");
+			choice = br.readLine().trim();
+		}
+
+		if (choice.equalsIgnoreCase("Yes")) {
+			while (playersList.get(0).getNoOfArmies() > 0) {
+				for (int round = 1; round <= playersList.size(); round++) {
+					gameplayer = roundRobin.nextTurn();
+					boolean placeArmyFlag = true;
+					System.out.println("Name: " + gameplayer.getPlayerName());
+					System.out.println("Countries: " + gameplayer.getPlayerCountries());
+					System.out.println("No of Armies remaining: " + gameplayer.getNoOfArmies());
+					do {
+						placeArmyFlag = false;
+						System.out.println("Enter Command to place Army to Country");
+						String input = br.readLine().trim();
+						String[] data = input.split(" ");
+						Pattern commandName = Pattern.compile("placearmy");
+						Matcher commandMatch = commandName.matcher(data[0]);
+						if (!commandMatch.matches() || input.isEmpty()) {
+							System.out.println("\nIncorrect Command");
+							placeArmyFlag = true;
 						}
-					} else {
-						System.out.println("This country is not owned by you!\n");
-						placeArmyFlag = true;
-					}
+						if (!placeArmyFlag) {
+							gameplayer.getPlayerCountries().forEach(con -> {
+								if (con.getCountryName().equals(data[1])) {
+									Country selectedCountry = con;
+									if (gameplayer.getNoOfArmies() <= 0) {
+										selectedCountry.setNoOfArmies(selectedCountry.getNoOfArmies() + 1);
+										gameplayer.setNoOfArmies(gameplayer.getNoOfArmies() - 1);
+									} else {
+										System.out.println("All armies are placed.\n");
+									}
+								}
+							});
+						}
 
-				} while (placeArmyFlag);
+					} while (placeArmyFlag);
 
+				}
 			}
+		} else {
+			boolean placeAllArmyFlag = true;
+			do {
+				placeAllArmyFlag = false;
+				System.out.println("Enter Command to place all remaining armies");
+				String input = br.readLine().trim();
+				Pattern commandName = Pattern.compile("placeall");
+				Matcher commandMatch = commandName.matcher(input);
+				if (!commandMatch.matches() || input.isEmpty()) {
+					System.out.println("\nIncorrect Command");
+					placeAllArmyFlag = true;
+				}
+				if (!placeAllArmyFlag) {
+					for (int round = 1; round <= playersList.size(); round++) {
+						gameplayer = roundRobin.nextTurn();
+						while (gameplayer.getNoOfArmies() > 0) {
+							int index = new Random().nextInt(gameplayer.getPlayerCountries().size());
+							Country selectedCountry = gameplayer.getPlayerCountries().get(index);
+							if (gameplayer.getNoOfArmies() > 0) {
+								selectedCountry.setNoOfArmies(selectedCountry.getNoOfArmies() + 1);
+								gameplayer.setNoOfArmies(gameplayer.getNoOfArmies() - 1);
+							} else {
+								System.out.println("All armies are placed.\n");
+							}
+						}
+						System.out.println("Name: " + gameplayer.getPlayerName());
+						System.out.println("Countries: " + gameplayer.getPlayerCountries());
+						System.out.println("No of Armies remaining: " + gameplayer.getNoOfArmies());
+					}
+				}
+
+			} while (placeAllArmyFlag);
+
 		}
 
 	}
@@ -163,8 +206,8 @@ public class StartupPhase {
 				if (countrySet.size() > 1) {
 					countryIndex = new Random().nextInt(countrySet.size());
 					playersList.get(i).addCountry(countrySet.get(countryIndex));
-					//Country name = countrySet.get(countryIndex);
-					//name.setPlayer(playersList.get(i).getPlayerName());
+					// Country name = countrySet.get(countryIndex);
+					// name.setPlayer(playersList.get(i).getPlayerName());
 					countrySet.remove(countryIndex);
 
 				} else if (countrySet.size() == 1) {
