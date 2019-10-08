@@ -15,8 +15,14 @@ public class StartupPhase {
 	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	ArrayList<GamePlayer> playersList = new ArrayList<GamePlayer>();
 	ArrayList<String> playerNames;
+	GamePlayer gameplayer = new GamePlayer();
+	static int TWOPLAYERARMYCOUNT = 40;
+	static int THREEPLAYERARMYCOUNT = 35;
+	static int FOURPLAYERARMYCOUNT = 30;
+	static int FIVEPLAYERARMYCOUNT = 25;
+	static int SIXPLAYERARMYCOUNT = 20;
 
-	public void gamePlay(GameMap mapGraph) throws Exception {
+	public void gamePlay(GameMap gameMap) throws Exception {
 		boolean proceed = false, populateFlag = false;
 
 		do {
@@ -89,7 +95,6 @@ public class StartupPhase {
 		} while (proceed);
 
 		for (String player : playerNames) {
-			GamePlayer gameplayer = new GamePlayer();
 			gameplayer.setPlayerName(player);
 			playersList.add(gameplayer);
 		}
@@ -104,9 +109,49 @@ public class StartupPhase {
 				System.out.println("\nIncorrect Command");
 				populateFlag = true;
 			}
-			populateCountries(mapGraph);
+			populateCountries(gameMap);
 
 		} while (populateFlag);
+		defaultArmiesToPlayer();
+		initialArmyAllocation(gameMap);
+
+		RoundRobinAllocator roundRobin = new RoundRobinAllocator(playersList);
+		while (gameplayer.getNoOfArmies() > 0) {
+			for (int round = 1; round <= playersList.size(); round++) {
+				gameplayer = roundRobin.nextTurn();
+				boolean placeArmyFlag = true;
+				System.out.println("Name: " + gameplayer.getPlayerName());
+				System.out.println("Countries: " + gameplayer.getPlayerCountries());
+				System.out.println("No of Armies remaining: " + gameplayer.getNoOfArmies());
+				do {
+					placeArmyFlag = false;
+					System.out.println("Enter Command to place Army to Country");
+					String input = br.readLine().trim();
+					String[] data = input.split(" ");
+					Pattern commandName = Pattern.compile("placearmy");
+					Matcher commandMatch = commandName.matcher(data[0]);
+					if (!commandMatch.matches() || input.isEmpty()) {
+						System.out.println("\nIncorrect Command");
+						placeArmyFlag = true;
+					}
+					Country selectedCountry = new Country();
+					selectedCountry.setCountryName(data[0]);
+					if (gameplayer.getPlayerCountries().contains(selectedCountry)) {
+						if (gameplayer.getNoOfArmies() >= 1) {
+							selectedCountry.setNoOfArmies(selectedCountry.getNoOfArmies() + 1);
+							gameplayer.setNoOfArmies(selectedCountry.getNoOfArmies() - 1);
+						} else {
+							System.out.println("All armies are placed.\n");
+						}
+					} else {
+						System.out.println("This country is not owned by you!\n");
+						placeArmyFlag = true;
+					}
+
+				} while (placeArmyFlag);
+
+			}
+		}
 
 	}
 
@@ -114,13 +159,16 @@ public class StartupPhase {
 		int countryIndex;
 		ArrayList<Country> countrySet = new ArrayList<>(gameMap.getCountrySet().values());
 		while (countrySet.size() > 0) {
-			for (int i = 0; i < this.playersList.size(); ++i) {
+			for (int i = 0; i < playersList.size(); ++i) {
 				if (countrySet.size() > 1) {
 					countryIndex = new Random().nextInt(countrySet.size());
-					this.playersList.get(i).addCountry(countrySet.get(countryIndex));
+					playersList.get(i).addCountry(countrySet.get(countryIndex));
+					//Country name = countrySet.get(countryIndex);
+					//name.setPlayer(playersList.get(i).getPlayerName());
 					countrySet.remove(countryIndex);
+
 				} else if (countrySet.size() == 1) {
-					this.playersList.get(i).addCountry(countrySet.get(0));
+					playersList.get(i).addCountry(countrySet.get(0));
 					countrySet.remove(0);
 					break;
 				} else {
@@ -128,6 +176,39 @@ public class StartupPhase {
 				}
 			}
 		}
+	}
+
+	public void defaultArmiesToPlayer() {
+		playersList.forEach(player -> {
+			switch (playersList.size()) {
+			case 2:
+				player.setNoOfArmies(TWOPLAYERARMYCOUNT);
+				break;
+			case 3:
+				player.setNoOfArmies(THREEPLAYERARMYCOUNT);
+				break;
+			case 4:
+				player.setNoOfArmies(FOURPLAYERARMYCOUNT);
+				break;
+			case 5:
+				player.setNoOfArmies(FIVEPLAYERARMYCOUNT);
+				break;
+			case 6:
+				player.setNoOfArmies(SIXPLAYERARMYCOUNT);
+				break;
+			}
+		});
+	}
+
+	public void initialArmyAllocation(GameMap gameMap) {
+
+		gameMap.getCountrySet().values().forEach(country -> {
+			country.setNoOfArmies(1);
+		});
+
+		playersList.forEach(player -> {
+			player.setNoOfArmies(player.getNoOfArmies() - player.getPlayerCountries().size());
+		});
 	}
 
 }
