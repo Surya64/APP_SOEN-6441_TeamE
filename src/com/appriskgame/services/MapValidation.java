@@ -379,16 +379,22 @@ public class MapValidation {
 			String[] result = p.split(fileData);
 			ArrayList<String> visitedtag = new ArrayList<String>();
 			boolean invalidtag = true, validatecontinentdata = true, validatecountrydata = true,
-					validateboundarydata = true;
+					validateboundarydata = true, validatefilesdata = true;
 
 			for (String tagdetails : result) {
 				String tag = tagdetails.split("\\r\\n")[0].trim();
 				if (tag.equalsIgnoreCase("[continents]") || tag.equalsIgnoreCase("[countries]")
 						|| tag.equalsIgnoreCase("[borders]") || tag.equalsIgnoreCase("[files]")) {
+					if (tag.equalsIgnoreCase("[files]")) {
+						if (!visitedtag.contains(tag)) {
+						} else {
+							errorMessage = errorMessage.concat("Duplicate Entry for [files] Tag Found.\n");
+							validatefilesdata = false;
+						}
+					}
 					if (tag.equalsIgnoreCase("[continents]")) {
 						if (!visitedtag.contains(tag)) {
 							if (validateContinents(tagdetails)) {
-								// gameMap.setContinents(listOfContinent);
 								visitedtag.add(tag);
 							} else
 								validatecontinentdata = false;
@@ -401,7 +407,6 @@ public class MapValidation {
 						if (!visitedtag.contains(tag)) {
 
 							if (validateCountries(tagdetails)) {
-								// gameMap.setCountries(listOfCountries);
 								visitedtag.add(tag);
 							} else
 								validatecountrydata = false;
@@ -414,7 +419,6 @@ public class MapValidation {
 						if (!visitedtag.contains(tag)) {
 
 							if (validateBoundaries(tagdetails)) {
-								// gameMap.setCountries(listOfCountries);
 								visitedtag.add(tag);
 							} else
 								validateboundarydata = false;
@@ -431,13 +435,13 @@ public class MapValidation {
 				}
 			}
 
-			if (invalidtag == true && validatecontinentdata == true && validatecountrydata == true
-					&& validateboundarydata == true) {
+			if (invalidtag == true && validatefilesdata == true && validatecontinentdata == true
+					&& validatecountrydata == true && validateboundarydata == true) {
 				if (checkCountryAdjacency()) {
 					read.close();
 					return true;
 				} else {
-					errorMessage = "Loaded Map have below provided error. Please resolve below errors.\n\n";
+					errorMessage = "Loaded Map have below provided error.\n\n";
 					errorMessage = errorMessage.concat(adjancencyError);
 					read.close();
 					return false;
@@ -446,7 +450,7 @@ public class MapValidation {
 			} else {
 
 				errorMessage = tagerror.concat(errorMessage);
-				errorMessage = "Loaded Map have below provided error. Please resolve below errors.\n" + errorMessage;
+				errorMessage = "Loaded Map have below provided error\n" + errorMessage;
 				read.close();
 				return false;
 			}
