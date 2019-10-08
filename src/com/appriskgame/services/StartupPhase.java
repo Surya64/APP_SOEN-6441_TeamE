@@ -206,8 +206,6 @@ public class StartupPhase {
 				if (countrySet.size() > 1) {
 					countryIndex = new Random().nextInt(countrySet.size());
 					playersList.get(i).addCountry(countrySet.get(countryIndex));
-					// Country name = countrySet.get(countryIndex);
-					// name.setPlayer(playersList.get(i).getPlayerName());
 					countrySet.remove(countryIndex);
 
 				} else if (countrySet.size() == 1) {
@@ -247,6 +245,14 @@ public class StartupPhase {
 
 		gameMap.getCountrySet().values().forEach(country -> {
 			country.setNoOfArmies(1);
+		});
+
+		gameMap.getCountrySet().values().forEach(country -> {
+			playersList.forEach(player -> {
+				if (player.getPlayerCountries().contains(country)) {
+					country.setPlayer(player.getPlayerName());
+				}
+			});
 		});
 
 		playersList.forEach(player -> {

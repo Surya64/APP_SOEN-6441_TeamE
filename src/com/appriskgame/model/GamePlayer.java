@@ -35,5 +35,10 @@ public class GamePlayer {
 
 		this.playerCountries.add(country);
 	}
+	@Override
+	public String toString() {
+		return "Player [PlayerName=" + playerName + ", Armies=" + noOfArmies + ", Countries=" + playerCountries + "]";
+
+	}
 
 }

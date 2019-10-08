@@ -7,7 +7,6 @@ public class Country {
 
 	private String countryName;
 	private String continentName;
-	private int continentNumber;
 	private ArrayList<String> neighbourCountries=new ArrayList<String>();;
 	private List<Country> neighbourCountriesToAdd = new ArrayList<Country>();
 	private Continent partOfContinent;
@@ -94,8 +93,8 @@ public class Country {
 
 	@Override
 	public String toString() {
-		return "[Countryname=" + countryName + ", partOfContinent=" + partOfContinent + ", adjacentCountries="
-				+ neighbourCountries + ", noOfArmies=" + armiesCount + ", continent=" + continentNumber + ", player="
+		return "[Countryname=" + countryName + ", NeighbourCountries="
+				+ neighbourCountries + ", NoOfArmies=" + armiesCount + ", Continent=" + continentName + ", Owner="
 				+ player + "]\n";
 	}
 
