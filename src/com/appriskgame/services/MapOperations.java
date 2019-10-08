@@ -26,7 +26,7 @@ public class MapOperations {
 	public boolean isMapExists(String mapFileName) {
 
 		String mapFileNameWithExtention = mapFileName + ".map";
-		File mapFolder = new File("C:\\Users\\saich\\Desktop\\VersionController\\APP_SOEN-6441_TeamE\\resources\\maps");
+		File mapFolder = new File(mapLocation);
 		File[] listFiles = mapFolder.listFiles();
 		for (int i = 0; i < listFiles.length; i++) {
 //			System.out.println("File Name"+listFiles[i].getName());
