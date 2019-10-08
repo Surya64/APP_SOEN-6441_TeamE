@@ -22,7 +22,6 @@ public class MapOperations {
 	GameMap gameMap = new GameMap();
 
 	public boolean isMapExists(String mapFileName) {
-
 		String mapFileNameWithExtention = mapFileName + ".map";
 		File mapFolder = new File(mapLocation);
 		File[] listFiles = mapFolder.listFiles();
@@ -36,29 +35,37 @@ public class MapOperations {
 		return false;
 	}
 
-	public GameMap readGameMap(String inputGameMapName) {
+	public GameMap readGameMap(String inputGameMapName) throws IOException {
 		HashMap<String, Country> countrySet = new HashMap<>();
-		String data = "";
+		MapValidation validate = new MapValidation();
 		String GameMapName = inputGameMapName;
-		try {
-			data = new String(Files.readAllBytes(Paths.get(GameMapName)));
-			String[] requiredData = data.split("name");
-			data = requiredData[1];
-		} catch (IOException e) {
+		boolean uploadSuccessful = false;
+		String data = "";
+		uploadSuccessful = validate.validateMap(GameMapName);
+		if (uploadSuccessful) {
+			try {
+				data = new String(Files.readAllBytes(Paths.get(GameMapName)));
+				String[] requiredData = data.split("name");
+				data = requiredData[1];
+			} catch (IOException e) {
 
-			e.printStackTrace();
+				e.printStackTrace();
+			}
+			String[] formattedData = data.split("\\r\\n\\r\\n");
+			fillContinentsInGameMap(formattedData[2]);
+			fillCountriesInGameMap(formattedData[3]);
+			fillNeighboringCountriesInGameMap(formattedData[4]);
+			gameMap.getCountries().forEach(country -> {
+				countrySet.put(country.getCountryName(), country);
+				gameMap.setCountrySet(countrySet);
+
+			});
+			return gameMap;
+		} else {
+			System.out.println(MapValidation.getError());
+			System.out.println("\nPlease rectify all the above mentioned issues and upload the file again");
 		}
-		String[] formattedData = data.split("\\r\\n\\r\\n");
-		fillContinentsInGameMap(formattedData[2]);
-		fillCountriesInGameMap(formattedData[3]);
-		fillNeighboringCountriesInGameMap(formattedData[4]);
-		// validation
-		gameMap.getCountries().forEach(country -> {
-			countrySet.put(country.getCountryName(), country);
-			gameMap.setCountrySet(countrySet);
-		});
-		return gameMap;
-
+		return new GameMap();
 	}
 
 	public void fillContinentsInGameMap(String ContinentsString) {
@@ -170,7 +177,7 @@ public class MapOperations {
 
 	public String getFileTags(String ouputGameMapName) {
 		String mapNameDetails = "\r\n\r\nname " + ouputGameMapName + " Map";
-		String fileTag = "\r\n\r\n[files]\n";
+		String fileTag = "\r\n\r\n[files]\r\n";
 		String pic = "pic " + ouputGameMapName + "_pic.png";
 		String fullFormat = mapNameDetails + fileTag + pic;
 		return fullFormat;
@@ -180,7 +187,7 @@ public class MapOperations {
 		String continentsDetails = "[continents]";
 		for (int i = 0; i < gameMap.getContinents().size(); i++) {
 			Continent continent = gameMap.getContinents().get(i);
-			String continentDetails = continent.getContinentName() + " " + continent.getContinentControlValue();
+			String continentDetails = continent.getContinentName() + " " + continent.getContinentControlValue() + " " + "#99NoColor";
 			continentsDetails = continentsDetails + "\r\n" + continentDetails;
 		}
 		return continentsDetails;
@@ -192,7 +199,7 @@ public class MapOperations {
 		for (int i = 0; i < gameMap.getCountries().size(); i++) {
 			Country country = gameMap.getCountries().get(i);
 			String countryDetails = (i + 1) + " " + country.getCountryName() + " "
-					+ getContinentNumber(country.getContinentName());
+					+ getContinentNumber(country.getContinentName()) + " " + "99" + " " + "99";
 
 			countriesDetails = countriesDetails + "\r\n" + countryDetails;
 		}
@@ -655,14 +662,17 @@ public class MapOperations {
 			String command = br.readLine().trim();
 			String[] cmdDetails = command.split(" ");
 			String cmdType = cmdDetails[0];
+			GameMap gameMapCheck;
 			if (cmdType.equals("editmap")) {
 				if (cmdDetails.length == 2) {
 					String mapFileName = cmdDetails[1];
 					if (isMapExists(mapFileName)) {
 						String inputGameMapName = mapLocation + mapFileName + ".map";
-						readGameMap(inputGameMapName);
-						// validate
-						System.out.println("Loaded Successfully");
+						gameMapCheck = readGameMap(inputGameMapName);
+						if (gameMapCheck.getContinents().isEmpty()) {
+							flag = true;
+							System.out.println("Incorrect File");
+						}
 					} else {
 						System.out.println("Do you want to create a map from scratch? Yes/No");
 						String choice = br.readLine().trim();
@@ -678,18 +688,20 @@ public class MapOperations {
 						}
 
 					}
-					System.out.println("Do you want to edit the loaded map? Yes/No");
-					String choice = br.readLine().trim();
-					while (!(choice.equalsIgnoreCase("Yes") || choice.equalsIgnoreCase("No") || choice == null)) {
-						System.err.println("\nPlease enter the choice as either Yes or No:");
-						choice = br.readLine().trim();
-					}
+					if (!flag) {
+						System.out.println("Do you want to edit the loaded map? Yes/No");
+						String choice = br.readLine().trim();
+						while (!(choice.equalsIgnoreCase("Yes") || choice.equalsIgnoreCase("No") || choice == null)) {
+							System.err.println("\nPlease enter the choice as either Yes or No:");
+							choice = br.readLine().trim();
+						}
 
-					if (choice.equalsIgnoreCase("Yes")) {
-						GameMap map = editMap();
-						return map;
-					} else {
-						return gameMap;
+						if (choice.equalsIgnoreCase("Yes")) {
+							GameMap map = editMap();
+							return map;
+						} else {
+							return gameMap;
+						}
 					}
 				}
 
