@@ -24,20 +24,21 @@ public class StartupPhase {
 			playerNames = new ArrayList<String>();
 			do {
 				flag = false;
-				System.out.println("Enter Player Name");
+				System.out.println("Enter Command to add or remove player");
 				String input = br.readLine().trim();
-				if (input.contains("-add")) {
-					String[] command = input.split("-add ");
-					Pattern commandPattern = Pattern.compile("[a-zA-z]+ -[a-zA-z\\s-]*");
-					Pattern commandName = Pattern.compile("gameplayer");
-					Matcher commandMatch = commandPattern.matcher(input);
-					Matcher commandNameMatch = commandName.matcher(command[0].trim());
-					if (!commandMatch.matches() || input.isEmpty() || !commandNameMatch.matches()) {
-						System.out.println("\nIncorrect Command");
-						flag = true;
-					} else {
-						for (int i = 1; i < command.length; i++) {
-							String name = command[i].trim();
+				Pattern commandPattern = Pattern.compile("[a-zA-z]+ -[a-zA-z\\s-]*");
+				Pattern commandName = Pattern.compile("gameplayer");
+				Matcher commandMatch = commandPattern.matcher(input);
+				String[] command = input.split("-");
+				Matcher commandNameMatch = commandName.matcher(command[0].trim());
+				if (!commandMatch.matches() || input.isEmpty() || !commandNameMatch.matches()) {
+					System.out.println("\nIncorrect Command");
+					flag = true;
+				} else {
+					if (input.contains("-add")) {
+						String[] addData = input.split("-add ");
+						for (int i = 1; i < addData.length; i++) {
+							String name = addData[i].trim();
 							Pattern namePattern = Pattern.compile("[a-zA-z]+");
 							Matcher match = namePattern.matcher(name);
 							if (!match.matches() || name.isEmpty()) {
@@ -46,19 +47,10 @@ public class StartupPhase {
 							}
 							playerNames.add(name);
 						}
-					}
-				} else if (input.contains("-remove")) {
-					String[] command = input.split("-remove ");
-					Pattern commandPattern = Pattern.compile("[a-zA-z]+ -[a-zA-z\\s-]*");
-					Pattern commandName = Pattern.compile("gameplayer");
-					Matcher commandMatch = commandPattern.matcher(input);
-					Matcher commandNameMatch = commandName.matcher(command[0].trim());
-					if (!commandMatch.matches() || input.isEmpty() || !commandNameMatch.matches()) {
-						System.out.println("\nIncorrect Command");
-						flag = true;
-					} else {
-						for (int i = 1; i < command.length; i++) {
-							String name = command[i].trim();
+					} else if (input.contains("-remove")) {
+						String[] removeData = input.split("-remove ");
+						for (int i = 1; i < removeData.length; i++) {
+							String name = removeData[i].trim();
 							Pattern namePattern = Pattern.compile("[a-zA-z]+");
 							Matcher match = namePattern.matcher(name);
 							if (!match.matches() || name.isEmpty()) {
@@ -73,6 +65,18 @@ public class StartupPhase {
 						}
 					}
 
+				}
+				System.out.println("Do you want to add/remove players? Yes/No");
+				String choice = br.readLine().trim();
+				while (!(choice.equalsIgnoreCase("Yes") || choice.equalsIgnoreCase("No") || choice == null)) {
+					System.err.println("\nPlease enter the choice as either Yes or No:");
+					choice = br.readLine().trim();
+				}
+
+				if (choice.equalsIgnoreCase("Yes")) {
+					flag = true;
+				} else {
+					flag = false;
 				}
 			} while (flag);
 			if (playerNames.size() > 5 || playerNames.size() < 2) {

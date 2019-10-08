@@ -10,6 +10,8 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import com.appriskgame.model.Continent;
 import com.appriskgame.model.Country;
 import com.appriskgame.model.GameMap;
@@ -35,7 +37,8 @@ public class MapOperations {
 		return false;
 	}
 
-	public void readGameMap(String inputGameMapName) {
+	public GameMap readGameMap(String inputGameMapName) {
+		HashMap<String, Country> countrySet = new HashMap<>();
 		String data = "";
 		String GameMapName = inputGameMapName;
 		try {
@@ -50,6 +53,12 @@ public class MapOperations {
 		fillContinentsInGameMap(formattedData[2]);
 		fillCountriesInGameMap(formattedData[3]);
 		fillNeighboringCountriesInGameMap(formattedData[4]);
+		//validation
+		gameMap.getCountries().forEach(country -> {
+			countrySet.put(country.getCountryName(), country);
+			gameMap.setCountrySet(countrySet);
+		});
+		return gameMap;
 
 	}
 
