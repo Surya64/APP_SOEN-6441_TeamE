@@ -44,7 +44,13 @@ public class MapOperations {
 			if (cmdType.equals("editcontinent")) {
 
 				if (opsType.equals("-add")) {
-					loadGameMap.addContinentToGameMap(cmdDetails[2], Integer.parseInt(cmdDetails[3]));
+
+					if (loadGameMap.isContinentUnique(cmdDetails[2])) {
+						loadGameMap.addContinentToGameMap(cmdDetails[2], Integer.parseInt(cmdDetails[3]));
+					} else {
+						System.out.println(cmdDetails[2] + "  " + "Continent is Already Present in the GameMap");
+					}
+
 				} else if (opsType.equals("-remove")) {
 
 					if (loadGameMap.doesContinentExit(cmdDetails[2])) {
@@ -59,7 +65,13 @@ public class MapOperations {
 				if (opsType.equals("-add")) {
 
 					if (loadGameMap.doesContinentExit(cmdDetails[3])) {
-						loadGameMap.addCountryToGameMap(cmdDetails[2], cmdDetails[3]);
+
+						if (loadGameMap.isCountryUnique(cmdDetails[2])) {
+							loadGameMap.addCountryToGameMap(cmdDetails[2], cmdDetails[3]);
+						} else {
+							System.out.println(cmdDetails[2] + "  " + "Country is Already Present in the GameMap");
+						}
+
 					} else {
 						System.out.println(cmdDetails[3] + "Continent is not present in the GameMap");
 					}
@@ -142,7 +154,7 @@ public class MapOperations {
 
 			}
 
-			System.out.println("Enter 1 to continue");
+			System.out.println("Enter 1 Number  to continue");
 			ops = sc.nextInt();
 		}
 
@@ -152,7 +164,7 @@ public class MapOperations {
 
 	public boolean isMapExists(String mapFileName) {
 
-		String mapFileNameWithExtention=mapFileName+".map";
+		String mapFileNameWithExtention = mapFileName + ".map";
 		File mapFolder = new File("C:\\Users\\saich\\Desktop\\VersionController\\APP_SOEN-6441_TeamE\\resources\\maps");
 		File[] listFiles = mapFolder.listFiles();
 		for (int i = 0; i < listFiles.length; i++) {
@@ -404,7 +416,7 @@ public class MapOperations {
 			}
 			// remove country from the neighbor country list
 			neighborCountry.getneighbourCountriesToAdd().remove(removeneighborIndex);
-			neighborCountry.getNeighbourCountries().remove(removeCountryIndex);
+			neighborCountry.getNeighbourCountries().remove(removeneighborIndex);
 		}
 		// 3. Last remove the country from the country List
 
@@ -487,6 +499,24 @@ public class MapOperations {
 			System.out.println(GameMap.getCountries().get(i).getNeighbourCountries());
 		}
 
+	}
+
+	public boolean isCountryUnique(String countryName) {
+		for (int i = 0; i < GameMap.getCountries().size(); i++) {
+			if (GameMap.getCountries().get(i).getCountryName().equals(countryName)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public boolean isContinentUnique(String continentName) {
+		for (int i = 0; i < GameMap.getContinents().size(); i++) {
+			if (GameMap.getContinents().get(i).getContinentName().equals(continentName)) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 }
