@@ -1,4 +1,3 @@
-
 package com.appriskgame.services;
 
 import java.io.BufferedReader;
@@ -22,10 +21,12 @@ public class MapOperations {
 	String mapLocation = workingDir + "/resources/maps/";
 	GameMap gameMap = new GameMap();
 
+	
+
 	public boolean isMapExists(String mapFileName) {
 
 		String mapFileNameWithExtention = mapFileName + ".map";
-		File mapFolder = new File(mapLocation);
+		File mapFolder = new File("C:\\Users\\saich\\Desktop\\VersionController\\APP_SOEN-6441_TeamE\\resources\\maps");
 		File[] listFiles = mapFolder.listFiles();
 		for (int i = 0; i < listFiles.length; i++) {
 //			System.out.println("File Name"+listFiles[i].getName());
@@ -78,7 +79,7 @@ public class MapOperations {
 		int cotinenentNumber = 0;
 
 		for (int i = 0; i < gameMap.getContinents().size()
-				&& !gameMap.getContinents().get(i).getContinentName().equals(continentName); i++) {
+				&& !gameMap.getContinents().get(i).getContinentName().equalsIgnoreCase(continentName); i++) {
 			cotinenentNumber = i + 1;
 		}
 		int actualContinentNumber = cotinenentNumber + 1;
@@ -98,7 +99,7 @@ public class MapOperations {
 		int countryNumber = 0;
 
 		for (int i = 0; i < gameMap.getCountries().size()
-				&& !gameMap.getCountries().get(i).getCountryName().equals(countryName); i++) {
+				&& !gameMap.getCountries().get(i).getCountryName().equalsIgnoreCase(countryName); i++) {
 			countryNumber = i + 1;
 		}
 		int actualCountryNumber = countryNumber + 1;
@@ -142,7 +143,7 @@ public class MapOperations {
 				int neighbourCountryNumber = Integer.parseInt(arrayOfCountries[j]) - 1;
 				Country neighbourCountry = gameMap.getCountries().get(neighbourCountryNumber);
 				Country currentCountry = gameMap.getCountries().get(currentCountryNumber - 1);
-				currentCountry.getneighbourCountriesToAdd().add(neighbourCountry);
+				currentCountry.getNeighbourCountriesToAdd().add(neighbourCountry);
 				currentCountry.getNeighbourCountries().add(neighbourCountry.getCountryName());
 			}
 
@@ -206,10 +207,10 @@ public class MapOperations {
 		for (int i = 0; i < gameMap.getCountries().size(); i++) {
 			String boundaryDetails = i + 1 + " ";
 
-			for (int j = 0; j < gameMap.getCountries().get(i).getneighbourCountriesToAdd().size(); j++) {
+			for (int j = 0; j < gameMap.getCountries().get(i).getNeighbourCountriesToAdd().size(); j++) {
 				boundaryDetails = boundaryDetails
 						+ getCountryNumber(
-								gameMap.getCountries().get(i).getneighbourCountriesToAdd().get(j).getCountryName())
+								gameMap.getCountries().get(i).getNeighbourCountriesToAdd().get(j).getCountryName())
 						+ " ";
 			}
 			boundariesDetails = boundariesDetails + "\r\n" + boundaryDetails;
@@ -241,7 +242,7 @@ public class MapOperations {
 		Country neighborCountry = null;
 		int neighborCountryIndex = getCountryNumber(neighborCountryName) - 1;
 		neighborCountry = gameMap.getCountries().get(neighborCountryIndex);
-		country.getneighbourCountriesToAdd().add(neighborCountry);
+		country.getNeighbourCountriesToAdd().add(neighborCountry);
 		country.getNeighbourCountries().add(neighborCountry.getCountryName());
 
 	}
@@ -258,7 +259,7 @@ public class MapOperations {
 		int removeCountryIndexInContinentList = 0;
 		for (int i = 0; i < gameMap.getContinents().get(continentNumberIndex).getListOfCountries().size()
 				&& !gameMap.getContinents().get(continentNumberIndex).getListOfCountries().get(i).getCountryName()
-						.equals(countryName); i++) {
+						.equalsIgnoreCase(countryName); i++) {
 			removeCountryIndexInContinentList = i;
 		}
 		if (gameMap.getContinents().get(continentNumberIndex).getListOfCountries().size() >= 1) {
@@ -270,20 +271,20 @@ public class MapOperations {
 
 		// Neighbor Details
 		java.util.List<Country> neighborCountries = gameMap.getCountries().get(removeCountryIndex)
-				.getneighbourCountriesToAdd();
+				.getNeighbourCountriesToAdd();
 
 		String removeCountryName = removeCountry.getCountryName();
 
 		for (int i = 0; i < neighborCountries.size(); i++) {
 			Country neighborCountry = neighborCountries.get(i);
 			int removeneighborIndex = 0;
-			for (int j = 0; j < neighborCountry.getneighbourCountriesToAdd().size() && !neighborCountry
-					.getneighbourCountriesToAdd().get(j).getCountryName().equals(removeCountryName); j++) {
+			for (int j = 0; j < neighborCountry.getNeighbourCountriesToAdd().size() && !neighborCountry
+					.getNeighbourCountriesToAdd().get(j).getCountryName().equalsIgnoreCase(removeCountryName); j++) {
 				removeneighborIndex = j + 1;
 			}
 			// remove country from the neighbor country list
-			neighborCountry.getneighbourCountriesToAdd().remove(removeneighborIndex);
-			neighborCountry.getNeighbourCountries().remove(removeCountryIndex);
+			neighborCountry.getNeighbourCountriesToAdd().remove(removeneighborIndex);
+			neighborCountry.getNeighbourCountries().remove(removeneighborIndex);
 		}
 		// 3. Last remove the country from the country List
 
@@ -300,18 +301,18 @@ public class MapOperations {
 		int desiredNeighborIndex = 0;
 
 		for (int i = 0; i < gameMap.getCountries().size()
-				&& !gameMap.getCountries().get(i).getCountryName().equals(countryName); i++) {
+				&& !gameMap.getCountries().get(i).getCountryName().equalsIgnoreCase(countryName); i++) {
 			desiredCountryIndex = i + 1;
 		}
 		java.util.List<Country> neighborCountries = gameMap.getCountries().get(desiredCountryIndex)
-				.getneighbourCountriesToAdd();
+				.getNeighbourCountriesToAdd();
 
 		for (int i = 0; i < neighborCountries.size()
-				&& !neighborCountries.get(i).getCountryName().equals(neighborRemoveCountryName); i++) {
+				&& !neighborCountries.get(i).getCountryName().equalsIgnoreCase(neighborRemoveCountryName); i++) {
 			desiredNeighborIndex = i + 1;
 		}
 
-		gameMap.getCountries().get(desiredCountryIndex).getneighbourCountriesToAdd().remove(desiredNeighborIndex);
+		gameMap.getCountries().get(desiredCountryIndex).getNeighbourCountriesToAdd().remove(desiredNeighborIndex);
 		gameMap.getCountries().get(desiredNeighborIndex).getNeighbourCountries().remove(desiredNeighborIndex);
 	}
 
@@ -335,7 +336,7 @@ public class MapOperations {
 
 	public boolean doesCountryExit(String countryName) {
 		for (int i = 0; i < gameMap.getCountries().size(); i++) {
-			if (gameMap.getCountries().get(i).getCountryName().equals(countryName)) {
+			if (gameMap.getCountries().get(i).getCountryName().equalsIgnoreCase(countryName)) {
 				return true;
 			}
 		}
@@ -344,7 +345,7 @@ public class MapOperations {
 
 	public boolean doesContinentExit(String continentName) {
 		for (int i = 0; i < gameMap.getContinents().size(); i++) {
-			if (gameMap.getContinents().get(i).getContinentName().equals(continentName)) {
+			if (gameMap.getContinents().get(i).getContinentName().equalsIgnoreCase(continentName)) {
 				return true;
 			}
 		}
@@ -359,7 +360,7 @@ public class MapOperations {
 			System.out.println(gameMap.getContinents().get(i).getContinentName());
 		}
 		System.out.println();
-		System.out.println("Countries[Neighbours]");
+		System.out.println("Countries");
 		System.out.println("----------");
 		for (int i = 0; i < gameMap.getCountries().size(); i++) {
 			System.out.print(gameMap.getCountries().get(i).getCountryName());
@@ -370,7 +371,7 @@ public class MapOperations {
 
 	public boolean isCountryUnique(String countryName) {
 		for (int i = 0; i < gameMap.getCountries().size(); i++) {
-			if (gameMap.getCountries().get(i).getCountryName().equals(countryName)) {
+			if (gameMap.getCountries().get(i).getCountryName().equalsIgnoreCase(countryName)) {
 				return false;
 			}
 		}
@@ -379,12 +380,36 @@ public class MapOperations {
 
 	public boolean isContinentUnique(String continentName) {
 		for (int i = 0; i < gameMap.getContinents().size(); i++) {
-			if (gameMap.getContinents().get(i).getContinentName().equals(continentName)) {
+			if (gameMap.getContinents().get(i).getContinentName().equalsIgnoreCase(continentName)) {
 				return false;
 			}
 		}
 		return true;
 	}
+
+	public boolean isBorderUnique(String countryName, String neighborCountryName) {
+		int desiredCountryIndex = getCountryNumber(countryName) - 1;
+		Country currentCountry = gameMap.getCountries().get(desiredCountryIndex);
+		java.util.List<Country> neighborCountries = currentCountry.getNeighbourCountriesToAdd();
+		for (int i = 0; i < neighborCountries.size(); i++) {
+			if (neighborCountries.get(i).getCountryName().equalsIgnoreCase(neighborCountryName)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+    public boolean isContinentRuleSatisfied()
+    {
+    	if(gameMap.getContinents().size()>2)
+    	{
+    		return true;
+    	}
+    	else
+    	{
+    		return false;
+    	}
+    }
 
 	public GameMap editMap() throws IOException {
 
@@ -422,6 +447,8 @@ public class MapOperations {
 					}
 
 				} else if (opsType.equals("-remove")) {
+					if(isContinentRuleSatisfied())
+					{
 
 					if (doesContinentExit(cmdDetails[2])) {
 						removeContinentFromGameMap(cmdDetails[2]);
@@ -443,6 +470,12 @@ public class MapOperations {
 					}
 
 				}
+					else {
+						System.out.println("There should be atleast 2 Continents in the GameMap");
+					}
+					
+				}
+				
 
 			} else if (cmdType.equals("editcountry")) {
 				if (opsType.equals("-add")) {
@@ -506,6 +539,8 @@ public class MapOperations {
 				if (opsType.equals("-add")) {
 					if (doesCountryExit(cmdDetails[2])) {
 						if (doesCountryExit(cmdDetails[3])) {
+							
+							if (isBorderUnique(cmdDetails[2], cmdDetails[3])) {	
 							addNeighborCountryToGameMap(cmdDetails[2], cmdDetails[3]);
 							addNeighborCountryToGameMap(cmdDetails[3], cmdDetails[2]);
 							System.out.println("Do you want to perform other map operations? Yes/No");
@@ -521,6 +556,12 @@ public class MapOperations {
 							} else {
 								flag = false;
 							}
+							}
+							else {
+								System.out.println(cmdDetails[2] + cmdDetails[3] + "  "
+										+ "Boundary is Already present in the GameMap");
+								flag = true;
+							}	
 						} else {
 							System.out.println(cmdDetails[3] + "  " + "Country is not present in the GameMap");
 							flag = true;

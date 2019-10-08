@@ -22,13 +22,7 @@ public class Country {
 		this.countryName = countryName;
 	}
 
-	public List<Country> getneighbourCountriesToAdd() {
-		return neighbourCountriesToAdd;
-	}
 
-	public void setneighbourCountriesToAdd(List<Country> neighbourCountriesToAdd) {
-		this.neighbourCountriesToAdd = neighbourCountriesToAdd;
-	}
 
 	public String getContinentName() {
 		return continentName;
