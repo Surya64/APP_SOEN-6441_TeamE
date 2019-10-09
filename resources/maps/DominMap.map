@@ -10,3 +10,13 @@ ameroki 10 yellow
 1 2 3
 2 1
 3 1
+
+editcontinent -add azio 5
+editcontinent -add ameroki 10
+
+editcountry -add siberia azio
+editcountry -add worrick ameroki
+editcountry -add yazteck azio
+
+editneighbor -add siberia worrick
+editneighbor -add siberia yazteck

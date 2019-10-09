@@ -412,6 +412,16 @@ public class MapOperations {
 		}
 	}
 
+	private void validateMapDetails() {
+		MapValidation validate = new MapValidation();
+		String continentsData = getContinents();
+		String countriesData = getCountries();
+		String boundariesData = getBoundaries();
+		validate.validateContinents(continentsData);
+		validate.validateCountries(countriesData);
+		validate.validateBoundaries(boundariesData);
+	}
+
 	public GameMap editMap() throws IOException {
 
 		boolean flag = true;
@@ -613,10 +623,23 @@ public class MapOperations {
 				} else {
 					flag = false;
 				}
+			} else if (cmdType.equals("validatemap")) {
+				validateMapDetails();
+				System.out.println("Do you want to perform other map operations? Yes/No");
+				String choice = br.readLine().trim();
+				while (!(choice.equalsIgnoreCase("Yes") || choice.equalsIgnoreCase("No") || choice == null)) {
+					System.err.println("\nPlease enter the choice as either Yes or No:");
+					choice = br.readLine().trim();
+				}
+
+				if (choice.equalsIgnoreCase("Yes")) {
+					flag = true;
+				} else {
+					flag = false;
+				}
+
 			}
-			/*
-			 * else if (cmdType.equals("validatemap")) { //validate }
-			 */
+
 		}
 		System.out.println("Do you want to Save the Map File? Yes/No");
 		String choice = br.readLine().trim();
