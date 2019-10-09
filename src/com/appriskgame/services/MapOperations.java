@@ -63,7 +63,7 @@ public class MapOperations {
 			return gameMap;
 		} else {
 			System.out.println(MapValidation.getError());
-			System.out.println("\nPlease rectify all the above mentioned issues and upload the file again");
+			System.out.println("\nPlease rectify all the above mentioned issues.");
 		}
 		return new GameMap();
 	}
@@ -172,7 +172,6 @@ public class MapOperations {
 		String boundariesData = getBoundaries();
 		bw.write(boundariesData);
 		bw.close();
-
 	}
 
 	public String getFileTags(String ouputGameMapName) {
@@ -187,7 +186,8 @@ public class MapOperations {
 		String continentsDetails = "[continents]";
 		for (int i = 0; i < gameMap.getContinents().size(); i++) {
 			Continent continent = gameMap.getContinents().get(i);
-			String continentDetails = continent.getContinentName() + " " + continent.getContinentControlValue() + " " + "#99NoColor";
+			String continentDetails = continent.getContinentName() + " " + continent.getContinentControlValue() + " "
+					+ "#99NoColor";
 			continentsDetails = continentsDetails + "\r\n" + continentDetails;
 		}
 		return continentsDetails;
@@ -412,6 +412,16 @@ public class MapOperations {
 		}
 	}
 
+	private void validateMapDetails() {
+		MapValidation validate = new MapValidation();
+		String continentsData = getContinents();
+		String countriesData = getCountries();
+		String boundariesData = getBoundaries();
+		validate.validateContinents(continentsData);
+		validate.validateCountries(countriesData);
+		validate.validateBoundaries(boundariesData);
+	}
+
 	public GameMap editMap() throws IOException {
 
 		boolean flag = true;
@@ -613,10 +623,23 @@ public class MapOperations {
 				} else {
 					flag = false;
 				}
+			} else if (cmdType.equals("validatemap")) {
+				validateMapDetails();
+				System.out.println("Do you want to perform other map operations? Yes/No");
+				String choice = br.readLine().trim();
+				while (!(choice.equalsIgnoreCase("Yes") || choice.equalsIgnoreCase("No") || choice == null)) {
+					System.err.println("\nPlease enter the choice as either Yes or No:");
+					choice = br.readLine().trim();
+				}
+
+				if (choice.equalsIgnoreCase("Yes")) {
+					flag = true;
+				} else {
+					flag = false;
+				}
+
 			}
-			/*
-			 * else if (cmdType.equals("validatemap")) { //validate }
-			 */
+
 		}
 		System.out.println("Do you want to Save the Map File? Yes/No");
 		String choice = br.readLine().trim();
@@ -636,6 +659,17 @@ public class MapOperations {
 					String fileName = cmdDetails[1];
 					String ouputGameMapName = mapLocation + fileName + ".map";
 					writeGameMap(ouputGameMapName, fileName);
+					MapValidation validate = new MapValidation();
+					boolean uploadSuccessful = false;
+					uploadSuccessful = validate.validateMap(ouputGameMapName);
+					if (uploadSuccessful) {
+						System.out.println("Successfully Saved");
+					} else {
+						File file = new File(ouputGameMapName);
+						file.delete();
+						System.out.println(MapValidation.getError());
+						System.out.println("\nPlease rectify all the above mentioned issues");
+					}
 				} else {
 					System.out.println("Incorrect command");
 				}

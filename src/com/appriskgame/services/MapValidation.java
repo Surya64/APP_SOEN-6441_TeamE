@@ -441,7 +441,7 @@ public class MapValidation {
 					read.close();
 					return true;
 				} else {
-					errorMessage = "Loaded Map have below provided error.\n\n";
+					errorMessage = "Map have below error.\n";
 					errorMessage = errorMessage.concat(adjancencyError);
 					read.close();
 					return false;
@@ -450,7 +450,7 @@ public class MapValidation {
 			} else {
 
 				errorMessage = tagerror.concat(errorMessage);
-				errorMessage = "Loaded Map have below provided error\n" + errorMessage;
+				errorMessage = "Map have below error\n" + errorMessage;
 				read.close();
 				return false;
 			}
