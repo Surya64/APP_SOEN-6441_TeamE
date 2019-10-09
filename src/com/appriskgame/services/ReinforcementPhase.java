@@ -18,6 +18,15 @@ import com.appriskgame.model.GamePlayer;
  * in their turn. Based on certain conditions players will be getting some
  * number of armies before the attack begins
  *
+ * The tasks performed by this class are
+ * <ul>
+ * <li>Once the player choose for the reinforcement,Lists all the countries from
+ * the map for a continent to which a player belongs
+ * <li>Armies are reinforced based on the rule
+ * <li>User have to choose the country and the number of reinforment armies to
+ * be allocated
+ *
+ *
  * @author Shruthi
  *
  */
@@ -50,6 +59,7 @@ public class ReinforcementPhase {
 
 		Continent playerContinent = player.getPlayerCountries().get(0).getPartOfContinent();
 		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+		Country countryNameObject = new Country();
 
 		ArrayList<Country> numOfcontries = mapDetails.getCountries();
 		for (int i = 0; i < numOfcontries.size(); i++) {
@@ -72,11 +82,21 @@ public class ReinforcementPhase {
 		}
 		String countryName = playersChoiceList.get(1);
 		String armyCount = playersChoiceList.get(2);
+
+		// Saving the players country in an object, so that all the country details will
+		// be taken further
+		for (Country country : player.getPlayerCountries()) {
+
+			if (country.getCountryName().equalsIgnoreCase(countryName)) {
+				countryNameObject = country;
+			}
+
+		}
 //        if (!myCountries.stream().anyMatch(countryName::equalsIgnoreCase))
 		Pattern numberPattern = Pattern.compile("[0-9+]");
 		Matcher match = numberPattern.matcher(armyCount);
-		while (!match.matches() || armyCount.isEmpty() || !player.getPlayerCountries().contains(countryName)) {
-			if (!player.getPlayerCountries().contains(countryName)) {
+		while (!match.matches() || armyCount.isEmpty() || !player.getPlayerCountries().contains(countryNameObject)) {
+			if (!player.getPlayerCountries().contains(countryNameObject)) {
 				System.out.println("Please enter the country that you own in right format");
 				playersChoice = input.readLine().trim();
 				playersChoiceList = Arrays.asList(playersChoice.split(" "));
@@ -87,6 +107,13 @@ public class ReinforcementPhase {
 				}
 				countryName = playersChoiceList.get(1);
 				armyCount = playersChoiceList.get(2);
+				for (Country country : player.getPlayerCountries()) {
+
+					if (country.getCountryName().equalsIgnoreCase(countryName)) {
+						countryNameObject = country;
+					}
+
+				}
 			}
 
 			if (!match.matches() || armyCount.isEmpty()) {
@@ -102,6 +129,13 @@ public class ReinforcementPhase {
 				countryName = playersChoiceList.get(1);
 				armyCount = playersChoiceList.get(2);
 				match = numberPattern.matcher(armyCount);
+				for (Country country : player.getPlayerCountries()) {
+
+					if (country.getCountryName().equalsIgnoreCase(countryName)) {
+						countryNameObject = country;
+					}
+
+				}
 			}
 		}
 		int numOfarmies = Integer.parseInt(armyCount);
