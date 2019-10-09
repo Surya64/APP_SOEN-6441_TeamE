@@ -28,6 +28,17 @@ public class ReinforcementPhase {
 	public static List<String> playersChoiceList = new ArrayList<String>();
 
 	/**
+	 * Minimum number of reinforcement armies for a country allocated if the
+	 * condition is not met
+	 */
+	public static int MINIMUM_REINFORCEMENT_ARMY = 3;
+
+	/**
+	 * A constant number set as a rule, to check the reinforcement condition
+	 */
+	public static int MINIMUM_NUM_OF_PLAYER_COUNTRY = 9;
+
+	/**
 	 * This method asks the player to be continued with Reinforcement phase. If the
 	 * player choose to continue this will call a method assigningReinforcedArmies
 	 *
@@ -117,10 +128,10 @@ public class ReinforcementPhase {
 		int contriesPlyerOwns = player.getPlayerCountries().size();
 		int reinformentArmiesAssigned;
 
-		if (contriesPlyerOwns >= 9) {
+		if (contriesPlyerOwns >= MINIMUM_NUM_OF_PLAYER_COUNTRY) {
 			reinformentArmiesAssigned = (int) Math.floor(contriesPlyerOwns / 3);
 		} else {
-			reinformentArmiesAssigned = 3;
+			reinformentArmiesAssigned = MINIMUM_REINFORCEMENT_ARMY;
 		}
 		if (doesPlayerOwnAContinent(player, listOfContries))
 			reinformentArmiesAssigned = continent.getContinentControlValue();
