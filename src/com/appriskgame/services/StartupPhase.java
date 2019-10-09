@@ -195,6 +195,22 @@ public class StartupPhase {
 			} while (placeAllArmyFlag);
 
 		}
+		System.out.println("\n\nReinforcement Phase Begins\n\n");
+		System.out.println("Do you want to perfom Reinforcement Phase");
+		String input = br.readLine().trim();
+		while (!(input.equalsIgnoreCase("Yes") || input.equalsIgnoreCase("No") || input == null)) {
+			System.err.println("\nPlease enter the choice as either Yes or No:");
+			input = br.readLine().trim();
+		}
+		if (input.equalsIgnoreCase("Yes")) {
+			ReinforcementPhase reinforce = new ReinforcementPhase();
+			for (int round = 1; round <= playersList.size(); round++) {
+				gameplayer = roundRobin.nextTurn();
+				reinforce.startReinforcement(gameplayer, gameMap);
+			}
+		} else {
+			System.out.println("Thank You!!");
+		}
 
 	}
 
