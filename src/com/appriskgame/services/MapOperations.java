@@ -131,6 +131,7 @@ public class MapOperations {
 			Country country = new Country();
 			country.setCountryName(countryDetails[1]);
 			country.setContinentName(continentName);
+			country.setPartOfContinent(continent);
 			continent.getListOfCountries().add(country);
 
 			gameMap.getCountries().add(country);
@@ -236,6 +237,8 @@ public class MapOperations {
 		country.setCountryName(countryName);
 		int continentIndex = getContinentNumber(continentName) - 1;
 		country.setContinentName(continentName);
+		Continent continent = gameMap.getContinents().get(continentIndex);
+		country.setPartOfContinent(continent);
 		gameMap.getCountries().add(country);
 		gameMap.getContinents().get(continentIndex).getListOfCountries().add(country);
 	}
