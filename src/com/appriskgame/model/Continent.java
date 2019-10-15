@@ -6,17 +6,18 @@ import java.util.ArrayList;
  * The Continent class is to have all the details regarding Continent
  *
  * @author Shruthi
+ * @author Sahana
  *
  */
 
 public class Continent {
-	/** The name of Continent */
+
 	private String continentName;
 
-	/** Control value for each continent */
+
 	private int continentControlValue;
 
-	/** List of all countries a continents must have */
+
 	private ArrayList<Country> listOfCountries = new ArrayList<Country>();
 
 	/**

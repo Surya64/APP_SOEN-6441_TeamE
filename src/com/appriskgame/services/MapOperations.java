@@ -15,12 +15,27 @@ import com.appriskgame.model.Continent;
 import com.appriskgame.model.Country;
 import com.appriskgame.model.GameMap;
 
+/**
+ * The MapOperations class is for loading the contents with Continents,
+ * respective Countries and also for getting the map details for other classes
+ *
+ * @author Sai
+ * @author Shruthi
+ * @author Dolly
+ */
 public class MapOperations {
 	private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	String workingDir = System.getProperty("user.dir");
 	String mapLocation = workingDir + "/resources/maps/";
 	GameMap gameMap = new GameMap();
 
+	/**
+	 * isMapExists method is to check if the Map is already existing in a given
+	 * location
+	 *
+	 * @param mapFileName
+	 *
+	 */
 	public boolean isMapExists(String mapFileName) {
 		String mapFileNameWithExtention = mapFileName + ".map";
 		File mapFolder = new File(mapLocation);
@@ -35,6 +50,13 @@ public class MapOperations {
 		return false;
 	}
 
+	/**
+	 * readGameMap method is to load the contents of Continents, Countries and
+	 * neighboring countries
+	 *
+	 * @param inputGameMapName
+	 * @throws IOException
+	 */
 	public GameMap readGameMap(String inputGameMapName) throws IOException {
 		HashMap<String, Country> countrySet = new HashMap<>();
 		MapValidation validate = new MapValidation();
@@ -68,6 +90,11 @@ public class MapOperations {
 		return new GameMap();
 	}
 
+	/**
+	 * This method is to fill the Continents
+	 *
+	 * @param ContinentsString
+	 */
 	public void fillContinentsInGameMap(String ContinentsString) {
 		String[] continentList = ContinentsString.split("\\r\\n");
 
@@ -79,6 +106,13 @@ public class MapOperations {
 			gameMap.getContinents().add(continent);
 		}
 	}
+
+	/**
+	 * getContinentNumber is for getting the minimum assigned Continent number
+	 *
+	 * @param continentName
+	 *
+	 */
 
 	public int getContinentNumber(String continentName) {
 		int cotinenentNumber = 0;
@@ -92,6 +126,13 @@ public class MapOperations {
 		return actualContinentNumber;
 	}
 
+	/**
+	 * getContinentName is to get the respective ContinentName for a given Continent
+	 * Number
+	 *
+	 * @param continentNumber
+	 * @return
+	 */
 	public String getContinentName(int continentNumber) {
 		String cotinenentName = "";
 
@@ -100,6 +141,12 @@ public class MapOperations {
 		return cotinenentName;
 	}
 
+	/**
+	 * getCountryNumber is for getting the minimum assigned Country number
+	 *
+	 * @param countryName
+	 * @return
+	 */
 	public int getCountryNumber(String countryName) {
 		int countryNumber = 0;
 
@@ -112,6 +159,12 @@ public class MapOperations {
 		return actualCountryNumber;
 	}
 
+	/**
+	 * getCountryName will get the Country name for a given country number
+	 *
+	 * @param countryNumber
+	 *
+	 */
 	public String getCountryName(int countryNumber) {
 		String countryName = "";
 
@@ -120,6 +173,11 @@ public class MapOperations {
 		return countryName;
 	}
 
+	/**
+	 * fillCountriesInGameMap method is to fill countries given in a string
+	 *
+	 * @param CountriesString
+	 */
 	public void fillCountriesInGameMap(String CountriesString) {
 		String[] countriesList = CountriesString.split("\\r\\n");
 
@@ -138,6 +196,12 @@ public class MapOperations {
 		}
 	}
 
+	/**
+	 * fillNeighboringCountriesInGameMap is to assign neighboring countries for each
+	 * country
+	 *
+	 * @param neighboringCountriesString
+	 */
 	public void fillNeighboringCountriesInGameMap(String neighboringCountriesString) {
 		String[] neighbouringCountriesList = neighboringCountriesString.split("\\r\\n");
 
@@ -156,6 +220,13 @@ public class MapOperations {
 		}
 	}
 
+	/**
+	 * writeGameMap
+	 * 
+	 * @param ouputGameMapName
+	 * @param mapFileName
+	 * @throws IOException
+	 */
 	public void writeGameMap(String ouputGameMapName, String mapFileName) throws IOException {
 
 		File GameMapName = new File(ouputGameMapName);

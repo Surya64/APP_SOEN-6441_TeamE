@@ -28,6 +28,7 @@ import com.appriskgame.model.GamePlayer;
  *
  *
  * @author Shruthi
+ * @author Sai
  *
  */
 public class ReinforcementPhase {
@@ -45,7 +46,7 @@ public class ReinforcementPhase {
 	/**
 	 * A constant number set as a rule, to check the reinforcement condition
 	 */
-	public static int MINIMUM_NUM_OF_PLAYER_COUNTRY = 9;
+	public static int MINIMUM_NUM_OF_PLAYERS_COUNTRY = 9;
 
 	/**
 	 * This method asks the player to be continued with Reinforcement phase. If the
@@ -162,7 +163,7 @@ public class ReinforcementPhase {
 		int contriesPlyerOwns = player.getPlayerCountries().size();
 		int reinformentArmiesAssigned;
 
-		if (contriesPlyerOwns >= MINIMUM_NUM_OF_PLAYER_COUNTRY) {
+		if (contriesPlyerOwns >= MINIMUM_NUM_OF_PLAYERS_COUNTRY) {
 			reinformentArmiesAssigned = (int) Math.floor(contriesPlyerOwns / 3);
 		} else {
 			reinformentArmiesAssigned = MINIMUM_REINFORCEMENT_ARMY;

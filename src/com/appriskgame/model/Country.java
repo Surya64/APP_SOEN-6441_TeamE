@@ -6,20 +6,22 @@ import java.util.List;
 /**
  * The Country class is for all the details about a country
  *
+ * @author Sai
  * @author Shruthi
+ *
  */
 public class Country {
-	/** Name of country. */
+
 	private String countryName;
 
-	/** The Continent name of the respective country */
+
 	private String continentName;
 
-	/** The neighboring Countries with respect to countries Continent */
+
 	private ArrayList<String> neighbourCountries=new ArrayList<String>();;
 	private List<Country> neighbourCountriesToAdd = new ArrayList<Country>();
 
-	/** Part of continent */
+
 	private Continent partOfContinent;
 	private int armiesCount;
 	private String player;
