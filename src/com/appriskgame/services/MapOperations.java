@@ -41,7 +41,6 @@ public class MapOperations {
 		File mapFolder = new File(mapLocation);
 		File[] listFiles = mapFolder.listFiles();
 		for (int i = 0; i < listFiles.length; i++) {
-//			System.out.println("File Name"+listFiles[i].getName());
 			if (mapFileNameWithExtention.equals(listFiles[i].getName())) {
 				return true;
 			}
@@ -155,7 +154,6 @@ public class MapOperations {
 			countryNumber = i + 1;
 		}
 		int actualCountryNumber = countryNumber + 1;
-
 		return actualCountryNumber;
 	}
 
@@ -191,7 +189,6 @@ public class MapOperations {
 			country.setContinentName(continentName);
 			country.setPartOfContinent(continent);
 			continent.getListOfCountries().add(country);
-
 			gameMap.getCountries().add(country);
 		}
 	}
@@ -209,7 +206,6 @@ public class MapOperations {
 			String[] arrayOfCountries = neighbouringCountriesList[i].split(" ");
 			int currentCountryNumber = Integer.parseInt(arrayOfCountries[0]);
 			for (int j = 1; j < arrayOfCountries.length; j++) {
-
 				int neighbourCountryNumber = Integer.parseInt(arrayOfCountries[j]) - 1;
 				Country neighbourCountry = gameMap.getCountries().get(neighbourCountryNumber);
 				Country currentCountry = gameMap.getCountries().get(currentCountryNumber - 1);
@@ -229,7 +225,6 @@ public class MapOperations {
 	 * @throws IOException
 	 */
 	public void writeGameMap(String ouputGameMapName, String mapFileName) throws IOException {
-
 		File GameMapName = new File(ouputGameMapName);
 		FileWriter fw = new FileWriter(GameMapName);
 		BufferedWriter bw = new BufferedWriter(fw);
@@ -284,7 +279,6 @@ public class MapOperations {
 	 */
 	public String getCountries() {
 		String countriesDetails = "[countries]";
-
 		for (int i = 0; i < gameMap.getCountries().size(); i++) {
 			Country country = gameMap.getCountries().get(i);
 			String countryDetails = (i + 1) + " " + country.getCountryName() + " "
@@ -296,7 +290,7 @@ public class MapOperations {
 	}
 
 	/**
-	 * getBoundaries will give the bounderies between maps
+	 * getBoundaries will give the boundaries between maps
 	 *
 	 * @return boundariesDetails
 	 */
@@ -305,7 +299,6 @@ public class MapOperations {
 
 		for (int i = 0; i < gameMap.getCountries().size(); i++) {
 			String boundaryDetails = i + 1 + " ";
-
 			for (int j = 0; j < gameMap.getCountries().get(i).getNeighbourCountriesToAdd().size(); j++) {
 				boundaryDetails = boundaryDetails
 						+ getCountryNumber(
@@ -324,7 +317,6 @@ public class MapOperations {
 	 * @param continentConrrolValue
 	 */
 	public void addContinentToGameMap(String continentName, int continentConrrolValue) {
-
 		Continent continent = new Continent();
 		continent.setContinentName(continentName);
 		continent.setContinentControlValue(continentConrrolValue);
@@ -363,7 +355,6 @@ public class MapOperations {
 		neighborCountry = gameMap.getCountries().get(neighborCountryIndex);
 		country.getNeighbourCountriesToAdd().add(neighborCountry);
 		country.getNeighbourCountries().add(neighborCountry.getCountryName());
-
 	}
 
 	/**
@@ -372,11 +363,9 @@ public class MapOperations {
 	 * @param countryName
 	 */
 	public void removeCountryFromGameMap(String countryName) {
-
 		// Get the country Object to be removed
 		int removeCountryIndex = getCountryNumber(countryName) - 1;
 		Country removeCountry = gameMap.getCountries().get(removeCountryIndex);
-
 		// 1.Remove the country from the continent List
 		int continentNumberIndex = getContinentNumber(removeCountry.getContinentName()) - 1;
 		// remove country from continent list
@@ -392,13 +381,10 @@ public class MapOperations {
 		}
 
 		// 2.Remove Country from neighbor Country List
-
 		// Neighbor Details
 		java.util.List<Country> neighborCountries = gameMap.getCountries().get(removeCountryIndex)
 				.getNeighbourCountriesToAdd();
-
 		String removeCountryName = removeCountry.getCountryName();
-
 		for (int i = 0; i < neighborCountries.size(); i++) {
 			Country neighborCountry = neighborCountries.get(i);
 			int removeneighborIndex = 0;
@@ -411,9 +397,7 @@ public class MapOperations {
 			neighborCountry.getNeighbourCountries().remove(removeneighborIndex);
 		}
 		// 3. Last remove the country from the country List
-
 		if (gameMap.getCountries().size() >= 1) {
-			// remove country from country list
 			gameMap.getCountries().remove(removeCountryIndex);
 		}
 
@@ -427,22 +411,18 @@ public class MapOperations {
 	 * @param neighborRemoveCountryName
 	 */
 	public void removeNeighborCountryFromGameMap(String countryName, String neighborRemoveCountryName) {
-		// still need to modify
 		int desiredCountryIndex = 0;
 		int desiredNeighborIndex = 0;
-
 		for (int i = 0; i < gameMap.getCountries().size()
 				&& !gameMap.getCountries().get(i).getCountryName().equalsIgnoreCase(countryName); i++) {
 			desiredCountryIndex = i + 1;
 		}
 		java.util.List<Country> neighborCountries = gameMap.getCountries().get(desiredCountryIndex)
 				.getNeighbourCountriesToAdd();
-
 		for (int i = 0; i < neighborCountries.size()
 				&& !neighborCountries.get(i).getCountryName().equalsIgnoreCase(neighborRemoveCountryName); i++) {
 			desiredNeighborIndex = i + 1;
 		}
-
 		gameMap.getCountries().get(desiredCountryIndex).getNeighbourCountriesToAdd().remove(desiredNeighborIndex);
 		gameMap.getCountries().get(desiredNeighborIndex).getNeighbourCountries().remove(desiredNeighborIndex);
 	}
@@ -454,15 +434,11 @@ public class MapOperations {
 	 * @param continentName
 	 */
 	public void removeContinentFromGameMap(String continentName) {
-
 		int removeContinentIndex = getContinentNumber(continentName) - 1;
-
 		java.util.List<Country> removeCountries = gameMap.getContinents().get(removeContinentIndex)
 				.getListOfCountries();
-
 		ArrayList<String> removeCountriesNames = new ArrayList<String>();
 		for (int i = 0; i < removeCountries.size(); i++) {
-//			System.out.println(removeCountries.get(i).getCountryName());
 			removeCountriesNames.add(removeCountries.get(i).getCountryName());
 		}
 		for (int i = 0; i < removeCountriesNames.size(); i++) {
@@ -507,7 +483,6 @@ public class MapOperations {
 	 * showmapDetails is to display Map details to the user
 	 */
 	public void showmapDetails() {
-
 		System.out.println("Continents");
 		System.out.println("----------");
 		for (int i = 0; i < gameMap.getContinents().size(); i++) {
@@ -520,7 +495,6 @@ public class MapOperations {
 			System.out.print(gameMap.getCountries().get(i).getCountryName());
 			System.out.println(gameMap.getCountries().get(i).getNeighbourCountries());
 		}
-
 	}
 
 	/**
@@ -589,14 +563,130 @@ public class MapOperations {
 	/**
 	 * validateMapDetails Validates the data of Countries,Continent and Boundaries
 	 */
-	private void validateMapDetails() {
+	private boolean validateMapDetails() {
 		MapValidation validate = new MapValidation();
 		String continentsData = getContinents();
 		String countriesData = getCountries();
 		String boundariesData = getBoundaries();
-		validate.validateContinents(continentsData);
-		validate.validateCountries(countriesData);
-		validate.validateBoundaries(boundariesData);
+
+		if (validate.validateContinents(continentsData) == true && validate.validateCountries(countriesData) == true
+				&& validate.validateBoundaries(boundariesData) == true) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public String singleCommandOperation(String cmdDetails[]) {
+		String command = "";
+		for (int i = 0; i < cmdDetails.length; i++) {
+			command = command + cmdDetails[i] + " ";
+		}
+		return command.trim();
+	}
+
+	public ArrayList<String> multipleCommands(String fullCommand) throws IOException {
+
+		String[] commandArrays = fullCommand.split(" ");
+		boolean suspend = false;
+		ArrayList<String> splitCommands = new ArrayList<String>();
+
+		if (commandArrays[0].equalsIgnoreCase("editcontinent")) {
+			for (int i = 1; i < commandArrays.length && suspend == false; i = i + 1) {
+				String[] cmdDetails = new String[4];
+				String decider = commandArrays[i];
+
+				switch (decider) {
+				case "-add":
+					cmdDetails[0] = "editcontinent";
+					cmdDetails[1] = "-add";
+					i = i + 1;
+					cmdDetails[2] = commandArrays[i];
+					i = i + 1;
+					cmdDetails[3] = commandArrays[i];
+					String addCoammand = singleCommandOperation(cmdDetails);
+					splitCommands.add(addCoammand);
+					suspend = false;
+					break;
+				case "-remove":
+					cmdDetails = new String[3];
+					cmdDetails[0] = "editcontinent";
+					cmdDetails[1] = "-remove";
+					i = i + 1;
+					cmdDetails[2] = commandArrays[i];
+					String removeCommand = singleCommandOperation(cmdDetails);
+					splitCommands.add(removeCommand);
+					suspend = false;
+					break;
+				}
+			}
+		}
+
+		else if (commandArrays[0].equalsIgnoreCase("editcountry")) {
+			for (int i = 1; i < commandArrays.length && suspend == false; i = i + 1) {
+				String[] cmdDetails = new String[4];
+				String decider = commandArrays[i];
+
+				switch (decider) {
+				case "-add":
+					cmdDetails[0] = "editcountry";
+					cmdDetails[1] = "-add";
+					i = i + 1;
+					cmdDetails[2] = commandArrays[i];
+					i = i + 1;
+					cmdDetails[3] = commandArrays[i];
+					String addCoammand = singleCommandOperation(cmdDetails);
+					splitCommands.add(addCoammand);
+					suspend = false;
+					break;
+				case "-remove":
+					cmdDetails = new String[3];
+					cmdDetails[0] = "editcountry";
+					cmdDetails[1] = "-remove";
+					i = i + 1;
+					cmdDetails[2] = commandArrays[i];
+					String removeCommand = singleCommandOperation(cmdDetails);
+					splitCommands.add(removeCommand);
+					suspend = false;
+					break;
+				}
+			}
+		}
+
+		else if (commandArrays[0].equalsIgnoreCase("editneighbor")) {
+			for (int i = 1; i < commandArrays.length && suspend == false; i = i + 1) {
+				String[] cmdDetails = new String[4];
+				String decider = commandArrays[i];
+
+				switch (decider) {
+				case "-add":
+					cmdDetails[0] = "editneighbor";
+					cmdDetails[1] = "-add";
+					i = i + 1;
+					cmdDetails[2] = commandArrays[i];
+					i = i + 1;
+					cmdDetails[3] = commandArrays[i];
+					String addCoammand = singleCommandOperation(cmdDetails);
+					splitCommands.add(addCoammand);
+					suspend = false;
+					break;
+				case "-remove":
+					cmdDetails = new String[4];
+					cmdDetails[0] = "editneighbor";
+					cmdDetails[1] = "-remove";
+					i = i + 1;
+					cmdDetails[2] = commandArrays[i];
+					i = i + 1;
+					cmdDetails[3] = commandArrays[i];
+					String removeCommand = singleCommandOperation(cmdDetails);
+					splitCommands.add(removeCommand);
+					suspend = false;
+					break;
+				}
+			}
+		}
+
+		return splitCommands;
 	}
 
 	/**
@@ -614,186 +704,166 @@ public class MapOperations {
 			System.out.println("Enter the command : ");
 			String command = br.readLine().trim();
 			String[] cmdDetails = command.split(" ");
+			ArrayList<String> commands = multipleCommands(command);
 			String cmdType = cmdDetails[0];
-			String opsType = "";
-			if (cmdDetails.length > 1) {
-				opsType = cmdDetails[1];
-			}
 			if (cmdType.equals("editcontinent")) {
-
-				if (opsType.equals("-add")) {
-
-					if (isContinentUnique(cmdDetails[2])) {
-						addContinentToGameMap(cmdDetails[2], Integer.parseInt(cmdDetails[3]));
-						System.out.println("Do you want to perform other map operations? Yes/No");
-						String choice = br.readLine().trim();
-						while (!(choice.equalsIgnoreCase("Yes") || choice.equalsIgnoreCase("No") || choice == null)) {
-							System.err.println("\nPlease enter the choice as either Yes or No:");
-							choice = br.readLine().trim();
-						}
-
-						if (choice.equalsIgnoreCase("Yes")) {
-							flag = true;
-						} else {
+				for (int i = 0; i < commands.size(); i++) {
+					String[] cmdDetailsMulti = commands.get(i).split(" ");
+					String opsType = "";
+					if (cmdDetailsMulti.length > 1) {
+						opsType = cmdDetailsMulti[1];
+					}
+					if (opsType.equals("-add")) {
+						if (isContinentUnique(cmdDetailsMulti[2])) {
+							addContinentToGameMap(cmdDetailsMulti[2], Integer.parseInt(cmdDetailsMulti[3]));
 							flag = false;
-						}
-					} else {
-						System.out.println(cmdDetails[2] + "  " + "Continent is Already Present in the GameMap");
-						flag = true;
-					}
-
-				} else if (opsType.equals("-remove")) {
-					if (isContinentRuleSatisfied()) {
-
-						if (doesContinentExit(cmdDetails[2])) {
-							removeContinentFromGameMap(cmdDetails[2]);
-							System.out.println("Do you want to perform other map operations? Yes/No");
-							String choice = br.readLine().trim();
-							while (!(choice.equalsIgnoreCase("Yes") || choice.equalsIgnoreCase("No")
-									|| choice == null)) {
-								System.err.println("\nPlease enter the choice as either Yes or No:");
-								choice = br.readLine().trim();
-							}
-
-							if (choice.equalsIgnoreCase("Yes")) {
-								flag = true;
-							} else {
-								flag = false;
-							}
 						} else {
-							System.out.println(cmdDetails[2] + "  " + "Continent is not present in the GameMap");
+							System.out
+									.println(cmdDetailsMulti[2] + "  " + "Continent is Already Present in the GameMap");
 							flag = true;
 						}
 
-					} else {
-						System.out.println("There should be atleast 2 Continents in the GameMap");
+					} else if (opsType.equals("-remove")) {
+						if (isContinentRuleSatisfied()) {
+							if (doesContinentExit(cmdDetailsMulti[2])) {
+								removeContinentFromGameMap(cmdDetailsMulti[2]);
+								flag = false;
+							} else {
+								System.out
+										.println(cmdDetailsMulti[2] + "  " + "Continent is not present in the GameMap");
+								flag = true;
+							}
+						} else {
+							System.out.println("There should be atleast 2 Continents in the GameMap");
+						}
+					}
+				}
+				if (!flag) {
+					System.out.println("Do you want to perform other map operations? Yes/No");
+					String choice = br.readLine().trim();
+					while (!(choice.equalsIgnoreCase("Yes") || choice.equalsIgnoreCase("No") || choice == null)) {
+						System.err.println("\nPlease enter the choice as either Yes or No:");
+						choice = br.readLine().trim();
 					}
 
+					if (choice.equalsIgnoreCase("Yes")) {
+						flag = true;
+					} else {
+						flag = false;
+					}
 				}
 
-			} else if (cmdType.equals("editcountry")) {
-				if (opsType.equals("-add")) {
+			}
 
-					if (doesContinentExit(cmdDetails[3])) {
-
-						if (isCountryUnique(cmdDetails[2])) {
-							addCountryToGameMap(cmdDetails[2], cmdDetails[3]);
-							System.out.println("Do you want to perform other map operations? Yes/No");
-							String choice = br.readLine().trim();
-							while (!(choice.equalsIgnoreCase("Yes") || choice.equalsIgnoreCase("No")
-									|| choice == null)) {
-								System.err.println("\nPlease enter the choice as either Yes or No:");
-								choice = br.readLine().trim();
-							}
-
-							if (choice.equalsIgnoreCase("Yes")) {
-								flag = true;
-							} else {
+			else if (cmdType.equals("editcountry")) {
+				for (int i = 0; i < commands.size(); i++) {
+					String[] cmdDetailsMulti = commands.get(i).split(" ");
+					String opsType = "";
+					if (cmdDetailsMulti.length > 1) {
+						opsType = cmdDetailsMulti[1];
+					}
+					if (opsType.equals("-add")) {
+						if (doesContinentExit(cmdDetailsMulti[3])) {
+							if (isCountryUnique(cmdDetailsMulti[2])) {
+								addCountryToGameMap(cmdDetailsMulti[2], cmdDetailsMulti[3]);
 								flag = false;
+							} else {
+								System.out.println(
+										cmdDetailsMulti[2] + "  " + "Country is Already Present in the GameMap");
+								flag = true;
 							}
 						} else {
-							System.out.println(cmdDetails[2] + "  " + "Country is Already Present in the GameMap");
+							System.out.println(cmdDetailsMulti[3] + " Continent is not present in the GameMap");
 							flag = true;
 						}
+					} else if (opsType.equals("-remove")) {
+						if (cmdDetailsMulti.length == 3) {
+							if (doesCountryExit(cmdDetailsMulti[2])) {
+								removeCountryFromGameMap(cmdDetailsMulti[2]);
+								flag = false;
+							} else {
+								System.out.println(cmdDetailsMulti[2] + "  " + "Country is not present in the GameMap");
+								flag = true;
+							}
+						}
+					}
+				}
+				if (!flag) {
+					System.out.println("Do you want to perform other map operations? Yes/No");
+					String choice = br.readLine().trim();
+					while (!(choice.equalsIgnoreCase("Yes") || choice.equalsIgnoreCase("No") || choice == null)) {
+						System.err.println("\nPlease enter the choice as either Yes or No:");
+						choice = br.readLine().trim();
+					}
 
-					} else {
-						System.out.println(cmdDetails[3] + "Continent is not present in the GameMap");
+					if (choice.equalsIgnoreCase("Yes")) {
 						flag = true;
+					} else {
+						flag = false;
 					}
-
-				} else if (opsType.equals("-remove")) {
-					if (cmdDetails.length == 3) {
-
-						if (doesCountryExit(cmdDetails[2])) {
-							removeCountryFromGameMap(cmdDetails[2]);
-							System.out.println("Do you want to perform other map operations? Yes/No");
-							String choice = br.readLine().trim();
-							while (!(choice.equalsIgnoreCase("Yes") || choice.equalsIgnoreCase("No")
-									|| choice == null)) {
-								System.err.println("\nPlease enter the choice as either Yes or No:");
-								choice = br.readLine().trim();
-							}
-
-							if (choice.equalsIgnoreCase("Yes")) {
-								flag = true;
-							} else {
-								flag = false;
-							}
-						} else {
-							System.out.println(cmdDetails[2] + "  " + "Country is not present in the GameMap");
-							flag = true;
-						}
-
-					}
-
 				}
 
 			} else if (cmdType.equals("editneighbor")) {
 
-				if (opsType.equals("-add")) {
-					if (doesCountryExit(cmdDetails[2])) {
-						if (doesCountryExit(cmdDetails[3])) {
-
-							if (isBorderUnique(cmdDetails[2], cmdDetails[3])) {
-								addNeighborCountryToGameMap(cmdDetails[2], cmdDetails[3]);
-								addNeighborCountryToGameMap(cmdDetails[3], cmdDetails[2]);
-								System.out.println("Do you want to perform other map operations? Yes/No");
-								String choice = br.readLine().trim();
-								while (!(choice.equalsIgnoreCase("Yes") || choice.equalsIgnoreCase("No")
-										|| choice == null)) {
-									System.err.println("\nPlease enter the choice as either Yes or No:");
-									choice = br.readLine().trim();
-								}
-
-								if (choice.equalsIgnoreCase("Yes")) {
-									flag = true;
-								} else {
+				for (int i = 0; i < commands.size(); i++) {
+					String[] cmdDetailsMulti = commands.get(i).split(" ");
+					String opsType = "";
+					if (cmdDetailsMulti.length > 1) {
+						opsType = cmdDetailsMulti[1];
+					}
+					if (opsType.equals("-add")) {
+						if (doesCountryExit(cmdDetailsMulti[2])) {
+							if (doesCountryExit(cmdDetailsMulti[3])) {
+								if (isBorderUnique(cmdDetailsMulti[2], cmdDetailsMulti[3])) {
+									addNeighborCountryToGameMap(cmdDetailsMulti[2], cmdDetailsMulti[3]);
+									addNeighborCountryToGameMap(cmdDetailsMulti[3], cmdDetailsMulti[2]);
 									flag = false;
+								} else {
+									System.out.println(cmdDetailsMulti[2] + cmdDetailsMulti[3] + "  "
+											+ "Boundary is Already present in the GameMap");
+									flag = true;
 								}
 							} else {
-								System.out.println(cmdDetails[2] + cmdDetails[3] + "  "
-										+ "Boundary is Already present in the GameMap");
+								System.out.println(cmdDetailsMulti[3] + "  " + "Country is not present in the GameMap");
 								flag = true;
 							}
 						} else {
-							System.out.println(cmdDetails[3] + "  " + "Country is not present in the GameMap");
+							System.out.println(cmdDetailsMulti[2] + "  " + "Country is not present in the GameMap");
 							flag = true;
 						}
-					} else {
-						System.out.println(cmdDetails[2] + "  " + "Country is not present in the GameMap");
-						flag = true;
-					}
 
-				} else if (opsType.equals("-remove")) {
-
-					if (doesCountryExit(cmdDetails[2])) {
-						if (doesCountryExit(cmdDetails[3])) {
-							removeNeighborCountryFromGameMap(cmdDetails[2], cmdDetails[3]);
-							// Remove the same in other way
-							removeNeighborCountryFromGameMap(cmdDetails[3], cmdDetails[2]);
-							System.out.println("Do you want to perform other map operations? Yes/No");
-							String choice = br.readLine().trim();
-							while (!(choice.equalsIgnoreCase("Yes") || choice.equalsIgnoreCase("No")
-									|| choice == null)) {
-								System.err.println("\nPlease enter the choice as either Yes or No:");
-								choice = br.readLine().trim();
-							}
-
-							if (choice.equalsIgnoreCase("Yes")) {
-								flag = true;
-							} else {
+					} else if (opsType.equals("-remove")) {
+						if (doesCountryExit(cmdDetailsMulti[2])) {
+							if (doesCountryExit(cmdDetailsMulti[3])) {
+								removeNeighborCountryFromGameMap(cmdDetailsMulti[2], cmdDetailsMulti[3]);
+								// Remove the same in other way
+								removeNeighborCountryFromGameMap(cmdDetailsMulti[3], cmdDetailsMulti[2]);
 								flag = false;
+							} else {
+								System.out.println(cmdDetailsMulti[3] + "  " + "Country is not present in the GameMap");
+								flag = true;
 							}
 						} else {
-							System.out.println(cmdDetails[3] + "  " + "Country is not present in the GameMap");
+							System.out.println(cmdDetailsMulti[2] + "  " + "Country is not present in the GameMap");
 							flag = true;
 						}
-					} else {
-						System.out.println(cmdDetails[2] + "  " + "Country is not present in the GameMap");
-						flag = true;
+					}
+				}
+				if (!flag) {
+					System.out.println("Do you want to perform other map operations? Yes/No");
+					String choice = br.readLine().trim();
+					while (!(choice.equalsIgnoreCase("Yes") || choice.equalsIgnoreCase("No") || choice == null)) {
+						System.err.println("\nPlease enter the choice as either Yes or No:");
+						choice = br.readLine().trim();
 					}
 
+					if (choice.equalsIgnoreCase("Yes")) {
+						flag = true;
+					} else {
+						flag = false;
+					}
 				}
+
 			} else if (cmdType.equals("showmap")) {
 				showmapDetails();
 				System.out.println("Do you want to perform other map operations? Yes/No");
@@ -802,14 +872,38 @@ public class MapOperations {
 					System.err.println("\nPlease enter the choice as either Yes or No:");
 					choice = br.readLine().trim();
 				}
-
 				if (choice.equalsIgnoreCase("Yes")) {
 					flag = true;
 				} else {
 					flag = false;
 				}
 			} else if (cmdType.equals("validatemap")) {
-				validateMapDetails();
+				boolean result = validateMapDetails();
+				if (result) {
+					System.out.println("Map Validated Successfully");
+					System.out.println("Do you want to perform other map operations? Yes/No");
+					String choice = br.readLine().trim();
+					while (!(choice.equalsIgnoreCase("Yes") || choice.equalsIgnoreCase("No") || choice == null)) {
+						System.err.println("\nPlease enter the choice as either Yes or No:");
+						choice = br.readLine().trim();
+					}
+
+					if (choice.equalsIgnoreCase("Yes")) {
+						flag = true;
+					} else {
+						flag = false;
+					}
+				} else {
+					System.out.println("Map Validation UnSuccessfully, Please Correct the Map");
+					flag = true;
+				}
+			} else {
+				System.out.println("Please Enter Map Operation Commands like below.\n Example :");
+				System.out.println("editcontinent -add continentname continentvalue -remove continentname");
+				System.out.println("editcountry -add countryname continentname -remove countryname");
+				System.out.println(
+						"editneighbor -add countryname neighborcountryname -remove countryname neighborcountryname");
+				System.out.println("showmap");
 				System.out.println("Do you want to perform other map operations? Yes/No");
 				String choice = br.readLine().trim();
 				while (!(choice.equalsIgnoreCase("Yes") || choice.equalsIgnoreCase("No") || choice == null)) {
@@ -822,7 +916,6 @@ public class MapOperations {
 				} else {
 					flag = false;
 				}
-
 			}
 
 		}
@@ -834,7 +927,6 @@ public class MapOperations {
 		}
 
 		if (choice.equalsIgnoreCase("Yes")) {
-			// validate
 			System.out.println("Enter the command to save the Map File");
 			String command = br.readLine().trim();
 			String[] cmdDetails = command.split(" ");
@@ -899,7 +991,6 @@ public class MapOperations {
 							System.err.println("\nPlease enter the choice as either Yes or No:");
 							choice = br.readLine().trim();
 						}
-
 						if (choice.equalsIgnoreCase("Yes")) {
 							createFile();
 						} else {
@@ -914,7 +1005,6 @@ public class MapOperations {
 							System.err.println("\nPlease enter the choice as either Yes or No:");
 							choice = br.readLine().trim();
 						}
-
 						if (choice.equalsIgnoreCase("Yes")) {
 							GameMap map = editMap();
 							return map;
