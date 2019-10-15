@@ -222,6 +222,7 @@ public class StartupPhase {
 		}
 		if (input.equalsIgnoreCase("Yes")) {
 			ReinforcementPhase reinforce = new ReinforcementPhase();
+			FortificationPhase fortify = new FortificationPhase();
 			for (int round = 1; round <= playersList.size(); round++) {
 				gameplayer = roundRobin.nextTurn();
 				Continent playerContinent = gameplayer.getPlayerCountries().get(0).getPartOfContinent();
@@ -233,6 +234,7 @@ public class StartupPhase {
 			    System.out.println("Attack Begin");
 			    System.out.println("Attack Ends");
 			    System.out.println("Fortification Phase Begins");
+			    fortify.startGameFortification(gameplayer, gameMap);
 			    
 			}
 		} else {
