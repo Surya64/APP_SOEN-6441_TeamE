@@ -221,8 +221,9 @@ public class MapOperations {
 	}
 
 	/**
-	 * writeGameMap
-	 * 
+	 * writeGameMap is to display the Continents, Countries and boundaries to the
+	 * player
+	 *
 	 * @param ouputGameMapName
 	 * @param mapFileName
 	 * @throws IOException
@@ -246,6 +247,12 @@ public class MapOperations {
 		bw.close();
 	}
 
+	/**
+	 * getFileTags is to output the Map names with picture
+	 *
+	 * @param ouputGameMapName
+	 * @return
+	 */
 	public String getFileTags(String ouputGameMapName) {
 		String mapNameDetails = "\r\n\r\nname " + ouputGameMapName + " Map";
 		String fileTag = "\r\n\r\n[files]\r\n";
@@ -254,6 +261,11 @@ public class MapOperations {
 		return fullFormat;
 	}
 
+	/**
+	 * getContinents will provide all the Continents in the Map
+	 *
+	 * @return continentsDetails
+	 */
 	public String getContinents() {
 		String continentsDetails = "[continents]";
 		for (int i = 0; i < gameMap.getContinents().size(); i++) {
@@ -265,6 +277,11 @@ public class MapOperations {
 		return continentsDetails;
 	}
 
+	/**
+	 * getCountries will provide all the Countries in the Map
+	 *
+	 * @return
+	 */
 	public String getCountries() {
 		String countriesDetails = "[countries]";
 
@@ -278,6 +295,11 @@ public class MapOperations {
 		return countriesDetails;
 	}
 
+	/**
+	 * getBoundaries will give the bounderies between maps
+	 *
+	 * @return boundariesDetails
+	 */
 	public String getBoundaries() {
 		String boundariesDetails = "[borders]";
 
@@ -295,6 +317,12 @@ public class MapOperations {
 		return boundariesDetails;
 	}
 
+	/**
+	 * addContinentToGameMap will add a Continent to the Map
+	 *
+	 * @param continentName
+	 * @param continentConrrolValue
+	 */
 	public void addContinentToGameMap(String continentName, int continentConrrolValue) {
 
 		Continent continent = new Continent();
@@ -303,6 +331,12 @@ public class MapOperations {
 		gameMap.getContinents().add(continent);
 	}
 
+	/**
+	 * addCountryToGameMap will add a Country to Continent in the Map
+	 *
+	 * @param countryName
+	 * @param continentName
+	 */
 	public void addCountryToGameMap(String countryName, String continentName) {
 		Country country = new Country();
 		country.setCountryName(countryName);
@@ -314,6 +348,12 @@ public class MapOperations {
 		gameMap.getContinents().get(continentIndex).getListOfCountries().add(country);
 	}
 
+	/**
+	 * addNeighborCountryToGameMap will add a neighboring country to a country
+	 *
+	 * @param countryName
+	 * @param neighborCountryName
+	 */
 	public void addNeighborCountryToGameMap(String countryName, String neighborCountryName) {
 		Country country = null;
 		int countryIndex = getCountryNumber(countryName) - 1;
@@ -326,6 +366,11 @@ public class MapOperations {
 
 	}
 
+	/**
+	 * removeCountryFromGameMap method is to remove a given Country
+	 *
+	 * @param countryName
+	 */
 	public void removeCountryFromGameMap(String countryName) {
 
 		// Get the country Object to be removed
@@ -374,6 +419,13 @@ public class MapOperations {
 
 	}
 
+	/**
+	 * removeNeighborCountryFromGameMap is to remove the neighboring country for a
+	 * given country in the Map
+	 *
+	 * @param countryName
+	 * @param neighborRemoveCountryName
+	 */
 	public void removeNeighborCountryFromGameMap(String countryName, String neighborRemoveCountryName) {
 		// still need to modify
 		int desiredCountryIndex = 0;
@@ -395,6 +447,12 @@ public class MapOperations {
 		gameMap.getCountries().get(desiredNeighborIndex).getNeighbourCountries().remove(desiredNeighborIndex);
 	}
 
+	/**
+	 * removeContinentFromGameMap is to remove a Continent from the Map
+	 * removeContinentFromGameMap
+	 *
+	 * @param continentName
+	 */
 	public void removeContinentFromGameMap(String continentName) {
 
 		int removeContinentIndex = getContinentNumber(continentName) - 1;
@@ -413,6 +471,13 @@ public class MapOperations {
 		gameMap.getContinents().remove(removeContinentIndex);
 	}
 
+	/**
+	 * doesCountryExit is to check if there is a Country by the given name already
+	 * exists
+	 *
+	 * @param countryName
+	 * @return boolean
+	 */
 	public boolean doesCountryExit(String countryName) {
 		for (int i = 0; i < gameMap.getCountries().size(); i++) {
 			if (gameMap.getCountries().get(i).getCountryName().equalsIgnoreCase(countryName)) {
@@ -422,6 +487,13 @@ public class MapOperations {
 		return false;
 	}
 
+	/**
+	 * doesContinentExit is to check if the given Continent is already existing in
+	 * the Map
+	 *
+	 * @param continentName
+	 * @return boolean
+	 */
 	public boolean doesContinentExit(String continentName) {
 		for (int i = 0; i < gameMap.getContinents().size(); i++) {
 			if (gameMap.getContinents().get(i).getContinentName().equalsIgnoreCase(continentName)) {
@@ -431,6 +503,9 @@ public class MapOperations {
 		return false;
 	}
 
+	/**
+	 * showmapDetails is to display Map details to the user
+	 */
 	public void showmapDetails() {
 
 		System.out.println("Continents");
@@ -448,6 +523,12 @@ public class MapOperations {
 
 	}
 
+	/**
+	 * isCountryUnique is to make sure there no repetitions of the given Country
+	 *
+	 * @param countryName
+	 * @return
+	 */
 	public boolean isCountryUnique(String countryName) {
 		for (int i = 0; i < gameMap.getCountries().size(); i++) {
 			if (gameMap.getCountries().get(i).getCountryName().equalsIgnoreCase(countryName)) {
@@ -457,6 +538,12 @@ public class MapOperations {
 		return true;
 	}
 
+	/**
+	 * isContinentUnique is to make sure there no repetitions of the given Continent
+	 *
+	 * @param continentName
+	 * @return
+	 */
 	public boolean isContinentUnique(String continentName) {
 		for (int i = 0; i < gameMap.getContinents().size(); i++) {
 			if (gameMap.getContinents().get(i).getContinentName().equalsIgnoreCase(continentName)) {
@@ -466,6 +553,13 @@ public class MapOperations {
 		return true;
 	}
 
+	/**
+	 * isBorderUnique is to make sure there no repetitions of any defined Border
+	 *
+	 * @param countryName
+	 * @param neighborCountryName
+	 * @return boolean
+	 */
 	public boolean isBorderUnique(String countryName, String neighborCountryName) {
 		int desiredCountryIndex = getCountryNumber(countryName) - 1;
 		Country currentCountry = gameMap.getCountries().get(desiredCountryIndex);
@@ -478,6 +572,12 @@ public class MapOperations {
 		return true;
 	}
 
+	/**
+	 * isContinentRuleSatisfied is to check at-least there are two Continents in a
+	 * Map
+	 *
+	 * @return
+	 */
 	public boolean isContinentRuleSatisfied() {
 		if (gameMap.getContinents().size() > 2) {
 			return true;
@@ -486,6 +586,9 @@ public class MapOperations {
 		}
 	}
 
+	/**
+	 * validateMapDetails Validates the data of Countries,Continent and Boundaries
+	 */
 	private void validateMapDetails() {
 		MapValidation validate = new MapValidation();
 		String continentsData = getContinents();
@@ -496,6 +599,14 @@ public class MapOperations {
 		validate.validateBoundaries(boundariesData);
 	}
 
+	/**
+	 * editMap is to make the changes as per the player's choice. By adding or
+	 * removing Continents,Countries and neighboring countries
+	 *
+	 * @return GameMap
+	 * @throws IOException
+	 *
+	 */
 	public GameMap editMap() throws IOException {
 
 		boolean flag = true;
