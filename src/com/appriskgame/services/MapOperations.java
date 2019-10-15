@@ -985,7 +985,7 @@ public class MapOperations {
 							System.out.println("Incorrect File");
 						}
 					} else {
-						System.out.println("Do you want to create a map from scratch? Yes/No");
+						System.out.println("InCorrect File!! \n Do you want to create a map from scratch? Yes/No");
 						String choice = br.readLine().trim();
 						while (!(choice.equalsIgnoreCase("Yes") || choice.equalsIgnoreCase("No") || choice == null)) {
 							System.err.println("\nPlease enter the choice as either Yes or No:");

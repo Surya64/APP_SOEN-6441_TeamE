@@ -14,9 +14,9 @@ import com.appriskgame.model.GamePlayer;
 
 /**
  * This class contains methods which will take the input to add or remove
- * players , Populate countries to players randomly , to allocate armies 
- * to the players initially and then place the remaining armies in round
- * robin fashion and includes to initialize the reinforcement phase
+ * players , Populate countries to players randomly , to allocate armies to the
+ * players initially and then place the remaining armies in round robin fashion
+ * and includes to initialize the reinforcement phase
  * 
  * @author Sahana
  * @author Surya
@@ -32,10 +32,10 @@ public class StartupPhase {
 	static int FOURPLAYERARMYCOUNT = 30;
 	static int FIVEPLAYERARMYCOUNT = 25;
 	static int SIXPLAYERARMYCOUNT = 20;
-	
+
 	/**
-	 * This method starts the game by obtaining the number of players
-	 * and taking the input from the players and initialize them. 
+	 * This method starts the game by obtaining the number of players and taking the
+	 * input from the players and initialize them.
 	 * 
 	 * @param gameMap Object of GameMap which consists of Map details
 	 * @throws Exception IO Exception
@@ -214,39 +214,29 @@ public class StartupPhase {
 
 		}
 		System.out.println("\n\nReinforcement Phase Begins\n\n");
-		System.out.println("Do you want to perfom Reinforcement Phase");
-		String input = br.readLine().trim();
-		while (!(input.equalsIgnoreCase("Yes") || input.equalsIgnoreCase("No") || input == null)) {
-			System.err.println("\nPlease enter the choice as either Yes or No:");
-			input = br.readLine().trim();
-		}
-		if (input.equalsIgnoreCase("Yes")) {
-			ReinforcementPhase reinforce = new ReinforcementPhase();
-			FortificationPhase fortify = new FortificationPhase();
-			for (int round = 1; round <= playersList.size(); round++) {
-				gameplayer = roundRobin.nextTurn();
-				Continent playerContinent = gameplayer.getPlayerCountries().get(0).getPartOfContinent();
-			    int reInforceAmries = ReinforcementPhase.assignReinforcedArmies(gameplayer, playerContinent);
-			    gameplayer.setNoOfArmies(reInforceAmries);
-			    while(gameplayer.getNoOfArmies()>0) {
+		ReinforcementPhase reinforce = new ReinforcementPhase();
+		FortificationPhase fortify = new FortificationPhase();
+		for (int round = 1; round <= playersList.size(); round++) {
+			gameplayer = roundRobin.nextTurn();
+			Continent playerContinent = gameplayer.getPlayerCountries().get(0).getPartOfContinent();
+			int reInforceAmries = ReinforcementPhase.assignReinforcedArmies(gameplayer, playerContinent);
+			gameplayer.setNoOfArmies(reInforceAmries);
+			while (gameplayer.getNoOfArmies() > 0) {
 				reinforce.startReinforcement(gameplayer, gameMap);
-			    }
-			    System.out.println("Attack Begin");
-			    System.out.println("Attack Ends");
-			    System.out.println("Fortification Phase Begins");
-			    fortify.startGameFortification(gameplayer, gameMap);
-			    
 			}
-		} else {
-			System.out.println("Thank You!!");
+			System.out.println("** ReInforcement Phase Ends **");
+			System.out.println("Attack Begin");
+			System.out.println("Attack Ends");
+			System.out.println("Fortification Phase Begins");
+			fortify.startGameFortification(gameplayer, gameMap);
+
 		}
 
 	}
-	
+
 	/**
-	 * This method is used to assign countries to the players
-	 * Random allocation of countries to players will take place
-	 * in this method. 
+	 * This method is used to assign countries to the players Random allocation of
+	 * countries to players will take place in this method.
 	 * 
 	 * @param gameMap Object of GameMap which consists of Map details
 	 */
@@ -270,10 +260,10 @@ public class StartupPhase {
 			}
 		}
 	}
-	
+
 	/**
-	 * This method is used to allocate Armies to players which depends 
-	 * on the players count in the game.
+	 * This method is used to allocate Armies to players which depends on the
+	 * players count in the game.
 	 * 
 	 */
 	public void defaultArmiesToPlayer() {
@@ -297,10 +287,10 @@ public class StartupPhase {
 			}
 		});
 	}
-	
+
 	/**
-	 * This method is used to assign armies to the countries so that each 
-	 * country will get at least one army according to the game rule.
+	 * This method is used to assign armies to the countries so that each country
+	 * will get at least one army according to the game rule.
 	 * 
 	 * @param gameMap Object of mapGraph which consists of map details
 	 */
