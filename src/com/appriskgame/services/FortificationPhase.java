@@ -4,8 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map.Entry;
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,30 +19,35 @@ import com.appriskgame.model.GamePlayer;
  * Takes the fromCountry and toCountry value which identifies from where the
  * player wishes to move army and where. After performing requisite
  * validation moves army of the player.
- * 
+ *
  * @author Dolly
- * 
+ *
  */
-public class Fortification_D {
+public class FortificationPhase {
 	public boolean doFortification = false;
+	public static List<String> playersCommandList = new ArrayList<String>();
+	String strUser;
+	String strfromCountry;
+	String strtoCountry;
+	String countryNumToPlace;
 
 	/**
 	 * This method is called from the Startup phase when the user opts to start the
 	 * fortification. It internally calls the moveArmies method once all the
 	 * validation with respect to fortification are performed.
-	 * 
+	 *
 	 * @param player  - The player who is doing fortification.
 	 * @param mapData - GameMapGraph object
 	 * @throws IOException - throws Input-Output exception
 	 */
-	
+
 	public void startGameFortification(GamePlayer player, GameMap mapData) throws IOException {
+
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int countOfArmies = 0;
-		if (player.countryName().length() >= 2) {
+		if (player.getPlayerCountries().size() >= 2) {
 			doFortification = true;
-			String fromCountry = "";
-			String toCountry = "";
+
 
 			while (doFortification) {
 				doFortification = true;
@@ -54,48 +59,60 @@ public class Fortification_D {
 					for (Country country : player.getPlayerCountries()) {
 						System.out.println("* " + country.getCountryName() + ":" + country.getNoOfArmies() + "\n");
 					}
-					System.out.println("Enter the name of country from which you want to move armies :");
-					fromCountry = br.readLine().trim().toUpperCase();
+					System.out.println("Enter the cmd for fortification");
+					strUser = br.readLine().trim().toUpperCase();
+					playersCommandList = Arrays.asList(strUser.split(" "));
+					if (!(playersCommandList.size() == 3)) {
+						System.out.println("Please enter the right format like : fortify fromcountry tocountry num");
+						strUser = br.readLine().trim();
+						playersCommandList = Arrays.asList(strUser.split(" "));
+					}
+					strfromCountry = playersCommandList.get(1);
+					strtoCountry = playersCommandList.get(2);
+					countryNumToPlace = playersCommandList.get(3);
+
 					Pattern namePattern1 = Pattern.compile("[a-zA-Z\\s]+");
-					Matcher match = namePattern1.matcher(fromCountry);
-					while (!match.matches() || fromCountry.isEmpty()) {
-						System.out.println("\nPlease enter the correct country name below:");
-						fromCountry = br.readLine().trim().toUpperCase();
-						match = namePattern1.matcher(fromCountry);
-					}
+					Matcher match = namePattern1.matcher(strfromCountry);
 
-					System.out.println("Enter the name of country to which you want to move some armies, from country "
-							+ fromCountry);
-					toCountry = br.readLine().trim().toUpperCase();
-					Pattern namePattern2 = Pattern.compile("[a-zA-Z\\s]+");
-					match = namePattern2.matcher(toCountry);
-					while (!match.matches() || toCountry.isEmpty()) {
-						System.out.println("\nPlease enter the correct country name below:");
+					Pattern numberPattern3 = Pattern.compile("[0-9]+");
+					Matcher match1 = numberPattern3.matcher(countryNumToPlace);
 
-						toCountry = br.readLine().trim().toUpperCase();
-						match = namePattern2.matcher(toCountry);
-					}
+					while (!match.matches() || strfromCountry.isEmpty() || !match.matches() || strtoCountry.isEmpty()
+							|| !match1.matches() || countryNumToPlace.isEmpty()) {
 
-					if (!mapData.getCountrySet().containsKey(fromCountry)
-							|| !mapData.getCountrySet().containsKey(toCountry)) {
-						doFortification = false;
-						System.out.println("Country doesn't exist!\n");
-					}
+						if (!match.matches() || strfromCountry.isEmpty()) {
+							System.out.println("\nPlease enter the correct from country name below:");
+							strUser = br.readLine().trim().toUpperCase();
+							playersCommandList = Arrays.asList(strUser.split(" "));
+							strfromCountry = playersCommandList.get(1);
+							strtoCountry = playersCommandList.get(2);
+							countryNumToPlace = playersCommandList.get(3);
+						}
+						if (!match.matches() || strtoCountry.isEmpty()) {
+							System.out.println("\nPlease enter the correct to country name below:");
+							strUser = br.readLine().trim().toUpperCase();
+							playersCommandList = Arrays.asList(strUser.split(" "));
+							strfromCountry = playersCommandList.get(1);
+							strtoCountry = playersCommandList.get(2);
+							countryNumToPlace = playersCommandList.get(3);
+						}
 
-					givingCountry = mapData.getCountrySet().get(fromCountry);
-					receivingCountry = mapData.getCountrySet().get(toCountry);
-					if (player.countryName().contains((CharSequence) givingCountry)
-							&& player.countryName().contains((CharSequence) receivingCountry)) {
-						doFortification = true;
-					} else {
-						System.out.println(
-								"Entered countries doesn't exist in player's owned country list, please enter country names again\n");
-						doFortification = false;
+						if (!match1.matches() || countryNumToPlace.isEmpty()) {
+							System.out.println("\nPlease enter the correct army count below:");
+							playersCommandList = Arrays.asList(strUser.split(" "));
+							strfromCountry = playersCommandList.get(1);
+							strtoCountry = playersCommandList.get(2);
+							countryNumToPlace = playersCommandList.get(3);
+						}
 
 					}
+
 				} while (!doFortification);
+
+
 				if (doFortification) {
-					System.out.println("\nEnter the number of armies to move from " + fromCountry + " to " + toCountry);
+					System.out.println(
+							"\nEnter the number of armies to move from " + strfromCountry + " to " + strtoCountry);
 					try {
 						String countOfArmy = br.readLine().trim();
 						Pattern numberPattern3 = Pattern.compile("[0-9]+");
@@ -107,7 +124,7 @@ public class Fortification_D {
 							match = numberPattern3.matcher(countOfArmy);
 						}
 						countOfArmies = Integer.parseInt(countOfArmy);
-						if (countOfArmies > mapData.getCountrySet().get(fromCountry).getNoOfArmies()) {
+						if (countOfArmies > mapData.getCountrySet().get(strfromCountry).getNoOfArmies()) {
 							System.out.println(
 									"Insufficient armies available, fortification is not possible with asked number of armies.");
 							doFortification = false;
@@ -122,7 +139,7 @@ public class Fortification_D {
 					boolean fortify = false;
 					for (Country country : player.getPlayerCountries()) {
 						for (String temp  : country.getNeighbourCountries()) {
-							if (temp.equalsIgnoreCase(fromCountry) || temp.equalsIgnoreCase(toCountry)) {
+							if (temp.equalsIgnoreCase(strfromCountry) || temp.equalsIgnoreCase(strtoCountry)) {
 								fortify = true;
 							}
 						}
@@ -147,7 +164,7 @@ public class Fortification_D {
 	/**
 	 * This method takes the values for each player from the startFortification
 	 * method and does the manipulation of armies and assign the armies
-	 * 
+	 *
 	 * @param fromCountry - The country from where player want to move army
 	 * @param toCountry   - The country to where player want to move army
 	 * @param armiesCount - Count of armies player wish to move
@@ -157,7 +174,7 @@ public class Fortification_D {
 
 		boolean neighbourCountries = false;
 		for (String country : fromCountry.getNeighbourCountries()) {
-			if (((String) country).equalsIgnoreCase(toCountry.getCountryName())) {
+			if (country.equalsIgnoreCase(toCountry.getCountryName())) {
 				int fromCountryArmy = fromCountry.getNoOfArmies();
 				int toCountryArmy = toCountry.getNoOfArmies();
 				fromCountry.setNoOfArmies(fromCountryArmy - armiesCount);
@@ -176,6 +193,6 @@ public class Fortification_D {
 		}
 	}
 
-	
+
 }
 
