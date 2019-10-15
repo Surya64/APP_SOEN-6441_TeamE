@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.appriskgame.model.Continent;
 import com.appriskgame.model.Country;
 import com.appriskgame.model.GameMap;
 import com.appriskgame.model.GamePlayer;
@@ -206,7 +207,16 @@ public class StartupPhase {
 			ReinforcementPhase reinforce = new ReinforcementPhase();
 			for (int round = 1; round <= playersList.size(); round++) {
 				gameplayer = roundRobin.nextTurn();
+				Continent playerContinent = gameplayer.getPlayerCountries().get(0).getPartOfContinent();
+			    int reInforceAmries = ReinforcementPhase.assignReinforcedArmies(gameplayer, playerContinent);
+			    gameplayer.setNoOfArmies(reInforceAmries);
+			    while(gameplayer.getNoOfArmies()>0) {
 				reinforce.startReinforcement(gameplayer, gameMap);
+			    }
+			    System.out.println("Attack Begin");
+			    System.out.println("Attack Ends");
+			    System.out.println("Fortification Phase Begins");
+			    
 			}
 		} else {
 			System.out.println("Thank You!!");

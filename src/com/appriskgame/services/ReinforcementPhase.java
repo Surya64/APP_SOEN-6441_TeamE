@@ -69,8 +69,8 @@ public class ReinforcementPhase {
 			}
 		}
 
-		int NumOfReinforcementArmies = assignReinforcedArmies(player, playerContinent);
-		System.out.println("Armies available for Reinforcement: " + NumOfReinforcementArmies);
+		System.out.println("Name :" +player.getPlayerName());
+		System.out.println("Armies available for Reinforcement: " + player.getNoOfArmies());
 		System.out.println("Please enter the country and number of armies to reinforce");
 
 		playersChoice = input.readLine().trim();
@@ -168,7 +168,7 @@ public class ReinforcementPhase {
 			reinformentArmiesAssigned = MINIMUM_REINFORCEMENT_ARMY;
 		}
 		if (doesPlayerOwnAContinent(player, listOfContries))
-			reinformentArmiesAssigned = continent.getContinentControlValue();
+			reinformentArmiesAssigned = reinformentArmiesAssigned + continent.getContinentControlValue();
 
 		return reinformentArmiesAssigned;
 	}

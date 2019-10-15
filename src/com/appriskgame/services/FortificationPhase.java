@@ -80,6 +80,8 @@ public class FortificationPhase {
 					while (!match.matches() || strfromCountry.isEmpty() || !match.matches() || strtoCountry.isEmpty()
 							|| !match1.matches() || countryNumToPlace.isEmpty()) {
 
+
+
 						if (!match.matches() || strfromCountry.isEmpty()) {
 							System.out.println("\nPlease enter the correct from country name below:");
 							strUser = br.readLine().trim().toUpperCase();
@@ -104,7 +106,6 @@ public class FortificationPhase {
 							strtoCountry = playersCommandList.get(2);
 							countryNumToPlace = playersCommandList.get(3);
 						}
-
 					}
 
 				} while (!doFortification);
