@@ -33,11 +33,21 @@ public class GamePlayer {
 	public void setPlayerName(String name) {
 		this.playerName = name;
 	}
-
+	
+	/**
+	 * Get the list of the countries assigned to player.
+	 * 
+	 * @return Countries List of countries of player .
+	 */
 	public ArrayList<Country> getPlayerCountries() {
 		return playerCountries;
 	}
-
+	
+	/**
+	 * Set the list of the countries to player.
+	 * 
+	 * @param countries To set the list of the countries to player.
+	 */
 	public void setPlayerCountries(ArrayList<Country> countries) {
 		this.playerCountries = countries;
 	}

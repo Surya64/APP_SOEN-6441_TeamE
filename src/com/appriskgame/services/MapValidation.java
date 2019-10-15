@@ -14,6 +14,15 @@ import com.appriskgame.model.Continent;
 import com.appriskgame.model.Country;
 import com.appriskgame.model.GameMap;
 
+/**
+ * This class is used to check the format of List of continents, List of
+ * countries, adjacency between countries which are present in the uploaded
+ * file and validate the map. 
+ * 
+ * @author Surya
+ * @author Sai
+ *
+ */
 public class MapValidation {
 	private GameMap gameMap;
 	private ArrayList<Country> listOfCountries;
