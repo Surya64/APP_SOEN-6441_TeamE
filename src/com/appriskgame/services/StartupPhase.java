@@ -12,6 +12,16 @@ import com.appriskgame.model.Country;
 import com.appriskgame.model.GameMap;
 import com.appriskgame.model.GamePlayer;
 
+/**
+ * This class contains methods which will take the input to add or remove
+ * players , Populate countries to players randomly , to allocate armies 
+ * to the players initially and then place the remaining armies in round
+ * robin fashion and includes to initialize the reinforcement phase
+ * 
+ * @author Sahana
+ * @author Surya
+ *
+ */
 public class StartupPhase {
 	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	ArrayList<GamePlayer> playersList = new ArrayList<GamePlayer>();
@@ -22,7 +32,14 @@ public class StartupPhase {
 	static int FOURPLAYERARMYCOUNT = 30;
 	static int FIVEPLAYERARMYCOUNT = 25;
 	static int SIXPLAYERARMYCOUNT = 20;
-
+	
+	/**
+	 * This method starts the game by obtaining the number of players
+	 * and taking the input from the players and initialize them. 
+	 * 
+	 * @param gameMap Object of GameMap which consists of Map details
+	 * @throws Exception IO Exception
+	 */
 	public void gamePlay(GameMap gameMap) throws Exception {
 		boolean proceed = false, populateFlag = false;
 
@@ -223,7 +240,14 @@ public class StartupPhase {
 		}
 
 	}
-
+	
+	/**
+	 * This method is used to assign countries to the players
+	 * Random allocation of countries to players will take place
+	 * in this method. 
+	 * 
+	 * @param gameMap Object of GameMap which consists of Map details
+	 */
 	public void populateCountries(GameMap gameMap) {
 		int countryIndex;
 		ArrayList<Country> countrySet = new ArrayList<>(gameMap.getCountrySet().values());
@@ -244,7 +268,12 @@ public class StartupPhase {
 			}
 		}
 	}
-
+	
+	/**
+	 * This method is used to allocate Armies to players which depends 
+	 * on the players count in the game.
+	 * 
+	 */
 	public void defaultArmiesToPlayer() {
 		playersList.forEach(player -> {
 			switch (playersList.size()) {
@@ -266,7 +295,13 @@ public class StartupPhase {
 			}
 		});
 	}
-
+	
+	/**
+	 * This method is used to assign armies to the countries so that each 
+	 * country will get at least one army according to the game rule.
+	 * 
+	 * @param gameMap Object of mapGraph which consists of map details
+	 */
 	public void initialArmyAllocation(GameMap gameMap) {
 
 		gameMap.getCountrySet().values().forEach(country -> {
