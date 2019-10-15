@@ -495,6 +495,7 @@ public class MapOperations {
 			System.out.print(gameMap.getCountries().get(i).getCountryName());
 			System.out.println(gameMap.getCountries().get(i).getNeighbourCountries());
 		}
+		System.out.println();
 	}
 
 	/**
@@ -590,36 +591,36 @@ public class MapOperations {
 		String[] commandArrays = fullCommand.split(" ");
 		boolean suspend = false;
 		ArrayList<String> splitCommands = new ArrayList<String>();
+		for (int i = 1; i < commandArrays.length && suspend == false; i = i + 1) {
+			String[] cmdDetails = new String[4];
+			String decider = commandArrays[i];
 
-		if (commandArrays[0].equalsIgnoreCase("editcontinent")) {
-			for (int i = 1; i < commandArrays.length && suspend == false; i = i + 1) {
-				String[] cmdDetails = new String[4];
-				String decider = commandArrays[i];
-
-				switch (decider) {
-				case "-add":
-					cmdDetails[0] = "editcontinent";
-					cmdDetails[1] = "-add";
-					i = i + 1;
-					cmdDetails[2] = commandArrays[i];
-					i = i + 1;
-					cmdDetails[3] = commandArrays[i];
-					String addCoammand = singleCommandOperation(cmdDetails);
-					splitCommands.add(addCoammand);
-					suspend = false;
-					break;
-				case "-remove":
-					cmdDetails = new String[3];
-					cmdDetails[0] = "editcontinent";
-					cmdDetails[1] = "-remove";
-					i = i + 1;
-					cmdDetails[2] = commandArrays[i];
-					String removeCommand = singleCommandOperation(cmdDetails);
-					splitCommands.add(removeCommand);
-					suspend = false;
-					break;
-				}
+			switch (decider) {
+			case "-add":
+				cmdDetails[0] = "editcontinent";
+				cmdDetails[1] = "-add";
+				i = i + 1;
+				cmdDetails[2] = commandArrays[i];
+				i = i + 1;
+				cmdDetails[3] = commandArrays[i];
+				String addCoammand = singleCommandOperation(cmdDetails);
+				splitCommands.add(addCoammand);
+				suspend = false;
+				break;
+			case "-remove":
+				cmdDetails = new String[3];
+				cmdDetails[0] = "editcontinent";
+				cmdDetails[1] = "-remove";
+				i = i + 1;
+				cmdDetails[2] = commandArrays[i];
+				String removeCommand = singleCommandOperation(cmdDetails);
+				splitCommands.add(removeCommand);
+				suspend = false;
+				break;
 			}
+		}
+		if (commandArrays[0].equalsIgnoreCase("editcontinent")) {
+			
 		}
 
 		else if (commandArrays[0].equalsIgnoreCase("editcountry")) {

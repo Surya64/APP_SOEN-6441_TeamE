@@ -104,7 +104,7 @@ public class StartupPhase {
 				}
 			} while (flag);
 			if (playerNames.size() > 5 || playerNames.size() < 2) {
-				System.out.println("Sorry! The numbers of players can be between 2 and 6.");
+				System.out.println("Sorry! The numbers of players can be between 2 and 6. Current size is " + playerNames.size());
 				proceed = true;
 			} else {
 				System.out.println("Great! Let's Play.");
@@ -128,7 +128,9 @@ public class StartupPhase {
 				System.out.println("\nIncorrect Command");
 				populateFlag = true;
 			}
-			populateCountries(gameMap);
+			if (!populateFlag) {
+				populateCountries(gameMap);
+			}
 
 		} while (populateFlag);
 		defaultArmiesToPlayer();
@@ -204,7 +206,7 @@ public class StartupPhase {
 								System.out.println("All armies are placed.\n");
 							}
 						}
-						System.out.println("Name: " + gameplayer.getPlayerName());
+						System.out.println("Player Name: " + gameplayer.getPlayerName());
 						System.out.println("Countries: " + gameplayer.getPlayerCountries());
 						System.out.println("No of Armies remaining: " + gameplayer.getNoOfArmies());
 					}

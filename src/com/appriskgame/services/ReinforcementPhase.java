@@ -143,11 +143,33 @@ public class ReinforcementPhase {
 		for (Country country : player.getPlayerCountries()) {
 
 			if (country.getCountryName().equalsIgnoreCase(countryName)) {
-				player.userAssignedArmiesToCountries(country, numOfarmies);
+				userAssignedArmiesToCountries(country, numOfarmies, player);
 			}
 
 		}
 
+	}
+	/**
+	 *
+	 * This method check the army count entered by the user and if it is less than
+	 * the available, it assigned to the mentioned country
+	 *
+	 * @param country     - the country given to players
+	 * @param armiesCount - the count of the armies player has
+	 * @param player      - Current player object
+	 */
+	public void userAssignedArmiesToCountries(Country country, int armiesCount, GamePlayer player) {
+
+		if (player.getPlayerCountries().contains(country)) {
+			if ((player.getNoOfArmies()) > 0 && player.getNoOfArmies() >= armiesCount) {
+				country.setNoOfArmies(country.getNoOfArmies() + armiesCount);
+				player.setNoOfArmies(player.getNoOfArmies() - armiesCount);
+			} else {
+				System.out.println("Insufficient number of armies.\n");
+			}
+		} else {
+			System.out.println("This country is not owned by you!\n");
+		}
 	}
 
 	/**
