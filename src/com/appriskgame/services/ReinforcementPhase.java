@@ -70,7 +70,7 @@ public class ReinforcementPhase {
 			}
 		}
 
-		System.out.println("Name :" +player.getPlayerName());
+		System.out.println(" Player Name :" +player.getPlayerName());
 		System.out.println("Armies available for Reinforcement: " + player.getNoOfArmies());
 		System.out.println("Please enter the country and number of armies to reinforce");
 
@@ -94,7 +94,7 @@ public class ReinforcementPhase {
 
 		}
 //        if (!myCountries.stream().anyMatch(countryName::equalsIgnoreCase))
-		Pattern numberPattern = Pattern.compile("[0-9+]");
+		Pattern numberPattern = Pattern.compile("[0-9]+");
 		Matcher match = numberPattern.matcher(armyCount);
 		while (!match.matches() || armyCount.isEmpty() || !player.getPlayerCountries().contains(countryNameObject)) {
 			if (!player.getPlayerCountries().contains(countryNameObject)) {
