@@ -39,7 +39,7 @@ public class Fortification_D {
 	public void startGameFortification(GamePlayer player, GameMap mapData) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int countOfArmies = 0;
-		if (player.countryName().length() >= 2) {
+		if (player.getPlayerCountries().size() >= 2) {
 			doFortification = true;
 			String fromCountry = "";
 			String toCountry = "";
@@ -84,8 +84,8 @@ public class Fortification_D {
 
 					givingCountry = mapData.getCountrySet().get(fromCountry);
 					receivingCountry = mapData.getCountrySet().get(toCountry);
-					if (player.countryName().contains((CharSequence) givingCountry)
-							&& player.countryName().contains((CharSequence) receivingCountry)) {
+					if (player.getPlayerCountries().contains((CharSequence) givingCountry)
+							&& player.getPlayerCountries().contains((CharSequence) receivingCountry)) {
 						doFortification = true;
 					} else {
 						System.out.println(
