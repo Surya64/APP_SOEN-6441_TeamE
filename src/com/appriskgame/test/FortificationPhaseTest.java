@@ -3,7 +3,7 @@ package com.appriskgame.test;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
-
+import org.junit.Before;
 import org.junit.Test;
 
 import com.appriskgame.model.Country;
@@ -16,20 +16,16 @@ import com.appriskgame.services.FortificationPhase;
  *
  */
 public class FortificationPhaseTest {
-	
-	/** Objects for Country Class */
+
 	private Country country, toCountry, fromCountry, toCountry1;
-	
-	/** Object for Fortification Class */
 	private FortificationPhase fortificationPhase;
-	
-	/** ArrayList for storing neighbour countries list for the countries */
 	private ArrayList<String> NeighbourCountries;
 	
 	/**
-	 * FortificationPhaseTest Constructor for initial setup 
+	 * Initialize method for fortification phase.
 	 */
-	public FortificationPhaseTest() {
+	
+	@Before public void initializeFortificationPhaseTest() {
 		
 		fortificationPhase = new FortificationPhase();
 		NeighbourCountries = new ArrayList<String>();
