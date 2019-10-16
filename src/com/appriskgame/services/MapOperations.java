@@ -722,23 +722,23 @@ public class MapOperations {
 			ArrayList<String> commands = multipleCommands(command);
 			String cmdType = cmdDetails[0];
 
-			Pattern namePattern1 = Pattern.compile("[a-zA-Z-\\s]+");
-			Matcher match1 = namePattern1.matcher(cmdType);
+			Pattern namePatternCmd = Pattern.compile("[a-zA-Z-\\s]+");
+			Matcher matchCmd = namePatternCmd.matcher(cmdType);
 			String[] userValidInputs = { "editcontinent", "editcountry", "editneighbor", "showmap", "validatemap" };
 			List<String> userValidInputsList = Arrays.asList(userValidInputs);
-			while (!match1.matches() || !userValidInputsList.contains(cmdType)) {
+			while (!matchCmd.matches() || !userValidInputsList.contains(cmdType)) {
 				System.out.println(
 						"\nPlease enter Command in right format :\n editcontinent -add continentname continentvalue -remove continentname\n"
 								+ " " + "or\n" + " "
 								+ "editcountry -add countryname continentname -remove countryname\n" + " " + "or\n"
 								+ " "
 								+ "editneighbor -add countryname neighborcountryname -remove countryname neighborcountryname\r\n"
-								+ " " + "or\n" + "showmap\n"+ "or\n" + "validatemap\n");
+								+ " " + "or\n" + "showmap\n" + "or\n" + "validatemap\n");
 				command = br.readLine().trim();
 				cmdDetails = command.split(" ");
 				commands = multipleCommands(command);
 				cmdType = cmdDetails[0];
-				match1 = namePattern1.matcher(cmdType);
+				matchCmd = namePatternCmd.matcher(cmdType);
 
 			}
 			if (cmdType.equals("editcontinent")) {
@@ -970,9 +970,11 @@ public class MapOperations {
 						file.delete();
 						System.out.println(MapValidation.getError());
 						System.out.println("\nPlease rectify all the above mentioned issues");
+						flag = true;
 					}
 				} else {
 					System.out.println("Incorrect command");
+					flag = true;
 				}
 			} else {
 				GameMap map = new GameMap();
