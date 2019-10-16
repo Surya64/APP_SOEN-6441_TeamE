@@ -26,7 +26,7 @@ public class Continent {
 	/**
 	 * Set the continent name.
 	 *
-	 * @param name To set the name of the continent
+	 * @param continentName To set the name of the continent
 	 */
 	public void setContinentName(String continentName) {
 		this.continentName = continentName;
@@ -44,7 +44,7 @@ public class Continent {
 	/**
 	 * To set the Control value for each continent
 	 *
-	 * @param continentControlValue
+	 * @param continentControlValue Continent Control Value
 	 */
 	public void setContinentControlValue(int continentControlValue) {
 		this.continentControlValue = continentControlValue;
@@ -62,7 +62,7 @@ public class Continent {
 	/**
 	 * Set the list of countries in the particular continent.
 	 *
-	 * @param listOfContries
+	 * @param listOfCountries List containing all countries
 	 */
 	public void setListOfCountries(ArrayList<Country> listOfCountries) {
 		this.listOfCountries = listOfCountries;

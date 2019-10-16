@@ -25,7 +25,7 @@ import com.appriskgame.model.GamePlayer;
  * <li>Armies are reinforced based on the rule
  * <li>User have to choose the country and the number of reinforcement armies to
  * be allocated
- *
+ * </ul>
  *
  * @author Shruthi
  * @author Sai

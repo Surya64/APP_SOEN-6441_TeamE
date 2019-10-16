@@ -37,8 +37,8 @@ public class MapOperations {
 	 * isMapExists method is to check if the Map is already existing in a given
 	 * location
 	 *
-	 * @param mapFileName
-	 *
+	 * @param mapFileName Input file path
+	 * @return true if file exist or else false.
 	 */
 	public boolean isMapExists(String mapFileName) {
 		String mapFileNameWithExtention = mapFileName + ".map";
@@ -56,8 +56,9 @@ public class MapOperations {
 	 * readGameMap method is to load the contents of Continents, Countries and
 	 * neighboring countries
 	 *
-	 * @param inputGameMapName
-	 * @throws IOException
+	 * @param inputGameMapName FileName to read the game map
+	 * @return Game Map Object
+	 * @throws IOException FileNotFound Exception
 	 */
 	public GameMap readGameMap(String inputGameMapName) throws IOException {
 		HashMap<String, Country> countrySet = new HashMap<>();
@@ -94,7 +95,7 @@ public class MapOperations {
 	/**
 	 * This method is to fill the Continents
 	 *
-	 * @param ContinentsString
+	 * @param ContinentsString String of all Continent details
 	 */
 	public void fillContinentsInGameMap(String ContinentsString) {
 		String[] continentList = ContinentsString.split("\\r\\n");
@@ -111,7 +112,8 @@ public class MapOperations {
 	/**
 	 * getContinentNumber is for getting the minimum assigned Continent number
 	 *
-	 * @param continentName
+	 * @param continentName Continent Name
+	 * @return continent Number
 	 */
 	public int getContinentNumber(String continentName) {
 		int cotinenentNumber = 0;
@@ -127,7 +129,7 @@ public class MapOperations {
 	 * getContinentName is to get the respective ContinentName for a given Continent
 	 * Number
 	 *
-	 * @param continentNumber
+	 * @param continentNumber Continent Number
 	 * @return Continent Name
 	 */
 	public String getContinentName(int continentNumber) {
@@ -139,7 +141,7 @@ public class MapOperations {
 	/**
 	 * getCountryNumber is for getting the minimum assigned Country number
 	 *
-	 * @param countryName
+	 * @param countryName Country Name
 	 * @return Country Number
 	 */
 	public int getCountryNumber(String countryName) {
@@ -155,7 +157,8 @@ public class MapOperations {
 	/**
 	 * getCountryName will get the Country name for a given country number
 	 *
-	 * @param countryNumber
+	 * @param countryNumber Country Number
+	 * @return Country Name
 	 *
 	 */
 	public String getCountryName(int countryNumber) {
@@ -167,7 +170,7 @@ public class MapOperations {
 	/**
 	 * fillCountriesInGameMap method is to fill countries given in a string
 	 *
-	 * @param CountriesString
+	 * @param CountriesString Details of all Countries in String
 	 */
 	public void fillCountriesInGameMap(String CountriesString) {
 		String[] countriesList = CountriesString.split("\\r\\n");
@@ -190,7 +193,7 @@ public class MapOperations {
 	 * fillNeighboringCountriesInGameMap is to assign neighboring countries for each
 	 * country
 	 *
-	 * @param neighboringCountriesString
+	 * @param neighboringCountriesString Details of Neighbor Countries in a string
 	 */
 	public void fillNeighboringCountriesInGameMap(String neighboringCountriesString) {
 		String[] neighbouringCountriesList = neighboringCountriesString.split("\\r\\n");
@@ -212,9 +215,9 @@ public class MapOperations {
 	 * writeGameMap is to display the Continents, Countries and boundaries to the
 	 * player
 	 *
-	 * @param ouputGameMapName
-	 * @param mapFileName
-	 * @throws IOException
+	 * @param ouputGameMapName Output File path to write
+	 * @param mapFileName      File Name
+	 * @throws IOException IO
 	 */
 	public void writeGameMap(String ouputGameMapName, String mapFileName) throws IOException {
 		File GameMapName = new File(ouputGameMapName);
@@ -237,8 +240,8 @@ public class MapOperations {
 	/**
 	 * getFileTags is to output the Map names with picture
 	 *
-	 * @param ouputGameMapName
-	 * @return
+	 * @param ouputGameMapName output File Name
+	 * @return String of file Tags
 	 */
 	public String getFileTags(String ouputGameMapName) {
 		String mapNameDetails = "\r\n\r\nname " + ouputGameMapName + " Map";
@@ -267,7 +270,7 @@ public class MapOperations {
 	/**
 	 * getCountries will provide all the Countries in the Map
 	 *
-	 * @return
+	 * @return List of countries in game map object
 	 */
 	public String getCountries() {
 		String countriesDetails = "[countries]";
@@ -283,7 +286,7 @@ public class MapOperations {
 	/**
 	 * getBoundaries will give the boundaries between maps
 	 *
-	 * @return boundariesDetails
+	 * @return list of border countries in game map object
 	 */
 	public String getBoundaries() {
 		String boundariesDetails = "[borders]";
@@ -304,21 +307,21 @@ public class MapOperations {
 	/**
 	 * addContinentToGameMap will add a Continent to the Map
 	 *
-	 * @param continentName
-	 * @param continentConrrolValue
+	 * @param continentName         Continent Name to Add
+	 * @param continentControlValue Continent Control Value to be Added
 	 */
-	public void addContinentToGameMap(String continentName, int continentConrrolValue) {
+	public void addContinentToGameMap(String continentName, int continentControlValue) {
 		Continent continent = new Continent();
 		continent.setContinentName(continentName);
-		continent.setContinentControlValue(continentConrrolValue);
+		continent.setContinentControlValue(continentControlValue);
 		gameMap.getContinents().add(continent);
 	}
 
 	/**
 	 * addCountryToGameMap will add a Country to Continent in the Map
 	 *
-	 * @param countryName
-	 * @param continentName
+	 * @param countryName   Country Name to Add
+	 * @param continentName Continent Name
 	 */
 	public void addCountryToGameMap(String countryName, String continentName) {
 		Country country = new Country();
@@ -334,8 +337,8 @@ public class MapOperations {
 	/**
 	 * addNeighborCountryToGameMap will add a neighboring country to a country
 	 *
-	 * @param countryName
-	 * @param neighborCountryName
+	 * @param countryName         Country Name to Add
+	 * @param neighborCountryName Neighbor Country Name to Add
 	 */
 	public void addNeighborCountryToGameMap(String countryName, String neighborCountryName) {
 		Country country = null;
@@ -351,7 +354,7 @@ public class MapOperations {
 	/**
 	 * removeCountryFromGameMap method is to remove a given Country
 	 *
-	 * @param countryName
+	 * @param countryName Country Name
 	 */
 	public void removeCountryFromGameMap(String countryName) {
 		// Get the country Object to be removed
@@ -398,8 +401,8 @@ public class MapOperations {
 	 * removeNeighborCountryFromGameMap is to remove the neighboring country for a
 	 * given country in the Map
 	 *
-	 * @param countryName
-	 * @param neighborRemoveCountryName
+	 * @param countryName               Country Name
+	 * @param neighborRemoveCountryName Neighbor Country Name to Remove
 	 */
 	public void removeNeighborCountryFromGameMap(String countryName, String neighborRemoveCountryName) {
 		int desiredCountryIndex = 0;
@@ -422,7 +425,7 @@ public class MapOperations {
 	 * removeContinentFromGameMap is to remove a Continent from the Map
 	 * removeContinentFromGameMap
 	 *
-	 * @param continentName
+	 * @param continentName Continent Name to remove from gamemap
 	 */
 	public void removeContinentFromGameMap(String continentName) {
 		int removeContinentIndex = getContinentNumber(continentName) - 1;
@@ -442,8 +445,8 @@ public class MapOperations {
 	 * doesCountryExit is to check if there is a Country by the given name already
 	 * exists
 	 *
-	 * @param countryName
-	 * @return boolean
+	 * @param countryName Country Name to Check
+	 * @return boolean true if exist or else false
 	 */
 	public boolean doesCountryExit(String countryName) {
 		for (int i = 0; i < gameMap.getCountries().size(); i++) {
@@ -458,8 +461,8 @@ public class MapOperations {
 	 * doesContinentExit is to check if the given Continent is already existing in
 	 * the Map
 	 *
-	 * @param continentName
-	 * @return boolean
+	 * @param continentName Continent Name to Check
+	 * @return boolean true if exist or else false
 	 */
 	public boolean doesContinentExit(String continentName) {
 		for (int i = 0; i < gameMap.getContinents().size(); i++) {
@@ -492,8 +495,8 @@ public class MapOperations {
 	/**
 	 * isCountryUnique is to make sure there no repetitions of the given Country
 	 *
-	 * @param countryName
-	 * @return
+	 * @param countryName Country Name to check
+	 * @return true if unique or else false
 	 */
 	public boolean isCountryUnique(String countryName) {
 		for (int i = 0; i < gameMap.getCountries().size(); i++) {
@@ -507,8 +510,8 @@ public class MapOperations {
 	/**
 	 * isContinentUnique is to make sure there no repetitions of the given Continent
 	 *
-	 * @param continentName
-	 * @return
+	 * @param continentName Continent Name to Check
+	 * @return true if unique or else false
 	 */
 	public boolean isContinentUnique(String continentName) {
 		for (int i = 0; i < gameMap.getContinents().size(); i++) {
@@ -522,9 +525,9 @@ public class MapOperations {
 	/**
 	 * isBorderUnique is to make sure there no repetitions of any defined Border
 	 *
-	 * @param countryName
-	 * @param neighborCountryName
-	 * @return boolean
+	 * @param countryName         Country Name to check
+	 * @param neighborCountryName neighbor Country Name to check
+	 * @return boolean true if unique or else false
 	 */
 	public boolean isBorderUnique(String countryName, String neighborCountryName) {
 		int desiredCountryIndex = getCountryNumber(countryName) - 1;
@@ -542,7 +545,7 @@ public class MapOperations {
 	 * isContinentRuleSatisfied is to check at-least there are two Continents in a
 	 * Map
 	 *
-	 * @return
+	 * @return true if continent rule is satisfied or else false
 	 */
 	public boolean isContinentRuleSatisfied() {
 		if (gameMap.getContinents().size() > 2) {
@@ -599,6 +602,7 @@ public class MapOperations {
 	 *
 	 * @param fullCommand input command with multiple add and remove
 	 * @return single command in arraylist
+	 * @throws IOException IO
 	 */
 	public ArrayList<String> multipleCommands(String fullCommand) throws IOException {
 
@@ -708,8 +712,8 @@ public class MapOperations {
 	 * editMap is to make the changes as per the player's choice. By adding or
 	 * removing Continents,Countries and neighboring countries
 	 *
-	 * @return GameMap
-	 * @throws IOException
+	 * @return GameMap object
+	 * @throws IOException IO
 	 *
 	 */
 	public GameMap editMap() throws IOException {
@@ -988,7 +992,7 @@ public class MapOperations {
 	 * This Method is used to create the new file.
 	 *
 	 * @return Game Map with details
-	 * @throws IOException
+	 * @throws IOException IO
 	 */
 	public GameMap createFile() throws IOException {
 		GameMap map = editMap();
@@ -999,7 +1003,7 @@ public class MapOperations {
 	 * This Method is used to load the existing file.
 	 *
 	 * @return Game Map with details
-	 * @throws IOException
+	 * @throws IOException IO
 	 */
 	public GameMap loadFile() throws IOException {
 		boolean flag = true;

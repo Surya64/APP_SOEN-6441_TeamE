@@ -20,6 +20,8 @@ public class ConnectedGraph {
 	 * This method is used to check adjacency between countries in the uploaded file
 	 * and check for correct format.
 	 * 
+	 * @param listOfCountries contains all countries
+	 * @param listOfContinent contains all Continent
 	 * @return flag returns boolean value if adjacency are defined correctly.
 	 * @throws IOException - throws input output exception
 	 */

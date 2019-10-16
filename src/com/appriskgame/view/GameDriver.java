@@ -117,8 +117,8 @@ public class GameDriver {
 						if (cmdType.equals("loadmap")) {
 							StartupPhase start = new StartupPhase();
 							loadGameMap = new MapOperations();
-								createMapGraph = loadGameMap.readGameMap(inputGameMapName);
-								start.gamePlay(createMapGraph);
+							createMapGraph = loadGameMap.readGameMap(inputGameMapName);
+							start.gamePlay(createMapGraph);
 						} else {
 							System.out.println("Incorrect Command");
 							loadFlag = true;

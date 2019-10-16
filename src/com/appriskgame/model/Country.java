@@ -31,7 +31,7 @@ public class Country {
 	/**
 	 * To set the CountryName
 	 *
-	 * @param countryName
+	 * @param countryName Country Name
 	 */
 	public void setCountryName(String countryName) {
 		this.countryName = countryName;
@@ -49,7 +49,7 @@ public class Country {
 	/**
 	 * To set the Continent name of the respective country
 	 *
-	 * @param continentName
+	 * @param continentName Continent Name to set
 	 */
 	public void setContinentName(String continentName) {
 		this.continentName = continentName;
@@ -67,7 +67,7 @@ public class Country {
 	/**
 	 * To set the Neighbor Countries
 	 *
-	 * @param neighbourCountriesToAdd
+	 * @param neighbourCountriesToAdd Neighbor Countries to Add
 	 */
 	public void setNeighbourCountriesToAdd(List<Country> neighbourCountriesToAdd) {
 		this.neighbourCountriesToAdd = neighbourCountriesToAdd;
@@ -85,7 +85,7 @@ public class Country {
 	/**
 	 * To set the Number of countries for each country
 	 *
-	 * @param noOfArmies
+	 * @param noOfArmies Number of Armies to set
 	 */
 	public void setNoOfArmies(int noOfArmies) {
 		this.armiesCount = noOfArmies;
@@ -103,7 +103,7 @@ public class Country {
 	/**
 	 * Set the list of adjacent countries.
 	 *
-	 * @param neighbourCountries
+	 * @param neighbourCountries Neighbor countries list
 	 */
 	public void setNeighbourCountries(ArrayList<String> neighbourCountries) {
 		this.neighbourCountries = neighbourCountries;
@@ -121,7 +121,8 @@ public class Country {
 	/**
 	 * Set the continent object which country belongs to.
 	 *
-	 * @param partOfContinent
+	 * @param partOfContinent Continent Name to set as to which the country belongs
+	 *                        to
 	 */
 	public void setPartOfContinent(Continent partOfContinent) {
 		this.partOfContinent = partOfContinent;
@@ -139,7 +140,7 @@ public class Country {
 	/**
 	 * Set the player name to whom country belong to.
 	 *
-	 * @param player
+	 * @param player Player Name for which the Country belong to
 	 */
 	public void setPlayer(String player) {
 		this.player = player;
