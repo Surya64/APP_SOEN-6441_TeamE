@@ -98,17 +98,33 @@ public class GameDriver {
 				choice = br.readLine().trim();
 			}
 			if (choice.equalsIgnoreCase("Yes")) {
-				System.out.println("Please enter the Load File Command");
-				String command = br.readLine().trim();
-				String[] cmdDetails = command.split(" ");
-				String cmdType = cmdDetails[0];
-				String inputGameMapName = mapLocation + cmdDetails[1] + ".map";
-				if (cmdType.equals("loadmap")) {
-					StartupPhase start = new StartupPhase();
-					loadGameMap = new MapOperations();
-					createMapGraph = loadGameMap.readGameMap(inputGameMapName);
-					start.gamePlay(createMapGraph);
-				}
+
+				boolean loadFlag;
+				do {
+					loadFlag = false;
+					System.out.println("Please enter the Load File Command");
+					String command = br.readLine().trim();
+					Pattern commandPattern = Pattern.compile("[a-z]+ [a-zA-z0-9]+");
+					Matcher matchPattern = commandPattern.matcher(command);
+					if (!matchPattern.matches() || command.isEmpty()) {
+						System.out.println("\nIncorrect Command");
+						loadFlag = true;
+					}
+					if (!loadFlag) {
+						String[] cmdDetails = command.split(" ");
+						String cmdType = cmdDetails[0];
+						String inputGameMapName = mapLocation + cmdDetails[1] + ".map";
+						if (cmdType.equals("loadmap")) {
+							StartupPhase start = new StartupPhase();
+							loadGameMap = new MapOperations();
+							createMapGraph = loadGameMap.readGameMap(inputGameMapName);
+							start.gamePlay(createMapGraph);
+						} else {
+							System.out.println("Incorrect Command");
+							loadFlag = true;
+						}
+					}
+				} while (loadFlag);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

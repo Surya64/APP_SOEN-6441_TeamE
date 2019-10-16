@@ -36,7 +36,7 @@ public class FortificationPhase {
 	 * validation with respect to fortification are performed.
 	 *
 	 * @param player  - The player who is doing fortification.
-	 * @param mapData - GameMapGraph object
+	 * @param gameMap - GameMap object
 	 * @throws IOException - throws Input-Output exception
 	 */
 	public void startGameFortification(GamePlayer player, GameMap gameMap) throws IOException {

@@ -64,7 +64,7 @@ public class GamePlayer {
 	/**
 	 * Set the army count of the player.
 	 * 
-	 * @param armyCount To set the army count of the player
+	 * @param count To set the army count of the player
 	 */
 	public void setNoOfArmies(int count) {
 		this.noOfArmies = count;

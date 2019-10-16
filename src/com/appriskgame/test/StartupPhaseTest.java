@@ -23,6 +23,8 @@ public class StartupPhaseTest {
 
 	/**
 	 * Initial setup for Startup Phase.
+	 * 
+	 * @throws Exception Not Found
 	 */
 	@Before
 	public void initialize() throws Exception {
