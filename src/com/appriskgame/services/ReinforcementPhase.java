@@ -34,6 +34,9 @@ import com.appriskgame.model.GamePlayer;
 public class ReinforcementPhase {
 
 	public static ArrayList<Country> listOfContries = new ArrayList<Country>();
+	public static ArrayList<Country> listOfCountriesOfPlayersContinent = new ArrayList<Country>();
+
+	public static ArrayList<Continent> listOfPlayerContinents = new ArrayList<Continent>();
 	public static String playersChoice;
 	public static List<String> playersChoiceList = new ArrayList<String>();
 
@@ -59,6 +62,21 @@ public class ReinforcementPhase {
 	public void startReinforcement(GamePlayer player, GameMap mapDetails) throws Exception {
 
 		Continent playerContinent = player.getPlayerCountries().get(0).getPartOfContinent();
+
+		int sizeOfPlayerCountries = player.getPlayerCountries().size();
+
+		for (int i = 0; i < sizeOfPlayerCountries; i++) {
+
+			playerContinent = player.getPlayerCountries().get(i).getPartOfContinent();
+			if (!listOfPlayerContinents.contains(playerContinent)) {
+
+				listOfPlayerContinents.add(playerContinent);
+			}
+
+		}
+		for (int i = 0; i < listOfPlayerContinents.size(); i++) {
+			listOfCountriesOfPlayersContinent.addAll(listOfPlayerContinents.get(i).getListOfCountries());
+		}
 		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 		Country countryNameObject = new Country();
 
@@ -70,7 +88,7 @@ public class ReinforcementPhase {
 			}
 		}
 
-		System.out.println(" Player Name :" +player.getPlayerName());
+		System.out.println(" Player Name :" + player.getPlayerName());
 		System.out.println("Armies available for Reinforcement: " + player.getNoOfArmies());
 		System.out.println("Please enter the country and number of armies to reinforce");
 
@@ -94,10 +112,14 @@ public class ReinforcementPhase {
 
 		}
 //        if (!myCountries.stream().anyMatch(countryName::equalsIgnoreCase))
+		Pattern namePattern1 = Pattern.compile("[a-zA-Z-\\s]+");
+		Matcher match1 = namePattern1.matcher(countryName);
+
 		Pattern numberPattern = Pattern.compile("[0-9]+");
 		Matcher match = numberPattern.matcher(armyCount);
-		while (!match.matches() || armyCount.isEmpty() || !player.getPlayerCountries().contains(countryNameObject)) {
-			if (!player.getPlayerCountries().contains(countryNameObject)) {
+		while (!match.matches() || armyCount.isEmpty() || !player.getPlayerCountries().contains(countryNameObject)
+				|| !match1.matches()) {
+			if (!player.getPlayerCountries().contains(countryNameObject) || !match1.matches()) {
 				System.out.println("Please enter the country that you own in right format");
 				playersChoice = input.readLine().trim();
 				playersChoiceList = Arrays.asList(playersChoice.split(" "));
@@ -115,6 +137,10 @@ public class ReinforcementPhase {
 					}
 
 				}
+				namePattern1 = Pattern.compile("[a-zA-Z-\\s]+");
+				match1 = namePattern1.matcher(countryName);
+				numberPattern = Pattern.compile("[0-9]+");
+				match = numberPattern.matcher(armyCount);
 			}
 
 			if (!match.matches() || armyCount.isEmpty()) {
@@ -137,6 +163,10 @@ public class ReinforcementPhase {
 					}
 
 				}
+				namePattern1 = Pattern.compile("[a-zA-Z-\\s]+");
+				match1 = namePattern1.matcher(countryName);
+				Pattern numberPattern = Pattern.compile("[0-9]+");
+				Matcher match = numberPattern.matcher(armyCount);
 			}
 		}
 		int numOfarmies = Integer.parseInt(armyCount);
@@ -149,6 +179,7 @@ public class ReinforcementPhase {
 		}
 
 	}
+
 	/**
 	 *
 	 * This method check the army count entered by the user and if it is less than
