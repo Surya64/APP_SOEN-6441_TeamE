@@ -14,7 +14,7 @@ import com.appriskgame.model.GameMap;
 import com.appriskgame.model.GamePlayer;
 
 /**
- * This class is dedicated for the fortification phase of the game. It checks
+ * This class is for the fortification phase of the game. It checks
  * the number of countries user has proceeds if it is not less than 2. Takes the
  * fromCountry and toCountry value which identifies from where the player wishes
  * to move army and where. After performing requisite validation moves army of

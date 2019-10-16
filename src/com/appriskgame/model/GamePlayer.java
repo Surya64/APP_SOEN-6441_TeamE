@@ -33,7 +33,7 @@ public class GamePlayer {
 	public void setPlayerName(String name) {
 		this.playerName = name;
 	}
-	
+
 	/**
 	 * Get the list of the countries assigned to player.
 	 * 
@@ -42,7 +42,7 @@ public class GamePlayer {
 	public ArrayList<Country> getPlayerCountries() {
 		return playerCountries;
 	}
-	
+
 	/**
 	 * Set the list of the countries to player.
 	 * 
@@ -73,10 +73,9 @@ public class GamePlayer {
 	/**
 	 * This method is used to add the country to the player's countries list.
 	 * 
-	 * @param country - The country that needs to be added.
+	 * @param country The country that needs to be added.
 	 */
 	public void addCountry(Country country) {
-
 		this.playerCountries.add(country);
 	}
 
@@ -85,15 +84,4 @@ public class GamePlayer {
 		return "Player [PlayerName=" + playerName + ", Armies=" + noOfArmies + ", Countries=" + playerCountries + "]";
 
 	}
-
-	public String countryName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Object Country() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

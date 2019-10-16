@@ -13,15 +13,9 @@ import java.util.List;
 public class Country {
 
 	private String countryName;
-
-
 	private String continentName;
-
-
 	private ArrayList<String> neighbourCountries=new ArrayList<String>();;
 	private List<Country> neighbourCountriesToAdd = new ArrayList<Country>();
-
-
 	private Continent partOfContinent;
 	private int armiesCount;
 	private String player;
