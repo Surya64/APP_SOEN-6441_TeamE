@@ -13,9 +13,9 @@ import java.util.ArrayList;
  * 
  * @author Sahana
  * @author Sai
- *
  */
 public class MapOperationTest {
+
 	private Continent continent1, continent2, continent3;
 	private ArrayList<Continent> listofContinents;
 	private MapOperations mapOperations;
@@ -30,25 +30,23 @@ public class MapOperationTest {
 		continent1 = new Continent();
 		continent1.setContinentName("Asia");
 		listofContinents.add(continent1);
-
 		continent2 = new Continent();
 		continent2.setContinentName("Africa");
 		listofContinents.add(continent2);
-
 		continent3 = new Continent();
 		continent3.setContinentName("North America");
 		listofContinents.add(continent3);
 	}
-	
+
 	/**
-	 * Test method for checking whether the continent is already defined
-	 *  in the continent list
+	 * Test method for checking whether the continent is already defined in the
+	 * continent list
 	 */
 	@Test
 	public void testIsContinentUnique() {
 		assertTrue(!mapOperations.doesContinentExit("North America"));
 	}
-	
+
 	/**
 	 * Test method for checking if the continent is not already defined in the list
 	 */
@@ -56,7 +54,7 @@ public class MapOperationTest {
 	public void testIsContinentNotUnique() {
 		assertFalse(mapOperations.doesContinentExit("Europe"));
 	}
-	
+
 	/**
 	 * Test method for checking if the country is not already defined in the list
 	 */
@@ -64,5 +62,4 @@ public class MapOperationTest {
 	public void testCountyExist() {
 		assertFalse(mapOperations.doesCountryExit("India"));
 	}
-	
 }

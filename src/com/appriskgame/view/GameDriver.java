@@ -10,17 +10,30 @@ import com.appriskgame.model.GameMap;
 import com.appriskgame.services.MapOperations;
 import com.appriskgame.services.StartupPhase;
 
+/**
+ * GameDriver class launches the Risk Game and provided options for the users to
+ * create a new map or load an existing map in-order to begin the game.
+ * 
+ * @author Surya
+ * @author Sai
+ * @author Sahana
+ */
 public class GameDriver {
+
 	private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	private static MapOperations loadGameMap;
 	private static GameMap gameMap;
 	static String workingDir = System.getProperty("user.dir");
 	static String mapLocation = workingDir + "/resources/maps/";
 
+	/**
+	 * This method sets up a console for the risk game by displaying the create a
+	 * map, load a map and exit.
+	 * 
+	 * @throws Exception - ClassNotFoundException
+	 */
 	public static void setUp() throws Exception {
-
 		boolean exit = true;
-
 		while (exit) {
 			exit = false;
 			System.out.println("\nWelcome to Risk Game!");
@@ -42,7 +55,7 @@ public class GameDriver {
 				loadGameMap = new MapOperations();
 				gameMap = loadGameMap.createFile();
 				startGame();
-				exit =true;
+				exit = true;
 				break;
 			case 2:
 				loadGameMap = new MapOperations();
@@ -61,12 +74,16 @@ public class GameDriver {
 				break;
 			default:
 				System.out.println("Invalid option. Please choose the correct option.");
-
 			}
 		}
-
 	}
 
+	/**
+	 * This is the method where the game begins after the creation of new map or
+	 * loading of existing map.
+	 * 
+	 * @throws Exception - NoSuchMethodException
+	 */
 	private static void startGame() throws Exception {
 		System.out.println("Do you want to start the game? (Yes or No)");
 		try {
@@ -77,7 +94,6 @@ public class GameDriver {
 				System.out.flush();
 				choice = br.readLine().trim();
 			}
-
 			if (choice.equalsIgnoreCase("Yes")) {
 				System.out.println("Please enter the Load File Command");
 				String command = br.readLine().trim();
@@ -91,14 +107,18 @@ public class GameDriver {
 					start.gamePlay(createMapGraph);
 				}
 			}
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
+	/**
+	 * This is the main method which launches the Game.
+	 * 
+	 * @param args main arguments
+	 * @throws Exception - NoSuchMethodException
+	 */
 	public static void main(String[] args) throws Exception {
 		setUp();
 	}
-
 }

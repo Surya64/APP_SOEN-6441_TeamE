@@ -21,7 +21,6 @@ import com.appriskgame.model.GamePlayer;
  * 
  * @author Sahana
  * @author Surya
- *
  */
 public class StartupPhase {
 	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -417,6 +416,12 @@ public class StartupPhase {
 		});
 	}
 
+	/**
+	 * Method to form the single command
+	 * 
+	 * @param cmdDetails command string
+	 * @return single command as string
+	 */
 	public String singleCommandOperation(String cmdDetails[]) {
 		String command = "";
 		for (int i = 0; i < cmdDetails.length; i++) {
@@ -425,8 +430,13 @@ public class StartupPhase {
 		return command.trim();
 	}
 
+	/**
+	 * This method is used to split the full command into single command of list
+	 * 
+	 * @param fullCommand input command with multiple add and remove
+	 * @return single command in arraylist
+	 */
 	public ArrayList<String> multipleCommands(String fullCommand) {
-
 		String[] commandArrays = fullCommand.split(" ");
 		boolean suspend = false;
 		ArrayList<String> splitCommands = new ArrayList<String>();
@@ -458,7 +468,6 @@ public class StartupPhase {
 			}
 		}
 		return splitCommands;
-
 	}
 
 }

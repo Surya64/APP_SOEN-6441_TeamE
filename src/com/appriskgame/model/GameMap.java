@@ -4,22 +4,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * This class stores the value associated to map.It holds the
- * values required to build the map.
+ * This class stores the value associated to map.It holds the values required to
+ * build the map.
  * 
  * @author Surya
  * @author Sahana
  * @author Sai
- *
  */
 public class GameMap {
-	/** ArrayList of Country objects to store the country details */
+
 	private ArrayList<Country> countries = new ArrayList<Country>();
-
-	/** ArrayList of Continent objects to store the continent details */
 	private ArrayList<Continent> continents = new ArrayList<Continent>();
-
-	/** HashMap for set of countries */
 	private HashMap<String, Country> countrySet;
 
 	/**
@@ -30,6 +25,7 @@ public class GameMap {
 	public ArrayList<Continent> getContinents() {
 		return continents;
 	}
+
 	/**
 	 * Set the list of continents
 	 * 
@@ -38,6 +34,7 @@ public class GameMap {
 	public void setContinents(ArrayList<Continent> continents) {
 		this.continents = continents;
 	}
+
 	/**
 	 * Get the list of Countries.
 	 * 
@@ -46,7 +43,7 @@ public class GameMap {
 	public ArrayList<Country> getCountries() {
 		return countries;
 	}
-	
+
 	/**
 	 * Set the list of Countries
 	 * 
@@ -55,7 +52,7 @@ public class GameMap {
 	public void setCountries(ArrayList<Country> countries) {
 		this.countries = countries;
 	}
-	
+
 	/**
 	 * Get the Country details.
 	 * 
@@ -64,7 +61,7 @@ public class GameMap {
 	public HashMap<String, Country> getCountrySet() {
 		return countrySet;
 	}
-	
+
 	/**
 	 * Set the Country details.
 	 * 
@@ -78,5 +75,4 @@ public class GameMap {
 	public String toString() {
 		return "[continents=" + continents + ", countries=" + countries + ", countrySet=" + countrySet + "]";
 	}
-
 }

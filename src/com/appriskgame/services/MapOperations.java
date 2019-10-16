@@ -45,7 +45,6 @@ public class MapOperations {
 				return true;
 			}
 		}
-
 		return false;
 	}
 
@@ -79,7 +78,6 @@ public class MapOperations {
 			gameMap.getCountries().forEach(country -> {
 				countrySet.put(country.getCountryName(), country);
 				gameMap.setCountrySet(countrySet);
-
 			});
 			return gameMap;
 		} else {
@@ -110,18 +108,14 @@ public class MapOperations {
 	 * getContinentNumber is for getting the minimum assigned Continent number
 	 *
 	 * @param continentName
-	 *
 	 */
-
 	public int getContinentNumber(String continentName) {
 		int cotinenentNumber = 0;
-
 		for (int i = 0; i < gameMap.getContinents().size()
 				&& !gameMap.getContinents().get(i).getContinentName().equalsIgnoreCase(continentName); i++) {
 			cotinenentNumber = i + 1;
 		}
 		int actualContinentNumber = cotinenentNumber + 1;
-
 		return actualContinentNumber;
 	}
 
@@ -130,13 +124,11 @@ public class MapOperations {
 	 * Number
 	 *
 	 * @param continentNumber
-	 * @return
+	 * @return Continent Name
 	 */
 	public String getContinentName(int continentNumber) {
 		String cotinenentName = "";
-
 		cotinenentName = gameMap.getContinents().get(continentNumber - 1).getContinentName();
-
 		return cotinenentName;
 	}
 
@@ -144,11 +136,10 @@ public class MapOperations {
 	 * getCountryNumber is for getting the minimum assigned Country number
 	 *
 	 * @param countryName
-	 * @return
+	 * @return Country Number
 	 */
 	public int getCountryNumber(String countryName) {
 		int countryNumber = 0;
-
 		for (int i = 0; i < gameMap.getCountries().size()
 				&& !gameMap.getCountries().get(i).getCountryName().equalsIgnoreCase(countryName); i++) {
 			countryNumber = i + 1;
@@ -165,9 +156,7 @@ public class MapOperations {
 	 */
 	public String getCountryName(int countryNumber) {
 		String countryName = "";
-
 		countryName = gameMap.getCountries().get(countryNumber).getCountryName();
-
 		return countryName;
 	}
 
@@ -212,7 +201,6 @@ public class MapOperations {
 				currentCountry.getNeighbourCountriesToAdd().add(neighbourCountry);
 				currentCountry.getNeighbourCountries().add(neighbourCountry.getCountryName());
 			}
-
 		}
 	}
 
@@ -283,7 +271,6 @@ public class MapOperations {
 			Country country = gameMap.getCountries().get(i);
 			String countryDetails = (i + 1) + " " + country.getCountryName() + " "
 					+ getContinentNumber(country.getContinentName()) + " " + "99" + " " + "99";
-
 			countriesDetails = countriesDetails + "\r\n" + countryDetails;
 		}
 		return countriesDetails;
@@ -578,6 +565,12 @@ public class MapOperations {
 		}
 	}
 
+	/**
+	 * Method to form the single command
+	 * 
+	 * @param cmdDetails command string
+	 * @return single command as string
+	 */
 	public String singleCommandOperation(String cmdDetails[]) {
 		String command = "";
 		for (int i = 0; i < cmdDetails.length; i++) {
@@ -586,12 +579,18 @@ public class MapOperations {
 		return command.trim();
 	}
 
+	/**
+	 * This method is used to split the full command into single command of list
+	 * 
+	 * @param fullCommand input command with multiple add and remove
+	 * @return single command in arraylist
+	 */
 	public ArrayList<String> multipleCommands(String fullCommand) throws IOException {
 
 		String[] commandArrays = fullCommand.split(" ");
 		boolean suspend = false;
 		ArrayList<String> splitCommands = new ArrayList<String>();
-		
+
 		if (commandArrays[0].equalsIgnoreCase("editcontinent")) {
 			for (int i = 1; i < commandArrays.length && suspend == false; i = i + 1) {
 				String[] cmdDetails = new String[4];
@@ -753,10 +752,7 @@ public class MapOperations {
 						flag = false;
 					}
 				}
-
-			}
-
-			else if (cmdType.equals("editcountry")) {
+			} else if (cmdType.equals("editcountry")) {
 				for (int i = 0; i < commands.size(); i++) {
 					String[] cmdDetailsMulti = commands.get(i).split(" ");
 					String opsType = "";
@@ -803,9 +799,7 @@ public class MapOperations {
 						flag = false;
 					}
 				}
-
 			} else if (cmdType.equals("editneighbor")) {
-
 				for (int i = 0; i < commands.size(); i++) {
 					String[] cmdDetailsMulti = commands.get(i).split(" ");
 					String opsType = "";
@@ -857,14 +851,12 @@ public class MapOperations {
 						System.err.println("\nPlease enter the choice as either Yes or No:");
 						choice = br.readLine().trim();
 					}
-
 					if (choice.equalsIgnoreCase("Yes")) {
 						flag = true;
 					} else {
 						flag = false;
 					}
 				}
-
 			} else if (cmdType.equals("showmap")) {
 				showmapDetails();
 				System.out.println("Do you want to perform other map operations? Yes/No");
@@ -888,7 +880,6 @@ public class MapOperations {
 						System.err.println("\nPlease enter the choice as either Yes or No:");
 						choice = br.readLine().trim();
 					}
-
 					if (choice.equalsIgnoreCase("Yes")) {
 						flag = true;
 					} else {
@@ -911,14 +902,12 @@ public class MapOperations {
 					System.err.println("\nPlease enter the choice as either Yes or No:");
 					choice = br.readLine().trim();
 				}
-
 				if (choice.equalsIgnoreCase("Yes")) {
 					flag = true;
 				} else {
 					flag = false;
 				}
 			}
-
 		}
 		System.out.println("Do you want to Save the Map File? Yes/No");
 		String choice = br.readLine().trim();
@@ -926,7 +915,6 @@ public class MapOperations {
 			System.err.println("\nPlease enter the choice as either Yes or No:");
 			choice = br.readLine().trim();
 		}
-
 		if (choice.equalsIgnoreCase("Yes")) {
 			System.out.println("Enter the command to save the Map File");
 			String command = br.readLine().trim();
@@ -957,15 +945,25 @@ public class MapOperations {
 			}
 		}
 		return gameMap;
-
 	}
 
+	/**
+	 * This Method is used to create the new file.
+	 * 
+	 * @return Game Map with details
+	 * @throws IOException
+	 */
 	public GameMap createFile() throws IOException {
 		GameMap map = editMap();
 		return map;
-
 	}
 
+	/**
+	 * This Method is used to load the existing file.
+	 * 
+	 * @return Game Map with details
+	 * @throws IOException
+	 */
 	public GameMap loadFile() throws IOException {
 		boolean flag = true;
 		while (flag) {
@@ -997,7 +995,6 @@ public class MapOperations {
 						} else {
 							loadFile();
 						}
-
 					}
 					if (!flag) {
 						System.out.println("Do you want to edit the loaded map? Yes/No");
@@ -1014,13 +1011,11 @@ public class MapOperations {
 						}
 					}
 				}
-
 			} else {
 				System.out.println("Incorrect Command");
 				flag = true;
 			}
 		}
 		return gameMap;
-
 	}
 }

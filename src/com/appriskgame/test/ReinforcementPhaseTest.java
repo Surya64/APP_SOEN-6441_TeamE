@@ -1,10 +1,8 @@
 package com.appriskgame.test;
 
 import static org.junit.Assert.assertEquals;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import com.appriskgame.model.Continent;
 import com.appriskgame.model.Country;
 import com.appriskgame.model.GamePlayer;
@@ -15,13 +13,10 @@ import com.appriskgame.services.ReinforcementPhase;
  *
  * @author Shruthi
  */
-
 public class ReinforcementPhaseTest {
 
 	GamePlayer player1, player2, player3;
-
 	Country country1, country2, country3, country4, country5, country6, country7, country8, country9, country10;
-
 	Continent continent, continent1;
 
 	/**
