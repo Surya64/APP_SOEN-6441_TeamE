@@ -9,7 +9,11 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.appriskgame.model.Continent;
 import com.appriskgame.model.Country;
@@ -567,7 +571,7 @@ public class MapOperations {
 
 	/**
 	 * Method to form the single command
-	 * 
+	 *
 	 * @param cmdDetails command string
 	 * @return single command as string
 	 */
@@ -581,7 +585,7 @@ public class MapOperations {
 
 	/**
 	 * This method is used to split the full command into single command of list
-	 * 
+	 *
 	 * @param fullCommand input command with multiple add and remove
 	 * @return single command in arraylist
 	 */
@@ -706,6 +710,26 @@ public class MapOperations {
 			String[] cmdDetails = command.split(" ");
 			ArrayList<String> commands = multipleCommands(command);
 			String cmdType = cmdDetails[0];
+
+			Pattern namePattern1 = Pattern.compile("[a-zA-Z-\\s]+");
+			Matcher match1 = namePattern1.matcher(cmdType);
+			String[] userValidInputs = { "editcontinent", "editcountry", "editneighbor", "showmap" };
+			List<String> userValidInputsList = Arrays.asList(userValidInputs);
+			while (!match1.matches() || !userValidInputsList.contains(cmdType)) {
+				System.out.println(
+						"Please enter the right format : editcontinent -add continentname continentvalue -remove continentname\n"
+								+ " " + "OR\n" + " "
+								+ "editcountry -add countryname continentname -remove countryname\n" + " " + "OR\n"
+								+ " "
+								+ "editneighbor -add countryname neighborcountryname -remove countryname neighborcountryname\r\n"
+								+ " " + "OR\n" + "showmap\n");
+				command = br.readLine().trim();
+				cmdDetails = command.split(" ");
+				commands = multipleCommands(command);
+				cmdType = cmdDetails[0];
+				match1 = namePattern1.matcher(cmdType);
+
+			}
 			if (cmdType.equals("editcontinent")) {
 				for (int i = 0; i < commands.size(); i++) {
 					String[] cmdDetailsMulti = commands.get(i).split(" ");
@@ -949,7 +973,7 @@ public class MapOperations {
 
 	/**
 	 * This Method is used to create the new file.
-	 * 
+	 *
 	 * @return Game Map with details
 	 * @throws IOException
 	 */
@@ -960,7 +984,7 @@ public class MapOperations {
 
 	/**
 	 * This Method is used to load the existing file.
-	 * 
+	 *
 	 * @return Game Map with details
 	 * @throws IOException
 	 */
