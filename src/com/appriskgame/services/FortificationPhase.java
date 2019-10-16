@@ -145,7 +145,7 @@ public class FortificationPhase {
 				if (doFortificationNone) {
 					if (!doFortification) {
 						countOfArmies = Integer.parseInt(countryNumToPlace);
-						if (countOfArmies > givingCountry.getNoOfArmies()) {
+						if (countOfArmies >= givingCountry.getNoOfArmies()) {
 							System.out.println(
 									"Insufficient armies available, fortification is not possible with asked number of armies.");
 							doFortification = true;
