@@ -9,9 +9,9 @@ import java.util.ArrayList;
  * 
  * @author Dolly
  * @author Sahana
- *
  */
 public class GamePlayer {
+
 	private String playerName;
 	private ArrayList<Country> playerCountries = new ArrayList<Country>();
 	private int noOfArmies = 0;

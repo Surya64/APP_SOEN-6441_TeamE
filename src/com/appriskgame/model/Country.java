@@ -4,17 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The Country class is for all the details about a country
+ * This Class provides information of country
  *
  * @author Sai
  * @author Shruthi
- *
  */
 public class Country {
 
 	private String countryName;
 	private String continentName;
-	private ArrayList<String> neighbourCountries=new ArrayList<String>();;
+	private ArrayList<String> neighbourCountries = new ArrayList<String>();;
 	private List<Country> neighbourCountriesToAdd = new ArrayList<Country>();
 	private Continent partOfContinent;
 	private int armiesCount;
@@ -37,7 +36,6 @@ public class Country {
 	public void setCountryName(String countryName) {
 		this.countryName = countryName;
 	}
-
 
 	/**
 	 * To get the Continent name of the respective country
@@ -149,9 +147,7 @@ public class Country {
 
 	@Override
 	public String toString() {
-		return "[Countryname=" + countryName + ", NeighbourCountries="
-				+ neighbourCountries + ", NoOfArmies=" + armiesCount + ", Continent=" + continentName + ", Owner="
-				+ player + "]\n";
+		return "[Countryname=" + countryName + ", NeighbourCountries=" + neighbourCountries + ", NoOfArmies="
+				+ armiesCount + ", Continent=" + continentName + ", Owner=" + player + "]\n";
 	}
-
 }

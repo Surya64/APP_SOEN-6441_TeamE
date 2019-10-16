@@ -29,11 +29,12 @@ import com.appriskgame.model.GamePlayer;
  *
  * @author Shruthi
  * @author Sai
- *
  */
 public class ReinforcementPhase {
 
 	public static ArrayList<Country> listOfContries = new ArrayList<Country>();
+	public static ArrayList<Country> listOfCountriesOfPlayersContinent = new ArrayList<Country>();
+	public static ArrayList<Continent> listOfPlayerContinents = new ArrayList<Continent>();
 	public static String playersChoice;
 	public static List<String> playersChoiceList = new ArrayList<String>();
 
@@ -57,11 +58,19 @@ public class ReinforcementPhase {
 	 * @throws Exception -IOException
 	 */
 	public void startReinforcement(GamePlayer player, GameMap mapDetails) throws Exception {
-
 		Continent playerContinent = player.getPlayerCountries().get(0).getPartOfContinent();
+		int sizeOfPlayerCountries = player.getPlayerCountries().size();
+		for (int i = 0; i < sizeOfPlayerCountries; i++) {
+			playerContinent = player.getPlayerCountries().get(i).getPartOfContinent();
+			if (!listOfPlayerContinents.contains(playerContinent)) {
+				listOfPlayerContinents.add(playerContinent);
+			}
+		}
+		for (int i = 0; i < listOfPlayerContinents.size(); i++) {
+			listOfCountriesOfPlayersContinent.addAll(listOfPlayerContinents.get(i).getListOfCountries());
+		}
 		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 		Country countryNameObject = new Country();
-
 		ArrayList<Country> numOfcontries = mapDetails.getCountries();
 		for (int i = 0; i < numOfcontries.size(); i++) {
 			Country country = numOfcontries.get(i);
@@ -69,86 +78,123 @@ public class ReinforcementPhase {
 				listOfContries.add(country);
 			}
 		}
+		System.out.println(" Player Name :" + player.getPlayerName());
+		int reinforcementArmies = assignReinforcedArmies(player, playerContinent);
+		System.out.println("Armies available for Reinforcement: " + reinforcementArmies);
+		player.setNoOfArmies((reinforcementArmies));
 
-		System.out.println(" Player Name :" +player.getPlayerName());
-		System.out.println("Armies available for Reinforcement: " + player.getNoOfArmies());
-		System.out.println("Please enter the country and number of armies to reinforce");
-
-		playersChoice = input.readLine().trim();
-		playersChoiceList = Arrays.asList(playersChoice.split(" "));
-		if (!(playersChoiceList.size() == 3)) {
-			System.out.println("Please enter the right format like : reinforce countryname num");
+		while (player.getNoOfArmies() > 0) {
+			System.out.println(
+					"Please enter the country and number of armies to reinforcein the format: reinforce countryname num");
 			playersChoice = input.readLine().trim();
 			playersChoiceList = Arrays.asList(playersChoice.split(" "));
-		}
-		String countryName = playersChoiceList.get(1);
-		String armyCount = playersChoiceList.get(2);
-
-		// Saving the players country in an object, so that all the country details will
-		// be taken further
-		for (Country country : player.getPlayerCountries()) {
-
-			if (country.getCountryName().equalsIgnoreCase(countryName)) {
-				countryNameObject = country;
-			}
-
-		}
-//        if (!myCountries.stream().anyMatch(countryName::equalsIgnoreCase))
-		Pattern numberPattern = Pattern.compile("[0-9]+");
-		Matcher match = numberPattern.matcher(armyCount);
-		while (!match.matches() || armyCount.isEmpty() || !player.getPlayerCountries().contains(countryNameObject)) {
-			if (!player.getPlayerCountries().contains(countryNameObject)) {
-				System.out.println("Please enter the country that you own in right format");
+			if (!(playersChoiceList.size() == 3)) {
+				System.out.println("Please enter the right format like : reinforce countryname num");
 				playersChoice = input.readLine().trim();
 				playersChoiceList = Arrays.asList(playersChoice.split(" "));
-				if (!(playersChoiceList.size() == 3)) {
-					System.out.println("Please enter the right format like : reinforce countryname num");
+			}
+			String strreinforce = playersChoiceList.get(0);
+			String countryName = playersChoiceList.get(1);
+			String armyCount = playersChoiceList.get(2);
+
+			// Saving the players country in an object, so that all the country details will
+			// be taken further
+			for (Country country : player.getPlayerCountries()) {
+				if (country.getCountryName().equalsIgnoreCase(countryName)) {
+					countryNameObject = country;
+				}
+			}
+			Pattern namePattern2 = Pattern.compile("[a-zA-Z-\\s]+");
+			Matcher match2 = namePattern2.matcher(strreinforce);
+			Pattern namePattern1 = Pattern.compile("[a-zA-Z-\\s]+");
+			Matcher match1 = namePattern1.matcher(countryName);
+			Pattern numberPattern = Pattern.compile("[0-9]+");
+			Matcher match = numberPattern.matcher(armyCount);
+
+			while (!match.matches() || armyCount.isEmpty() || !player.getPlayerCountries().contains(countryNameObject)
+					|| !match1.matches() || !match2.matches()) {
+				if (!player.getPlayerCountries().contains(countryNameObject) || !match1.matches()) {
+					System.out.println("Please enter the country that you own in right format");
 					playersChoice = input.readLine().trim();
 					playersChoiceList = Arrays.asList(playersChoice.split(" "));
-				}
-				countryName = playersChoiceList.get(1);
-				armyCount = playersChoiceList.get(2);
-				for (Country country : player.getPlayerCountries()) {
-
-					if (country.getCountryName().equalsIgnoreCase(countryName)) {
-						countryNameObject = country;
+					if (!(playersChoiceList.size() == 3)) {
+						System.out.println("Please enter the right format like : reinforce countryname num");
+						playersChoice = input.readLine().trim();
+						playersChoiceList = Arrays.asList(playersChoice.split(" "));
+					}
+					strreinforce = playersChoiceList.get(0);
+					countryName = playersChoiceList.get(1);
+					armyCount = playersChoiceList.get(2);
+					for (Country country : player.getPlayerCountries()) {
+						if (country.getCountryName().equalsIgnoreCase(countryName)) {
+							countryNameObject = country;
+						}
 					}
 
+					match1 = namePattern1.matcher(countryName);
+					match2 = namePattern2.matcher(strreinforce);
+					match = numberPattern.matcher(armyCount);
+				}
+
+				if (!match.matches() || armyCount.isEmpty()) {
+					System.out.println("\nPlease enter the correct army count in right format");
+					playersChoice = input.readLine().trim();
+					playersChoiceList = Arrays.asList(playersChoice.split(" "));
+					if (!(playersChoiceList.size() == 3)) {
+						System.out.println("Please enter the right format like : reinforce countryname num");
+						playersChoice = input.readLine().trim();
+						playersChoiceList = Arrays.asList(playersChoice.split(" "));
+					}
+
+					countryName = playersChoiceList.get(1);
+					armyCount = playersChoiceList.get(2);
+					match = numberPattern.matcher(armyCount);
+					for (Country country : player.getPlayerCountries()) {
+						if (country.getCountryName().equalsIgnoreCase(countryName)) {
+							countryNameObject = country;
+						}
+					}
+
+					match1 = namePattern1.matcher(countryName);
+					match2 = namePattern2.matcher(strreinforce);
+					match = numberPattern.matcher(armyCount);
+				}
+				if (!match2.matches()) {
+					System.out.println("\nPlease enter the right format like : reinforce countryname num");
+					playersChoice = input.readLine().trim();
+					playersChoiceList = Arrays.asList(playersChoice.split(" "));
+					if (!(playersChoiceList.size() == 3)) {
+						System.out.println("Please enter the right format like : reinforce countryname num");
+						playersChoice = input.readLine().trim();
+						playersChoiceList = Arrays.asList(playersChoice.split(" "));
+					}
+					strreinforce = playersChoiceList.get(0);
+					countryName = playersChoiceList.get(1);
+					armyCount = playersChoiceList.get(2);
+
+					for (Country country : player.getPlayerCountries()) {
+
+						if (country.getCountryName().equalsIgnoreCase(countryName)) {
+							countryNameObject = country;
+						}
+
+					}
+
+					match1 = namePattern1.matcher(countryName);
+					match2 = namePattern2.matcher(strreinforce);
+					match = numberPattern.matcher(armyCount);
 				}
 			}
 
-			if (!match.matches() || armyCount.isEmpty()) {
-				System.out.println("\nPlease enter the correct army count in right format");
-				playersChoice = input.readLine().trim();
-				playersChoiceList = Arrays.asList(playersChoice.split(" "));
-				if (!(playersChoiceList.size() == 3)) {
-					System.out.println("Please enter the right format like : reinforce countryname num");
-					playersChoice = input.readLine().trim();
-					playersChoiceList = Arrays.asList(playersChoice.split(" "));
-				}
-
-				countryName = playersChoiceList.get(1);
-				armyCount = playersChoiceList.get(2);
-				match = numberPattern.matcher(armyCount);
-				for (Country country : player.getPlayerCountries()) {
-
-					if (country.getCountryName().equalsIgnoreCase(countryName)) {
-						countryNameObject = country;
-					}
-
+			int numOfarmies = Integer.parseInt(armyCount);
+			for (Country country : player.getPlayerCountries()) {
+				if (country.getCountryName().equalsIgnoreCase(countryName)) {
+					userAssignedArmiesToCountries(country, numOfarmies, player);
 				}
 			}
 		}
-		int numOfarmies = Integer.parseInt(armyCount);
-		for (Country country : player.getPlayerCountries()) {
-
-			if (country.getCountryName().equalsIgnoreCase(countryName)) {
-				userAssignedArmiesToCountries(country, numOfarmies, player);
-			}
-
-		}
-
 	}
+
 	/**
 	 *
 	 * This method check the army count entered by the user and if it is less than
@@ -159,7 +205,6 @@ public class ReinforcementPhase {
 	 * @param player      - Current player object
 	 */
 	public void userAssignedArmiesToCountries(Country country, int armiesCount, GamePlayer player) {
-
 		if (player.getPlayerCountries().contains(country)) {
 			if ((player.getNoOfArmies()) > 0 && player.getNoOfArmies() >= armiesCount) {
 				country.setNoOfArmies(country.getNoOfArmies() + armiesCount);
@@ -180,11 +225,9 @@ public class ReinforcementPhase {
 	 * @param continent - Continent to which the player belongs to
 	 * @return armies to be assigned to any country of players choice
 	 */
-
 	public static int assignReinforcedArmies(GamePlayer player, Continent continent) {
 		int contriesPlyerOwns = player.getPlayerCountries().size();
 		int reinformentArmiesAssigned;
-
 		if (contriesPlyerOwns >= MINIMUM_NUM_OF_PLAYERS_COUNTRY) {
 			reinformentArmiesAssigned = (int) Math.floor(contriesPlyerOwns / 3);
 		} else {
@@ -192,7 +235,6 @@ public class ReinforcementPhase {
 		}
 		if (doesPlayerOwnAContinent(player, listOfContries))
 			reinformentArmiesAssigned = reinformentArmiesAssigned + continent.getContinentControlValue();
-
 		return reinformentArmiesAssigned;
 	}
 
@@ -203,15 +245,12 @@ public class ReinforcementPhase {
 	 * @param countriesList - The count of countries a continent has
 	 * @return True if a player own a continent
 	 */
-
 	private static boolean doesPlayerOwnAContinent(GamePlayer player, ArrayList<Country> countriesList) {
 		boolean flag = true;
-
 		for (int i = 0; i < countriesList.size(); i++) {
 			if (!player.getPlayerCountries().contains(countriesList.get(i)))
 				flag = false;
 		}
 		return flag;
 	}
-
 }

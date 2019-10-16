@@ -16,12 +16,11 @@ import com.appriskgame.model.GameMap;
 
 /**
  * This class is used to check the format of List of continents, List of
- * countries, adjacency between countries which are present in the uploaded
- * file and validate the map. 
+ * countries, adjacency between countries which are present in the uploaded file
+ * and validate the map.
  * 
  * @author Surya
  * @author Sai
- *
  */
 public class MapValidation {
 	private GameMap gameMap;
@@ -29,10 +28,20 @@ public class MapValidation {
 	private ArrayList<Continent> listOfContinent;
 	private static String errorMessage, adjancencyError;
 
+	/**
+	 * This Method used to get the error message.
+	 * 
+	 * @return errorMessage
+	 */
 	public static String getError() {
 		return errorMessage;
 	}
 
+	/**
+	 * This Method used to get the Game Map.
+	 * 
+	 * @return gameMap
+	 */
 	public GameMap getMapGraph() {
 		return gameMap;
 	}
@@ -99,7 +108,6 @@ public class MapValidation {
 	 * @return flag to check if entered countries are valid
 	 */
 	public boolean validateCountries(String tagData) {
-
 		listOfCountries = new ArrayList<Country>();
 		HashMap<String, String> visited = new HashMap<String, String>();
 		boolean duplicateData = true, formatData = true, continentData = true;
@@ -115,9 +123,7 @@ public class MapValidation {
 							"Invalid Country Details. " + data.trim() + " is not defined in required format.\n");
 					formatData = false;
 					continue;
-				}
-
-				else {
+				} else {
 					if (visited.containsKey(data.split(" ")[1])) {
 						DuplicateError = DuplicateError
 								.concat(data.split(" ")[1] + " is already defined. Duplicate Entry Found.\n");
@@ -139,7 +145,6 @@ public class MapValidation {
 								continentAvailable = true;
 								continentData = true;
 							}
-
 						} else {
 							continentError = continentError.concat("No Valid continents available.\n");
 							continentData = false;
@@ -151,16 +156,13 @@ public class MapValidation {
 							continentData = false;
 							continue;
 						}
-
 						country.setCountryName(name);
 						listOfCountries.add(country);
 						visited.put(name, data);
 					}
 				}
 			}
-
 		}
-
 		if (duplicateData == true && formatData == true && continentData == true) {
 			return true;
 		} else {
@@ -177,7 +179,6 @@ public class MapValidation {
 	 * @return flag to check if entered boundary countries are valid
 	 */
 	public boolean validateBoundaries(String tagData) {
-
 		HashMap<String, String> visited = new HashMap<String, String>();
 		boolean duplicatedata = true, formatdata = true, adjacentdata = true, continentdata = true;
 		ArrayList<String> adjacentcountries;
@@ -195,9 +196,7 @@ public class MapValidation {
 								"Invalid Boundary Details. " + data.trim() + " is not defined in required format.\n");
 						formatdata = false;
 						continue;
-					}
-
-					else {
+					} else {
 						if (visited.containsKey(data.split(" ")[0])) {
 							Duplicateerror = Duplicateerror
 									.concat(data.split(" ")[1] + " is already defined. Duplicate Entry Found .\n");
@@ -207,7 +206,6 @@ public class MapValidation {
 							String[] countrydetail = data.split(" ");
 							int countryIndex = Integer.parseInt(countrydetail[0]);
 							String name = listOfCountries.get(countryIndex - 1).getCountryName();
-
 							adjacentcountries = new ArrayList<>();
 							if (!(countrydetail.length < 1)) {
 								for (int j = 1; j < countrydetail.length; j++) {
@@ -221,25 +219,20 @@ public class MapValidation {
 								adjacentdata = false;
 								continue;
 							}
-
 							for (int k = 0; k < listOfCountries.size(); k++) {
 								if (listOfCountries.get(k).getCountryName() == name) {
 									listOfCountries.get(k).setNeighbourCountries(adjacentcountries);
 								}
-
 							}
-
 							visited.put(name, data);
 						}
 					}
 				}
-
 			}
 		} else {
 			formaterror = formaterror.concat(" Invalid Number of Borders ");
 			formatdata = false;
 		}
-
 		if (duplicatedata == true && formatdata == true && adjacentdata == true && continentdata == true) {
 			return true;
 		} else {
@@ -257,17 +250,14 @@ public class MapValidation {
 	 * @throws IOException - throws input output exception
 	 */
 	public boolean checkCountryAdjacency() throws IOException {
-
 		String adjError = new String(), contError = new String(), connectedError = new String();
 		ArrayList<String> adjacentCountries = new ArrayList<>();
 		ArrayList<String> availableContinent = new ArrayList<>();
 		ArrayList<String> connectivity = new ArrayList<>();
-
 		boolean flag = false, continentFlag = true, adjacencyFlag = true, connectedFlag = true;
 
 		if (listOfCountries != null && !listOfCountries.isEmpty()) {
 			for (Country country1 : listOfCountries) {
-
 				adjacentCountries = country1.getNeighbourCountries();
 				if (!adjacentCountries.isEmpty()) {
 					for (String adjCountryName : adjacentCountries) {
@@ -275,10 +265,8 @@ public class MapValidation {
 							if (country2.getCountryName().equals(adjCountryName)) {
 								if (country2.getNeighbourCountries().contains(country1.getCountryName())) {
 									flag = true;
-
 									// To check for Connectivity of the Graph adding the connected continents in the
 									// list
-
 									if (country1.getPartOfContinent() != null
 											&& country2.getPartOfContinent() != null) {
 										if (!country2.getPartOfContinent().getContinentName()
@@ -287,9 +275,7 @@ public class MapValidation {
 											connectivity.add(country1.getPartOfContinent().getContinentName());
 										}
 									}
-
 									break;
-
 								} else
 									flag = false;
 							} else
@@ -319,7 +305,6 @@ public class MapValidation {
 				}
 			});
 		}
-
 		for (Continent continent : listOfContinent) {
 			boolean flag4 = true;
 			for (String continentname : availableContinent) {
@@ -345,14 +330,9 @@ public class MapValidation {
 						+ " available continents.\n");
 			}
 		}
-
 		if (flag && continentFlag && adjacencyFlag && connectedFlag) {
 			return true;
-
-		}
-
-		else {
-
+		} else {
 			adjancencyError = "\n".concat(contError).concat(adjError);
 			if (!connectedFlag) {
 				connectedError = "\n Map Graph is not Connected - \n".concat(connectedError);
@@ -360,7 +340,6 @@ public class MapValidation {
 			}
 			return false;
 		}
-
 	}
 
 	/**
@@ -373,15 +352,14 @@ public class MapValidation {
 	 * @throws IOException -throws for input output
 	 */
 	public boolean validateMap(String fileName) throws IOException {
-
 		BufferedReader read = new BufferedReader(new FileReader(fileName));
 		String fileData;
 		String tagerror = new String();
 		fileData = new String(Files.readAllBytes(Paths.get(fileName)));
 		String[] requiredData = fileData.split("files");
 		fileData = "[files" + requiredData[1];
-
 		errorMessage = new String();
+
 		if (!fileData.trim().isEmpty()) {
 			gameMap = new GameMap();
 			Pattern p = Pattern.compile("\\r\\n\\r\\n");
@@ -411,7 +389,6 @@ public class MapValidation {
 							errorMessage = errorMessage.concat("Duplicate Entry for [continents] Tag Found.\n");
 							validatecontinentdata = false;
 						}
-
 					} else if (tag.equalsIgnoreCase("[countries]")) {
 						if (!visitedtag.contains(tag)) {
 
@@ -419,31 +396,26 @@ public class MapValidation {
 								visitedtag.add(tag);
 							} else
 								validatecountrydata = false;
-
 						} else {
 							errorMessage = errorMessage.concat("Duplicate Entry for [countries] Tag Found.\n");
 							validatecountrydata = false;
 						}
 					} else if (tag.equalsIgnoreCase("[borders]")) {
 						if (!visitedtag.contains(tag)) {
-
 							if (validateBoundaries(tagdetails)) {
 								visitedtag.add(tag);
 							} else
 								validateboundarydata = false;
-
 						} else {
 							errorMessage = errorMessage.concat("Duplicate Entry for [borders] Tag Found.\n");
 							validatecountrydata = false;
 						}
-
 					}
 				} else {
 					tagerror = tagerror.concat("Invalid " + tag + " found.\n");
 					invalidtag = false;
 				}
 			}
-
 			if (invalidtag == true && validatefilesdata == true && validatecontinentdata == true
 					&& validatecountrydata == true && validateboundarydata == true) {
 				if (checkCountryAdjacency()) {
@@ -455,17 +427,13 @@ public class MapValidation {
 					read.close();
 					return false;
 				}
-
 			} else {
-
 				errorMessage = tagerror.concat(errorMessage);
 				errorMessage = "Map have below error\n" + errorMessage;
 				read.close();
 				return false;
 			}
-		} else
-
-		{
+		} else {
 			errorMessage = "File is Empty.\n";
 			read.close();
 			return false;

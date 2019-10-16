@@ -21,7 +21,6 @@ import com.appriskgame.model.GamePlayer;
  * the player.
  *
  * @author Dolly
- *
  */
 public class FortificationPhase {
 	public boolean doFortification = false;
@@ -40,22 +39,16 @@ public class FortificationPhase {
 	 * @param mapData - GameMapGraph object
 	 * @throws IOException - throws Input-Output exception
 	 */
-
 	public void startGameFortification(GamePlayer player, GameMap gameMap) throws IOException {
-
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int countOfArmies = 0;
-
 		if (player.getPlayerCountries().size() >= 2) {
 			doFortification = true;
 			boolean doFortificationNone = true;
-
 			while (doFortification) {
 				doFortification = true;
-
 				Country givingCountry = null;
 				Country receivingCountry = null;
-
 				do {
 					doFortification = false;
 					System.out.println("\nPlayer has the following list of countries with armies: \n");
@@ -84,16 +77,12 @@ public class FortificationPhase {
 						strfromCountry = playersCommandList.get(1);
 						strtoCountry = playersCommandList.get(2);
 						countryNumToPlace = playersCommandList.get(3);
-
 						Pattern namePattern1 = Pattern.compile("[a-zA-Z-\\s]+");
 						Matcher match = namePattern1.matcher(strfromCountry);
-
 						Pattern numberPattern3 = Pattern.compile("[0-9]+");
 						Matcher match1 = numberPattern3.matcher(countryNumToPlace);
-
 						while (!match.matches() || strfromCountry.isEmpty() || !match.matches()
 								|| strtoCountry.isEmpty() || !match1.matches() || countryNumToPlace.isEmpty()) {
-
 							if (!match.matches() || strfromCountry.isEmpty()) {
 								System.out.println("\nPlease enter the correct from country name below:");
 								strUser = br.readLine().trim().toUpperCase();
@@ -110,7 +99,6 @@ public class FortificationPhase {
 								strtoCountry = playersCommandList.get(2);
 								countryNumToPlace = playersCommandList.get(3);
 							}
-
 							if (!match1.matches() || countryNumToPlace.isEmpty()) {
 								System.out.println("\nPlease enter the correct army count below:");
 								playersCommandList = Arrays.asList(strUser.split(" "));
@@ -129,7 +117,6 @@ public class FortificationPhase {
 								receivingCountry = country;
 							}
 						}
-
 						if (player.getPlayerCountries().contains(givingCountry)
 								&& player.getPlayerCountries().contains(receivingCountry)) {
 							doFortification = false;
@@ -137,15 +124,13 @@ public class FortificationPhase {
 							System.out.println(
 									"Entered countries doesn't exist in player's owned country list, please enter country names again\n");
 							doFortification = true;
-
 						}
 					}
 				} while (doFortification);
-
 				if (doFortificationNone) {
 					if (!doFortification) {
 						countOfArmies = Integer.parseInt(countryNumToPlace);
-						if (countOfArmies > givingCountry.getNoOfArmies()) {
+						if (countOfArmies >= givingCountry.getNoOfArmies()) {
 							System.out.println(
 									"Insufficient armies available, fortification is not possible with asked number of armies.");
 							doFortification = true;
@@ -156,7 +141,6 @@ public class FortificationPhase {
 							doFortification = true;
 						}
 					}
-
 					if (!doFortification) {
 						boolean fortify = false;
 						for (Country country : player.getPlayerCountries()) {
@@ -190,7 +174,6 @@ public class FortificationPhase {
 	 * @param toCountry   - The country to where player want to move army
 	 * @param armiesCount - Count of armies player wish to move
 	 */
-
 	public void moveArmies(Country fromCountry, Country toCountry, int armiesCount) {
 
 		boolean neighbourCountries = false;
@@ -207,11 +190,9 @@ public class FortificationPhase {
 				break;
 			}
 		}
-
 		if (!neighbourCountries) {
 			System.out.println("Countries are not adjacent!");
 			doFortification = true;
 		}
 	}
-
 }
