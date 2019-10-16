@@ -36,6 +36,7 @@ public class GameDriver {
 		boolean exit = true;
 		while (exit) {
 			exit = false;
+			System.out.flush();
 			System.out.println("\nWelcome to Risk Game!");
 			System.out.println("\nChoose the below options\n");
 			System.out.println("1. Create a Map.");
@@ -74,6 +75,8 @@ public class GameDriver {
 				break;
 			default:
 				System.out.println("Invalid option. Please choose the correct option.");
+				exit = true;
+				System.out.flush();
 			}
 		}
 	}

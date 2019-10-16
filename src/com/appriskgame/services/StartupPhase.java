@@ -1,7 +1,6 @@
 package com.appriskgame.services;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Random;
@@ -60,75 +59,82 @@ public class StartupPhase {
 	 */
 	public void gamePlay(GameMap gameMap) throws Exception {
 		boolean proceed = false, populateFlag = false, mapFlag = true;
-
+		playerNames = new ArrayList<String>();
 		do {
 			boolean flag;
-			playerNames = new ArrayList<String>();
 			do {
 				flag = false;
 				System.out.println("Enter Command to add or remove player");
 				String input = br.readLine().trim();
-				ArrayList<String> multiCommand = multipleCommands(input);
-				for (int p = 0; p < multiCommand.size(); p++) {
-					String data = multiCommand.get(p);
-					Pattern commandPattern = Pattern.compile("[a-zA-z]+ -[a-zA-z\\s-]*");
-					Pattern commandName = Pattern.compile("gameplayer");
-					Matcher commandMatch = commandPattern.matcher(data);
-					String[] command = data.split("-");
-					Matcher commandNameMatch = commandName.matcher(command[0].trim());
-					if (!commandMatch.matches() || input.isEmpty() || !commandNameMatch.matches()) {
-						System.out.println("\nIncorrect Command");
-						flag = true;
-					}
-					if (!flag) {
-						if (data.contains("-add")) {
-							String[] addData = data.split("-add ");
-							for (int i = 1; i < addData.length; i++) {
-								String name = addData[i].trim();
-								Pattern namePattern = Pattern.compile("[a-zA-z0-9]+");
-								Matcher match = namePattern.matcher(name);
-								if (!match.matches() || name.isEmpty()) {
-									System.out.println("\nPlease enter the correct player name");
-									flag = true;
-								}
-								playerNames.add(name);
-							}
-						} else if (data.contains("-remove")) {
-							String[] removeData = data.split("-remove ");
-							for (int i = 1; i < removeData.length; i++) {
-								String name = removeData[i].trim();
-								Pattern namePattern = Pattern.compile("[a-zA-z0-9]+");
-								Matcher match = namePattern.matcher(name);
-								if (!match.matches() || name.isEmpty()) {
-									System.out.println("\nPlease enter the correct player name");
-									flag = true;
-								}
-								if (playerNames.contains(name)) {
-									playerNames.remove(name);
-								} else {
-									System.out.println(name + "doesn't exist");
-								}
-							}
-						}
-
-					}
-				}
-				System.out.println("Do you want to add/remove players? Yes/No");
-				String choice = br.readLine().trim();
-				while (!(choice.equalsIgnoreCase("Yes") || choice.equalsIgnoreCase("No") || choice == null)) {
-					System.err.println("\nPlease enter the choice as either Yes or No:");
-					choice = br.readLine().trim();
-				}
-
-				if (choice.equalsIgnoreCase("Yes")) {
+				Pattern multiPattern = Pattern.compile("[a-zA-z]+ [-[a-z]+ [a-zA-Z]+ ]*");
+				Matcher multiCommandPattern = multiPattern.matcher(input);
+				if (!multiCommandPattern.matches() || input.isEmpty()) {
+					System.out.println("\nIncorrect Command");
 					flag = true;
-				} else {
-					flag = false;
+				}
+				if (!flag) {
+					ArrayList<String> multiCommand = multipleCommands(input);
+					for (int p = 0; p < multiCommand.size(); p++) {
+						String data = multiCommand.get(p);
+						Pattern commandPattern = Pattern.compile("[a-zA-z]+ -[a-zA-z\\s-]*");
+						Pattern commandName = Pattern.compile("gameplayer");
+						Matcher commandMatch = commandPattern.matcher(data);
+						String[] command = data.split("-");
+						Matcher commandNameMatch = commandName.matcher(command[0].trim());
+						if (!commandMatch.matches() || input.isEmpty() || !commandNameMatch.matches()) {
+							System.out.println("\nIncorrect Command");
+							flag = true;
+						}
+						if (!flag) {
+							if (data.contains("-add")) {
+								String[] addData = data.split("-add ");
+								for (int i = 1; i < addData.length; i++) {
+									String name = addData[i].trim();
+									Pattern namePattern = Pattern.compile("[a-zA-z0-9]+");
+									Matcher match = namePattern.matcher(name);
+									if (!match.matches() || name.isEmpty()) {
+										System.out.println("\nPlease enter the correct player name");
+										flag = true;
+									}
+									playerNames.add(name);
+								}
+							} else if (data.contains("-remove")) {
+								String[] removeData = data.split("-remove ");
+								for (int i = 1; i < removeData.length; i++) {
+									String name = removeData[i].trim();
+									Pattern namePattern = Pattern.compile("[a-zA-z0-9]+");
+									Matcher match = namePattern.matcher(name);
+									if (!match.matches() || name.isEmpty()) {
+										System.out.println("\nPlease enter the correct player name");
+										flag = true;
+									}
+									if (playerNames.contains(name)) {
+										playerNames.remove(name);
+									} else {
+										System.out.println(name + "doesn't exist");
+									}
+								}
+							}
+
+						}
+					}
+					System.out.println("Do you want to add/remove players? Yes/No");
+					String choice = br.readLine().trim();
+					while (!(choice.equalsIgnoreCase("Yes") || choice.equalsIgnoreCase("No") || choice == null)) {
+						System.err.println("\nPlease enter the choice as either Yes or No:");
+						choice = br.readLine().trim();
+					}
+
+					if (choice.equalsIgnoreCase("Yes")) {
+						flag = true;
+					} else {
+						flag = false;
+					}
 				}
 			} while (flag);
 			if (playerNames.size() > 5 || playerNames.size() < 2) {
-				System.out.println(
-						"Sorry! The numbers of players can be between 2 and 6. Current size is " + playerNames.size());
+				System.out.println("Sorry! The numbers of players can be between 2 and 6.\n Current size is "
+						+ playerNames.size() + "\nPlayers are : " + playerNames);
 				proceed = true;
 			} else {
 				System.out.println("Great! Let's Play.");
@@ -211,6 +217,7 @@ public class StartupPhase {
 							}
 							middlePlace = true;
 							placeArmyFlag = false;
+							round = playerNames.size();
 						}
 						if (!middlePlace) {
 							String[] data = input.split(" ");
@@ -297,31 +304,48 @@ public class StartupPhase {
 		} while (mapFlag);
 		ReinforcementPhase reinforce = new ReinforcementPhase();
 		FortificationPhase fortify = new FortificationPhase();
-		for (int round = 1; round <= playersList.size(); round++) {
-			gameplayer = roundRobin.nextTurn();
-			System.out.println("** Reinforcement Phase Begins for Player: " + gameplayer.getPlayerName() + " **");
-			System.out.println(gameplayer.getPlayerCountries());
-			Continent playerContinent = gameplayer.getPlayerCountries().get(0).getPartOfContinent();
-			int reInforceAmries = ReinforcementPhase.assignReinforcedArmies(gameplayer, playerContinent);
-			gameplayer.setNoOfArmies(reInforceAmries);
-			while (gameplayer.getNoOfArmies() > 0) {
-				reinforce.startReinforcement(gameplayer, gameMap);
-			}
-			System.out.println("** Reinforcement Phase Ends for Player: " + gameplayer.getPlayerName() + " **");
-			System.out.println("Attack Begin");
-			System.out.println("Attack Ends");
-			System.out.println("** Fortification Phase Begins for Player: " + gameplayer.getPlayerName() + " **");
-			System.out.println("Enter the Command to display Map");
-			String mapCommand = br.readLine().trim();
-			if (mapCommand.equalsIgnoreCase("showmap")) {
-				showMap(gameMap);
-			}
-			fortify.startGameFortification(gameplayer, gameMap);
-			System.out.println("** Fortification Phase Ends for Player: " + gameplayer.getPlayerName() + " **");
+		boolean gameContinue;
+		do {
+			gameContinue = false;
+			for (int round = 1; round <= playersList.size(); round++) {
+				gameplayer = roundRobin.nextTurn();
+				System.out.println("** Reinforcement Phase Begins for Player: " + gameplayer.getPlayerName() + " **");
+				System.out.println(gameplayer.getPlayerCountries());
+				Continent playerContinent = gameplayer.getPlayerCountries().get(0).getPartOfContinent();
+				int reInforceAmries = ReinforcementPhase.assignReinforcedArmies(gameplayer, playerContinent);
+				gameplayer.setNoOfArmies(reInforceAmries);
+				while (gameplayer.getNoOfArmies() > 0) {
+					reinforce.startReinforcement(gameplayer, gameMap);
+				}
+				System.out.println("** Reinforcement Phase Ends for Player: " + gameplayer.getPlayerName() + " **");
+				System.out.println("Attack Begin");
+				System.out.println("Attack Ends");
+				System.out.println("** Fortification Phase Begins for Player: " + gameplayer.getPlayerName() + " **");
+				System.out.println("Enter the Command to display Map");
+				String mapCommand = br.readLine().trim();
+				if (mapCommand.equalsIgnoreCase("showmap")) {
+					showMap(gameMap);
+				}
+				fortify.startGameFortification(gameplayer, gameMap);
+				System.out.println("** Fortification Phase Ends for Player: " + gameplayer.getPlayerName() + " **");
 
-		}
-		System.out.println("Thank You!!");
-		System.exit(0);
+			}
+			System.out.println("Do you want to continue playing? Yes/No");
+			String continuePlaying = br.readLine().trim();
+			while (!(continuePlaying.equalsIgnoreCase("Yes") || continuePlaying.equalsIgnoreCase("No")
+					|| continuePlaying == null)) {
+				System.err.println("\nPlease enter the choice as either Yes or No:");
+				choice = br.readLine().trim();
+			}
+			if (choice.equalsIgnoreCase("Yes")) {
+				gameContinue = true;
+			} else {
+				gameContinue = false;
+				System.out.println("Thank You!!");
+				System.exit(0);
+			}
+		} while (gameContinue);
+
 	}
 
 	/**

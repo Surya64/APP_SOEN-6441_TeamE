@@ -1,47 +1,118 @@
 package com.appriskgame.services;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-
+import java.io.IOException;
+import java.util.ArrayList;
+import com.appriskgame.model.Continent;
 import com.appriskgame.model.Country;
 
+/**
+ * This Class containing the method to check whether a map is a connected graph or
+ * not
+ * 
+ * @author Surya
+ * @author Sahana
+ * 
+ */
 public class ConnectedGraph {
+	static String adjancencyError="";
+	
+	/**
+	 * This method is used to check adjacency between countries in the uploaded file
+	 * and check for correct format.
+	 * 
+	 * @return flag returns boolean value if adjacency are defined correctly.
+	 * @throws IOException - throws input output exception
+	 */
+	public String checkCountryAdjacency(ArrayList<Country> listOfCountries, ArrayList<Continent> listOfContinent ) throws IOException {
+		String adjError = new String(), contError = new String(), connectedError = new String();
+		ArrayList<String> adjacentCountries = new ArrayList<>();
+		ArrayList<String> availableContinent = new ArrayList<>();
+		ArrayList<String> connectivity = new ArrayList<>();
+		boolean flag = false, continentFlag = true, adjacencyFlag = true, connectedFlag = true;
 
-	private HashMap<Country, Boolean> visited;
-	private HashSet<Country> countryList;
-
-	public ConnectedGraph(HashSet<Country> countryList) {
-		this.countryList = countryList;
-		this.visited = new HashMap<>();
-		Iterator<Country> iterator = this.countryList.iterator();
-		while (iterator.hasNext()) {
-			visited.put(iterator.next(), false);
-		}
-	}
-
-	private void depthFirstTraversal(Country startCountry) {
-		visited.put(startCountry, true);
-		Iterator<Country> it = startCountry.getNeighbourCountriesToAdd().iterator();
-		while (it.hasNext()) {
-			Country neighbourCountry = it.next();
-			if (!visited.get(neighbourCountry)) {
-				depthFirstTraversal(neighbourCountry);
+		if (listOfCountries != null && !listOfCountries.isEmpty()) {
+			for (Country country1 : listOfCountries) {
+				adjacentCountries = country1.getNeighbourCountries();
+				if (!adjacentCountries.isEmpty()) {
+					for (String adjCountryName : adjacentCountries) {
+						for (Country country2 : listOfCountries) {
+							if (country2.getCountryName().equals(adjCountryName)) {
+								if (country2.getNeighbourCountries().contains(country1.getCountryName())) {
+									flag = true;
+									// To check for Connectivity of the Graph adding the connected continents in the
+									// list
+									if (country1.getPartOfContinent() != null
+											&& country2.getPartOfContinent() != null) {
+										if (!country2.getPartOfContinent().getContinentName()
+												.equals(country1.getPartOfContinent().getContinentName())) {
+											connectivity.add(country2.getPartOfContinent().getContinentName());
+											connectivity.add(country1.getPartOfContinent().getContinentName());
+										}
+									}
+									break;
+								} else
+									flag = false;
+							} else
+								flag = false;
+						}
+						if (!flag) {
+							adjacencyFlag = false;
+							adjError = adjError.concat(country1.getCountryName() + " and " + adjCountryName
+									+ " are not defined properly as adjacent countries.\n");
+						}
+					}
+				} else {
+					adjacencyFlag = false;
+					adjError = adjError.concat(country1.getCountryName()
+							+ " does not have any Adjacents Countries. There should be atleast one adjacent country\n");
+				}
 			}
 		}
-	}
-
-	public boolean isConnected() {
-		depthFirstTraversal(countryList.iterator().next());
-		Iterator<Country> it = countryList.iterator();
-		while (it.hasNext()) {
-			Country country = it.next();
-			if (visited.get(country) == false) {
-				System.out.println("Map is not a connected graph.");
-				return false;
+		if (listOfContinent.size() < 2) {
+			continentFlag = false;
+			contError = "Minimum number of continents should be two to play the games.\n";
+		}
+		if (listOfCountries != null && !listOfCountries.isEmpty()) {
+			listOfCountries.forEach(country -> {
+				if (!availableContinent.contains(country.getCountryName())) {
+					availableContinent.add(country.getPartOfContinent().getContinentName());
+				}
+			});
+		}
+		for (Continent continent : listOfContinent) {
+			boolean flagConnected = true;
+			for (String continentname : availableContinent) {
+				if (continent.getContinentName().equalsIgnoreCase(continentname)) {
+					flagConnected = false;
+				}
+			}
+			if (flagConnected) {
+				continentFlag = false;
+				contError = contError.concat(continent.getContinentName()
+						+ " does not have any defined Country. Should have atleast one country.\n");
+			}
+			flagConnected = true;
+			for (String connectedContinent : connectivity) {
+				if (connectedContinent.equalsIgnoreCase(continent.getContinentName())) {
+					flagConnected = false;
+				}
+			}
+			if (flagConnected) {
+				connectedFlag = false;
+				connectedError = connectedError.concat("Countries from " + continent.getContinentName()
+						+ " are not connected to any of the countries of the other " + (listOfContinent.size() - 1)
+						+ " available continents.\n");
 			}
 		}
-		return true;
+		if (flag && continentFlag && adjacencyFlag && connectedFlag) {
+			return adjancencyError;
+		} else {
+			adjancencyError = "\n".concat(contError).concat(adjError);
+			if (!connectedFlag) {
+				connectedError = "\n Map Graph is not Connected - \n".concat(connectedError);
+				adjancencyError = adjancencyError.concat(connectedError);
+			}
+			return adjancencyError;
+		}
 	}
-
 }

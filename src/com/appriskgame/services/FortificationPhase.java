@@ -14,8 +14,8 @@ import com.appriskgame.model.GameMap;
 import com.appriskgame.model.GamePlayer;
 
 /**
- * This class is for the fortification phase of the game. It checks
- * the number of countries user has proceeds if it is not less than 2. Takes the
+ * This class is for the fortification phase of the game. It checks the number
+ * of countries user has proceeds if it is not less than 2. Takes the
  * fromCountry and toCountry value which identifies from where the player wishes
  * to move army and where. After performing requisite validation moves army of
  * the player.
@@ -58,15 +58,20 @@ public class FortificationPhase {
 					System.out.println("Enter the Command for fortification");
 					strUser = br.readLine().trim().toUpperCase();
 					playersCommandList = Arrays.asList(strUser.split(" "));
-					if (playersCommandList.size() == 2) {
-						playersCommandList = Arrays.asList(strUser.split(" "));
-						String none = playersCommandList.get(1);
-						if (none.equalsIgnoreCase("none")) {
-							System.out.println("No Move in Forification Phase");
-							doFortificationNone = false;
-							doFortification = false;
+					do {
+						if (playersCommandList.size() == 2) {
+							playersCommandList = Arrays.asList(strUser.split(" "));
+							String none = playersCommandList.get(1);
+							if (none.equalsIgnoreCase("none")) {
+								System.out.println("No Move in Forification Phase");
+								doFortificationNone = false;
+								doFortification = false;
+							} else {
+								System.out.println("Please enter the right format like : fortify none");
+								doFortificationNone = true;
+							}
 						}
-					}
+					} while (doFortificationNone);
 					if (doFortificationNone) {
 						if (!(playersCommandList.size() == 4)) {
 							System.out
