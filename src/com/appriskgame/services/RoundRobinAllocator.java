@@ -10,7 +10,6 @@ import com.appriskgame.model.GamePlayer;
  * 
  * @author Sahana
  * @author Surya
- *
  */
 public class RoundRobinAllocator {
 	private ArrayList<GamePlayer> listOfPlayers;

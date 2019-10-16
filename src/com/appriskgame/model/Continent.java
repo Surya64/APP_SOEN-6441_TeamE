@@ -3,21 +3,16 @@ package com.appriskgame.model;
 import java.util.ArrayList;
 
 /**
- * The Continent class is to have all the details regarding Continent
+ * This class contains all the details of Continent
  *
  * @author Shruthi
  * @author Sahana
  *
  */
-
 public class Continent {
 
 	private String continentName;
-
-
 	private int continentControlValue;
-
-
 	private ArrayList<Country> listOfCountries = new ArrayList<Country>();
 
 	/**
@@ -79,5 +74,4 @@ public class Continent {
 		return "Continents: \n[continentName=" + continentName + ", controlValue=" + continentControlValue
 				+ ", listOfCountries=" + listOfCountries + "]/n";
 	}
-
 }

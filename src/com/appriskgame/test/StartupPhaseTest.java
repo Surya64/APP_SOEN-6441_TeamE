@@ -13,7 +13,6 @@ import com.appriskgame.services.StartupPhase;
  * Test Class for StartUpPhase class
  * 
  * @author Sahana
- *
  */
 public class StartupPhaseTest {
 	GamePlayer player1, player2;

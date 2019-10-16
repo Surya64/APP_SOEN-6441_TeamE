@@ -9,9 +9,9 @@ import java.util.ArrayList;
  * 
  * @author Dolly
  * @author Sahana
- *
  */
 public class GamePlayer {
+
 	private String playerName;
 	private ArrayList<Country> playerCountries = new ArrayList<Country>();
 	private int noOfArmies = 0;
@@ -33,7 +33,7 @@ public class GamePlayer {
 	public void setPlayerName(String name) {
 		this.playerName = name;
 	}
-	
+
 	/**
 	 * Get the list of the countries assigned to player.
 	 * 
@@ -42,7 +42,7 @@ public class GamePlayer {
 	public ArrayList<Country> getPlayerCountries() {
 		return playerCountries;
 	}
-	
+
 	/**
 	 * Set the list of the countries to player.
 	 * 
@@ -87,13 +87,10 @@ public class GamePlayer {
 	}
 
 	public String countryName() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public Object Country() {
-		// TODO Auto-generated method stub
 		return null;
 	}
-
 }
