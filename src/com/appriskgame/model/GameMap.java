@@ -9,10 +9,8 @@ import java.util.HashMap;
  * 
  * @author Surya
  * @author Sahana
- * @author Sai
  */
 public class GameMap {
-
 	private ArrayList<Country> countries = new ArrayList<Country>();
 	private ArrayList<Continent> continents = new ArrayList<Continent>();
 	private HashMap<String, Country> countrySet;

@@ -73,10 +73,9 @@ public class GamePlayer {
 	/**
 	 * This method is used to add the country to the player's countries list.
 	 * 
-	 * @param country - The country that needs to be added.
+	 * @param country The country that needs to be added.
 	 */
 	public void addCountry(Country country) {
-
 		this.playerCountries.add(country);
 	}
 
@@ -84,13 +83,5 @@ public class GamePlayer {
 	public String toString() {
 		return "Player [PlayerName=" + playerName + ", Armies=" + noOfArmies + ", Countries=" + playerCountries + "]";
 
-	}
-
-	public String countryName() {
-		return null;
-	}
-
-	public Object Country() {
-		return null;
 	}
 }

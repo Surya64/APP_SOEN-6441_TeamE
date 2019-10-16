@@ -553,18 +553,29 @@ public class MapOperations {
 	}
 
 	/**
-	 * validateMapDetails Validates the data of Countries,Continent and Boundaries
+	 * validateMapDetails Validates the data of Countries, Continent, Boundaries and
+	 * Map Connectivity
+	 * 
+	 * @return boolean true if validation is successful or else false.
+	 * @throws IOException
 	 */
-	private boolean validateMapDetails() {
+	private boolean validateMapDetails() throws IOException {
 		MapValidation validate = new MapValidation();
+		ConnectedGraph connect = new ConnectedGraph();
 		String continentsData = getContinents();
 		String countriesData = getCountries();
 		String boundariesData = getBoundaries();
+		ArrayList<Country> listCountries = new ArrayList<Country>();
+		ArrayList<Continent> listContinent = new ArrayList<Continent>();
+		listContinent.addAll(gameMap.getContinents());
+		listCountries.addAll(gameMap.getCountries());
+		String adjError = connect.checkCountryAdjacency(listCountries, listContinent);
 
 		if (validate.validateContinents(continentsData) == true && validate.validateCountries(countriesData) == true
-				&& validate.validateBoundaries(boundariesData) == true) {
+				&& validate.validateBoundaries(boundariesData) == true && adjError.isEmpty()) {
 			return true;
 		} else {
+			System.out.println(adjError);
 			return false;
 		}
 	}
@@ -713,16 +724,16 @@ public class MapOperations {
 
 			Pattern namePattern1 = Pattern.compile("[a-zA-Z-\\s]+");
 			Matcher match1 = namePattern1.matcher(cmdType);
-			String[] userValidInputs = { "editcontinent", "editcountry", "editneighbor", "showmap" };
+			String[] userValidInputs = { "editcontinent", "editcountry", "editneighbor", "showmap", "validatemap" };
 			List<String> userValidInputsList = Arrays.asList(userValidInputs);
 			while (!match1.matches() || !userValidInputsList.contains(cmdType)) {
 				System.out.println(
-						"Please enter the right format : editcontinent -add continentname continentvalue -remove continentname\n"
-								+ " " + "OR\n" + " "
-								+ "editcountry -add countryname continentname -remove countryname\n" + " " + "OR\n"
+						"\nPlease enter Command in right format :\n editcontinent -add continentname continentvalue -remove continentname\n"
+								+ " " + "or\n" + " "
+								+ "editcountry -add countryname continentname -remove countryname\n" + " " + "or\n"
 								+ " "
 								+ "editneighbor -add countryname neighborcountryname -remove countryname neighborcountryname\r\n"
-								+ " " + "OR\n" + "showmap\n");
+								+ " " + "or\n" + "showmap\n"+ "or\n" + "validatemap\n");
 				command = br.readLine().trim();
 				cmdDetails = command.split(" ");
 				commands = multipleCommands(command);

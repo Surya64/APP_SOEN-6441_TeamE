@@ -15,7 +15,7 @@ import org.junit.Before;
  */
 public class MapValidationTest {
 	MapValidation mapValidation;
-	private String validMap, invalidMap;
+	private String validMap, invalidMap, notConnectedGraph;
 	private String validCountryData, invalidCountryData;
 	private String validContinentData, invalidContinentData;
 	private String validBoundaryData, invalidBoundaryData;
@@ -26,8 +26,9 @@ public class MapValidationTest {
 	@Before
 	public void initialize() {
 		mapValidation = new MapValidation();
-		validMap = "resources\\maps\\Valid1.map";
-		invalidMap = "resources\\maps\\Invalid1.map";
+		validMap = "resources\\maps\\valid1.map";
+		invalidMap = "resources\\maps\\invalid2.map";
+		notConnectedGraph = "resources\\maps\\testinvalidcontinent.map";
 		validCountryData = "[countries]\r\n1 siberia 1 99 99\r\n2 worrick 2 99 99\r\n3 yazteck 1 99 99";
 		invalidCountryData = "[countries]\r\n1 siberia\r\n2 worrick 2 99 99";
 		validContinentData = "[continents]\r\nSouth-America 5 yellow\r\nameroki 10 #99NoColor";
@@ -54,6 +55,16 @@ public class MapValidationTest {
 	@Test
 	public void testIsInvalidMap() throws IOException {
 		assertFalse(mapValidation.validateMap(invalidMap));
+	}
+	
+	/**
+	 * Test method for testing whether the map connected or not.
+	 * 
+	 * @throws IOException - the input output exception
+	 */
+	@Test
+	public void testnotConnectedGraph() throws IOException {
+		assertFalse(mapValidation.validateMap(notConnectedGraph));
 	}
 
 	/**

@@ -10,7 +10,6 @@ import java.util.ArrayList;
  *
  */
 public class Continent {
-
 	private String continentName;
 	private int continentControlValue;
 	private ArrayList<Country> listOfCountries = new ArrayList<Country>();
