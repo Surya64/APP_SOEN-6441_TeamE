@@ -32,6 +32,25 @@ public class StartupPhase {
 	static int FOURPLAYERARMYCOUNT = 30;
 	static int FIVEPLAYERARMYCOUNT = 25;
 	static int SIXPLAYERARMYCOUNT = 20;
+	
+	
+	/**
+	 * This method is used to set the player's list.
+	 * 
+	 * @param playersList It is the player's List need to be set
+	 */
+	public void setPlayerList(ArrayList<GamePlayer> playersList) {
+		this.playersList = playersList;
+	}
+	
+	/**
+	 * This method is used to get the player's list.
+	 * 
+	 * @return ArrayList of Players
+	 */
+	public ArrayList<GamePlayer> getPlayerList() {
+		return playersList;
+	}
 
 	/**
 	 * This method starts the game by obtaining the number of players and taking the
