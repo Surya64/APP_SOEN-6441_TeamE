@@ -165,8 +165,8 @@ public class ReinforcementPhase {
 				}
 				namePattern1 = Pattern.compile("[a-zA-Z-\\s]+");
 				match1 = namePattern1.matcher(countryName);
-				Pattern numberPattern = Pattern.compile("[0-9]+");
-				Matcher match = numberPattern.matcher(armyCount);
+				Pattern numberPattern2 = Pattern.compile("[0-9]+");
+				Matcher match2 = numberPattern.matcher(armyCount);
 			}
 		}
 		int numOfarmies = Integer.parseInt(armyCount);
