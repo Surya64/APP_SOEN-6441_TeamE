@@ -328,7 +328,6 @@ public class StartupPhase {
 				}
 				fortify.startGameFortification(gameplayer, gameMap);
 				System.out.println("** Fortification Phase Ends for Player: " + gameplayer.getPlayerName() + " **");
-
 			}
 			System.out.println("Do you want to continue playing? Yes/No");
 			String continuePlaying = br.readLine().trim();
@@ -337,7 +336,7 @@ public class StartupPhase {
 				System.err.println("\nPlease enter the choice as either Yes or No:");
 				choice = br.readLine().trim();
 			}
-			if (choice.equalsIgnoreCase("Yes")) {
+			if (continuePlaying.equalsIgnoreCase("Yes")) {
 				gameContinue = true;
 			} else {
 				gameContinue = false;
