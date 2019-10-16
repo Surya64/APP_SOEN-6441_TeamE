@@ -23,7 +23,7 @@ import com.appriskgame.model.GamePlayer;
  * <li>Once the player choose for the reinforcement,Lists all the countries from
  * the map for a continent to which a player belongs
  * <li>Armies are reinforced based on the rule
- * <li>User have to choose the country and the number of reinforment armies to
+ * <li>User have to choose the country and the number of reinforcement armies to
  * be allocated
  *
  *
