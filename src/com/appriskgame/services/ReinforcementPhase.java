@@ -79,8 +79,11 @@ public class ReinforcementPhase {
 			}
 		}
 		System.out.println(" Player Name :" + player.getPlayerName());
-		System.out.println("Armies available for Reinforcement: " + player.getNoOfArmies());
-		while (player.getNoOfArmies() != 0) {
+		int reinforcementArmies = assignReinforcedArmies(player, playerContinent);
+		System.out.println("Armies available for Reinforcement: " + reinforcementArmies);
+		player.setNoOfArmies((reinforcementArmies));
+
+		while (player.getNoOfArmies() > 0) {
 			System.out.println(
 					"Please enter the country and number of armies to reinforcein the format: reinforce countryname num");
 			playersChoice = input.readLine().trim();
