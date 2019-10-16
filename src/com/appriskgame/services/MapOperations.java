@@ -495,6 +495,7 @@ public class MapOperations {
 			System.out.print(gameMap.getCountries().get(i).getCountryName());
 			System.out.println(gameMap.getCountries().get(i).getNeighbourCountries());
 		}
+		System.out.println();
 	}
 
 	/**
@@ -590,7 +591,7 @@ public class MapOperations {
 		String[] commandArrays = fullCommand.split(" ");
 		boolean suspend = false;
 		ArrayList<String> splitCommands = new ArrayList<String>();
-
+		
 		if (commandArrays[0].equalsIgnoreCase("editcontinent")) {
 			for (int i = 1; i < commandArrays.length && suspend == false; i = i + 1) {
 				String[] cmdDetails = new String[4];

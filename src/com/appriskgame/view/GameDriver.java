@@ -42,7 +42,7 @@ public class GameDriver {
 				loadGameMap = new MapOperations();
 				gameMap = loadGameMap.createFile();
 				startGame();
-
+				exit =true;
 				break;
 			case 2:
 				loadGameMap = new MapOperations();
@@ -51,6 +51,7 @@ public class GameDriver {
 					System.out.println("Thank You!!");
 				} else {
 					startGame();
+					exit = true;
 				}
 				break;
 			case 3:
@@ -89,9 +90,6 @@ public class GameDriver {
 					createMapGraph = loadGameMap.readGameMap(inputGameMapName);
 					start.gamePlay(createMapGraph);
 				}
-			} else {
-				System.out.println("\nThank you!");
-				System.exit(0);
 			}
 
 		} catch (IOException e) {

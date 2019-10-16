@@ -41,7 +41,7 @@ public class StartupPhase {
 	 * @throws Exception IO Exception
 	 */
 	public void gamePlay(GameMap gameMap) throws Exception {
-		boolean proceed = false, populateFlag = false;
+		boolean proceed = false, populateFlag = false, mapFlag = true;
 
 		do {
 			boolean flag;
@@ -104,7 +104,8 @@ public class StartupPhase {
 				}
 			} while (flag);
 			if (playerNames.size() > 5 || playerNames.size() < 2) {
-				System.out.println("Sorry! The numbers of players can be between 2 and 6.");
+				System.out.println(
+						"Sorry! The numbers of players can be between 2 and 6. Current size is " + playerNames.size());
 				proceed = true;
 			} else {
 				System.out.println("Great! Let's Play.");
@@ -128,11 +129,25 @@ public class StartupPhase {
 				System.out.println("\nIncorrect Command");
 				populateFlag = true;
 			}
-			populateCountries(gameMap);
+			if (!populateFlag) {
+				populateCountries(gameMap);
+			}
 
 		} while (populateFlag);
 		defaultArmiesToPlayer();
 		initialArmyAllocation(gameMap);
+
+		do {
+			System.out.println("Enter the Command to display Map");
+			String mapCommand = br.readLine().trim();
+			if (mapCommand.equalsIgnoreCase("showmap")) {
+				showMap(gameMap);
+				mapFlag = false;
+			} else {
+				System.out.println("Incorrect Command");
+				mapFlag = true;
+			}
+		} while (mapFlag);
 
 		RoundRobinAllocator roundRobin = new RoundRobinAllocator(playersList);
 		System.out.println("Do you want to place army Individually? Yes/No");
@@ -147,10 +162,11 @@ public class StartupPhase {
 				for (int round = 1; round <= playersList.size(); round++) {
 					gameplayer = roundRobin.nextTurn();
 					boolean placeArmyFlag = true;
+					// showMap(gameMap);
 					System.out.println("Name: " + gameplayer.getPlayerName());
-					System.out.println("Countries: " + gameplayer.getPlayerCountries());
 					System.out.println("No of Armies remaining: " + gameplayer.getNoOfArmies());
 					do {
+						// showMap(gameMap);
 						placeArmyFlag = false;
 						System.out.println("Enter Command to place Army to Country");
 						String input = br.readLine().trim();
@@ -162,17 +178,25 @@ public class StartupPhase {
 							placeArmyFlag = true;
 						}
 						if (!placeArmyFlag) {
-							gameplayer.getPlayerCountries().forEach(con -> {
-								if (con.getCountryName().equals(data[1])) {
-									Country selectedCountry = con;
-									if (gameplayer.getNoOfArmies() <= 0) {
-										selectedCountry.setNoOfArmies(selectedCountry.getNoOfArmies() + 1);
+							boolean ownCountryFlag = false;
+							ArrayList<Country> playerCountries = gameplayer.getPlayerCountries();
+							for (int i = 0; i < playerCountries.size(); i++) {
+								if (playerCountries.get(i).getCountryName().equalsIgnoreCase(data[1])) {
+									if (gameplayer.getNoOfArmies() > 0) {
+										playerCountries.get(i)
+												.setNoOfArmies(playerCountries.get(i).getNoOfArmies() + 1);
 										gameplayer.setNoOfArmies(gameplayer.getNoOfArmies() - 1);
+										System.out.println(
+												"One Army is placed in " + playerCountries.get(i).getCountryName());
+										ownCountryFlag = true;
 									} else {
 										System.out.println("All armies are placed.\n");
 									}
 								}
-							});
+							}
+							if (!ownCountryFlag) {
+								System.out.println("Please enter the Country that you Own");
+							}
 						}
 
 					} while (placeArmyFlag);
@@ -204,7 +228,7 @@ public class StartupPhase {
 								System.out.println("All armies are placed.\n");
 							}
 						}
-						System.out.println("Name: " + gameplayer.getPlayerName());
+						System.out.println("Player Name: " + gameplayer.getPlayerName());
 						System.out.println("Countries: " + gameplayer.getPlayerCountries());
 						System.out.println("No of Armies remaining: " + gameplayer.getNoOfArmies());
 					}
@@ -213,25 +237,55 @@ public class StartupPhase {
 			} while (placeAllArmyFlag);
 
 		}
-		System.out.println("\n\nReinforcement Phase Begins\n\n");
+		do {
+			System.out.println("Enter the Command to display Map");
+			String mapCommand = br.readLine().trim();
+			if (mapCommand.equalsIgnoreCase("showmap")) {
+				showMap(gameMap);
+				mapFlag = false;
+			} else {
+				System.out.println("Incorrect Command");
+				mapFlag = true;
+			}
+		} while (mapFlag);
 		ReinforcementPhase reinforce = new ReinforcementPhase();
 		FortificationPhase fortify = new FortificationPhase();
 		for (int round = 1; round <= playersList.size(); round++) {
 			gameplayer = roundRobin.nextTurn();
+			System.out.println("** Reinforcement Phase Begins for Player: " + gameplayer.getPlayerName() + " **");
 			Continent playerContinent = gameplayer.getPlayerCountries().get(0).getPartOfContinent();
 			int reInforceAmries = ReinforcementPhase.assignReinforcedArmies(gameplayer, playerContinent);
 			gameplayer.setNoOfArmies(reInforceAmries);
 			while (gameplayer.getNoOfArmies() > 0) {
 				reinforce.startReinforcement(gameplayer, gameMap);
 			}
-			System.out.println("** ReInforcement Phase Ends **");
+			System.out.println("** Reinforcement Phase Ends for Player: " + gameplayer.getPlayerName() + " **");
 			System.out.println("Attack Begin");
 			System.out.println("Attack Ends");
-			System.out.println("Fortification Phase Begins");
+			System.out.println("** Fortification Phase Begins for Player: " + gameplayer.getPlayerName() + " **");
+			System.out.println("Enter the Command to display Map");
+			String mapCommand = br.readLine().trim();
+			if (mapCommand.equalsIgnoreCase("showmap")) {
+				showMap(gameMap);
+			}
 			fortify.startGameFortification(gameplayer, gameMap);
+			System.out.println("** Fortification Phase Ends for Player: " + gameplayer.getPlayerName() + " **");
 
 		}
 
+	}
+
+	/**
+	 * This method is used show the details of the countries and continents, armies
+	 * on each country, ownership of each country.
+	 * 
+	 * @param gameMap Object of GameMap which consists of Map details
+	 */
+	public void showMap(GameMap gameMap) {
+		ArrayList<Country> print = gameMap.getCountries();
+		for (Country country : print) {
+			System.out.println(country);
+		}
 	}
 
 	/**
