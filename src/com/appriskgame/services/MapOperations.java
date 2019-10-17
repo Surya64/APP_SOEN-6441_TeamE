@@ -1025,6 +1025,7 @@ public class MapOperations {
 							System.out.println("Incorrect File");
 						}
 					} else {
+						flag = true;
 						System.out.println("InCorrect File!! \n Do you want to create a map from scratch? Yes/No");
 						String choice = br.readLine().trim();
 						while (!(choice.equalsIgnoreCase("Yes") || choice.equalsIgnoreCase("No") || choice == null)) {
@@ -1035,6 +1036,7 @@ public class MapOperations {
 							createFile();
 						} else {
 							loadFile();
+							break;
 						}
 					}
 					if (!flag) {

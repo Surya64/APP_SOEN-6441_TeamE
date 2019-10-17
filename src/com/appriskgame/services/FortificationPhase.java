@@ -44,13 +44,15 @@ public class FortificationPhase {
 		int countOfArmies = 0;
 		if (player.getPlayerCountries().size() >= 2) {
 			doFortification = true;
-			boolean doFortificationNone = true;
-			while (doFortification) {
+			boolean doFortificationNone = false;
+			while (doFortification && !doFortificationNone) {
 				doFortification = true;
+				doFortificationNone = false;
 				Country givingCountry = null;
 				Country receivingCountry = null;
 				do {
 					doFortification = false;
+					doFortificationNone = false;
 					System.out.println("\nPlayer has the following list of countries with armies: \n");
 					for (Country country : player.getPlayerCountries()) {
 						System.out.println("* " + country.getCountryName() + ":" + country.getNoOfArmies() + "\n");
@@ -58,21 +60,19 @@ public class FortificationPhase {
 					System.out.println("Enter the Command for fortification");
 					strUser = br.readLine().trim().toUpperCase();
 					playersCommandList = Arrays.asList(strUser.split(" "));
-					do {
-						if (playersCommandList.size() == 2) {
-							playersCommandList = Arrays.asList(strUser.split(" "));
-							String none = playersCommandList.get(1);
-							if (none.equalsIgnoreCase("none")) {
-								System.out.println("No Move in Forification Phase");
-								doFortificationNone = false;
-								doFortification = false;
-							} else {
-								System.out.println("Please enter the right format like : fortify none");
-								doFortificationNone = true;
-							}
+					if (playersCommandList.size() == 2) {
+						playersCommandList = Arrays.asList(strUser.split(" "));
+						String none = playersCommandList.get(1);
+						if (none.equalsIgnoreCase("none")) {
+							System.out.println("No Move in Forification Phase");
+							doFortificationNone = true;
+							doFortification = true;
+						} else {
+							System.out.println("Please enter the right format like : fortify none");
 						}
-					} while (doFortificationNone);
-					if (doFortificationNone) {
+					}
+
+					if (!doFortification) {
 						if (!(playersCommandList.size() == 4)) {
 							System.out
 									.println("Please enter the right format like : fortify fromcountry tocountry num");
@@ -131,39 +131,38 @@ public class FortificationPhase {
 							doFortification = true;
 						}
 					}
-				} while (doFortification);
-				if (doFortificationNone) {
-					if (!doFortification) {
-						countOfArmies = Integer.parseInt(countryNumToPlace);
-						if (countOfArmies >= givingCountry.getNoOfArmies()) {
-							System.out.println(
-									"Insufficient armies available, fortification is not possible with asked number of armies.");
-							doFortification = true;
-						}
-						if (givingCountry.getNoOfArmies() == 1) {
-							System.out.println("Insufficient armies available, " + givingCountry.getCountryName()
-									+ " should have more than 1 army to Move");
-							doFortification = true;
-						}
+				} while (doFortification && !doFortificationNone);
+				if (!doFortification) {
+					countOfArmies = Integer.parseInt(countryNumToPlace);
+					if (countOfArmies >= givingCountry.getNoOfArmies()) {
+						System.out.println(
+								"Insufficient armies available, fortification is not possible with asked number of armies.");
+						doFortification = true;
 					}
-					if (!doFortification) {
-						boolean fortify = false;
-						for (Country country : player.getPlayerCountries()) {
-							for (String temp : country.getNeighbourCountries()) {
-								if (temp.equalsIgnoreCase(strfromCountry) || temp.equalsIgnoreCase(strtoCountry)) {
-									fortify = true;
-								}
-							}
-						}
-						if (fortify) {
-							moveArmies(givingCountry, receivingCountry, countOfArmies);
-						} else {
-							doFortification = true;
-							System.out.println(
-									"None of the players' countries are adjacent\n Fortification phase ends..!!");
-						}
+					if (givingCountry.getNoOfArmies() == 1) {
+						System.out.println("Insufficient armies available, " + givingCountry.getCountryName()
+								+ " should have more than 1 army to Move");
+						doFortification = true;
 					}
 				}
+				if (!doFortification) {
+					boolean fortify = false;
+					for (Country country : player.getPlayerCountries()) {
+						for (String temp : country.getNeighbourCountries()) {
+							if (temp.equalsIgnoreCase(strfromCountry) || temp.equalsIgnoreCase(strtoCountry)) {
+								fortify = true;
+							}
+						}
+					}
+					if (fortify) {
+						moveArmies(givingCountry, receivingCountry, countOfArmies);
+					} else {
+						doFortification = true;
+						System.out
+								.println("None of the players' countries are adjacent\n Fortification phase ends..!!");
+					}
+				}
+
 			}
 
 		} else {
