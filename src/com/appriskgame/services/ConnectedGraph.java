@@ -14,7 +14,7 @@ import com.appriskgame.model.Country;
  * 
  */
 public class ConnectedGraph {
-	static String adjancencyError="";
+	String adjancencyError="";
 	
 	/**
 	 * This method is used to check adjacency between countries in the uploaded file
