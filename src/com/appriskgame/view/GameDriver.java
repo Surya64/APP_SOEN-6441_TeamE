@@ -115,10 +115,15 @@ public class GameDriver {
 						String cmdType = cmdDetails[0];
 						String inputGameMapName = mapLocation + cmdDetails[1] + ".map";
 						if (cmdType.equals("loadmap")) {
-							StartupPhase start = new StartupPhase();
 							loadGameMap = new MapOperations();
-							createMapGraph = loadGameMap.readGameMap(inputGameMapName);
-							start.gamePlay(createMapGraph);
+							if (loadGameMap.isMapExists(cmdDetails[1])) {
+								StartupPhase start = new StartupPhase();
+								createMapGraph = loadGameMap.readGameMap(inputGameMapName);
+								start.gamePlay(createMapGraph);
+							} else {
+								System.out.println("File Doesn't Exist");
+								loadFlag = true;
+							}
 						} else {
 							System.out.println("Incorrect Command");
 							loadFlag = true;
