@@ -89,7 +89,7 @@ public class FortificationPhase {
 						while (!match.matches() || strfromCountry.isEmpty() || !match.matches()
 								|| strtoCountry.isEmpty() || !match1.matches() || countryNumToPlace.isEmpty()) {
 							if (!match.matches() || strfromCountry.isEmpty()) {
-								System.out.println("\nPlease enter the correct from country name below:");
+								System.out.println("\\nInCorrect fromcountry name, please enter the command again:");
 								strUser = br.readLine().trim().toUpperCase();
 								playersCommandList = Arrays.asList(strUser.split(" "));
 								strfromCountry = playersCommandList.get(1);
@@ -97,7 +97,7 @@ public class FortificationPhase {
 								countryNumToPlace = playersCommandList.get(3);
 							}
 							if (!match.matches() || strtoCountry.isEmpty()) {
-								System.out.println("\nPlease enter the correct to country name below:");
+								System.out.println("\nInCorrect tocountry name, please enter the command again:");
 								strUser = br.readLine().trim().toUpperCase();
 								playersCommandList = Arrays.asList(strUser.split(" "));
 								strfromCountry = playersCommandList.get(1);
@@ -105,11 +105,13 @@ public class FortificationPhase {
 								countryNumToPlace = playersCommandList.get(3);
 							}
 							if (!match1.matches() || countryNumToPlace.isEmpty()) {
-								System.out.println("\nPlease enter the correct army count below:");
+								System.out.println("\nInCorrect Army Count, please enter the command again:");
+								strUser = br.readLine().trim().toUpperCase();
 								playersCommandList = Arrays.asList(strUser.split(" "));
 								strfromCountry = playersCommandList.get(1);
 								strtoCountry = playersCommandList.get(2);
 								countryNumToPlace = playersCommandList.get(3);
+								match1 = numberPattern3.matcher(countryNumToPlace);
 							}
 						}
 						for (Country country : player.getPlayerCountries()) {
@@ -142,6 +144,10 @@ public class FortificationPhase {
 					if (givingCountry.getNoOfArmies() == 1) {
 						System.out.println("Insufficient armies available, " + givingCountry.getCountryName()
 								+ " should have more than 1 army to Move");
+						doFortification = true;
+					}
+					if (countOfArmies < 0) {
+						System.out.println("Army count should be a positive number");
 						doFortification = true;
 					}
 				}
