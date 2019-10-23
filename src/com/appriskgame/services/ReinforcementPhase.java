@@ -104,7 +104,7 @@ public class ReinforcementPhase {
 					countryNameObject = country;
 				}
 			}
-			Pattern namePattern2 = Pattern.compile("[a-zA-Z-\\s]+");
+			Pattern namePattern2 = Pattern.compile("reinforce");
 			Matcher match2 = namePattern2.matcher(strreinforce);
 			Pattern namePattern1 = Pattern.compile("[a-zA-Z-\\s]+");
 			Matcher match1 = namePattern1.matcher(countryName);

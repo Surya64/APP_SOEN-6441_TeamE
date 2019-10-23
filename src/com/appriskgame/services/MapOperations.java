@@ -601,7 +601,7 @@ public class MapOperations {
 	 * This method is used to split the full command into single command of list
 	 *
 	 * @param fullCommand input command with multiple add and remove
-	 * @return single command in arraylist
+	 * @return single command in arrayList
 	 * @throws IOException IO
 	 */
 	public ArrayList<String> multipleCommands(String fullCommand) throws IOException {

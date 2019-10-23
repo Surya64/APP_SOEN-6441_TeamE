@@ -25,6 +25,8 @@ public class StartupPhase {
 	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	ArrayList<GamePlayer> playersList = new ArrayList<GamePlayer>();
 	ArrayList<String> playerNames;
+	RoundRobinAllocator roundRobin;
+	MapOperations mapOperations = new MapOperations();
 	GamePlayer gameplayer = new GamePlayer();
 	static int TWOPLAYERARMYCOUNT = 40;
 	static int THREEPLAYERARMYCOUNT = 35;
@@ -178,7 +180,7 @@ public class StartupPhase {
 			}
 		} while (mapFlag);
 
-		RoundRobinAllocator roundRobin = new RoundRobinAllocator(playersList);
+		roundRobin = new RoundRobinAllocator(playersList);
 		System.out.println("Do you want to place army Individually? Yes/No");
 		String choice = br.readLine().trim();
 		while (!(choice.equalsIgnoreCase("Yes") || choice.equalsIgnoreCase("No") || choice == null)) {
@@ -199,22 +201,7 @@ public class StartupPhase {
 						System.out.println("Enter Command to place Army to Country");
 						String input = br.readLine().trim();
 						if (input.equalsIgnoreCase("placeall")) {
-							for (int i = 1; i <= playersList.size(); i++) {
-								gameplayer = roundRobin.nextTurn();
-								while (gameplayer.getNoOfArmies() > 0) {
-									int index = new Random().nextInt(gameplayer.getPlayerCountries().size());
-									Country selectedCountry = gameplayer.getPlayerCountries().get(index);
-									if (gameplayer.getNoOfArmies() > 0) {
-										selectedCountry.setNoOfArmies(selectedCountry.getNoOfArmies() + 1);
-										gameplayer.setNoOfArmies(gameplayer.getNoOfArmies() - 1);
-									} else {
-										System.out.println("All armies are placed.\n");
-									}
-								}
-								System.out.println("Player Name: " + gameplayer.getPlayerName());
-								System.out.println("Countries: " + gameplayer.getPlayerCountries());
-								System.out.println("No of Armies remaining: " + gameplayer.getNoOfArmies());
-							}
+							placeallAmry();
 							middlePlace = true;
 							placeArmyFlag = false;
 							round = playerNames.size();
@@ -270,38 +257,11 @@ public class StartupPhase {
 					placeAllArmyFlag = true;
 				}
 				if (!placeAllArmyFlag) {
-					for (int round = 1; round <= playersList.size(); round++) {
-						gameplayer = roundRobin.nextTurn();
-						while (gameplayer.getNoOfArmies() > 0) {
-							int index = new Random().nextInt(gameplayer.getPlayerCountries().size());
-							Country selectedCountry = gameplayer.getPlayerCountries().get(index);
-							if (gameplayer.getNoOfArmies() > 0) {
-								selectedCountry.setNoOfArmies(selectedCountry.getNoOfArmies() + 1);
-								gameplayer.setNoOfArmies(gameplayer.getNoOfArmies() - 1);
-							} else {
-								System.out.println("All armies are placed.\n");
-							}
-						}
-						System.out.println("Player Name: " + gameplayer.getPlayerName());
-						System.out.println("Countries: " + gameplayer.getPlayerCountries());
-						System.out.println("No of Armies remaining: " + gameplayer.getNoOfArmies());
-					}
+					placeallAmry();
 				}
-
 			} while (placeAllArmyFlag);
 
 		}
-		do {
-			System.out.println("Enter the Command to display Map");
-			String mapCommand = br.readLine().trim();
-			if (mapCommand.equalsIgnoreCase("showmap")) {
-				showMap(gameMap);
-				mapFlag = false;
-			} else {
-				System.out.println("Incorrect Command");
-				mapFlag = true;
-			}
-		} while (mapFlag);
 		ReinforcementPhase reinforce = new ReinforcementPhase();
 		FortificationPhase fortify = new FortificationPhase();
 		boolean gameContinue;
@@ -440,24 +400,10 @@ public class StartupPhase {
 	}
 
 	/**
-	 * Method to form the single command
-	 * 
-	 * @param cmdDetails command string
-	 * @return single command as string
-	 */
-	public String singleCommandOperation(String cmdDetails[]) {
-		String command = "";
-		for (int i = 0; i < cmdDetails.length; i++) {
-			command = command + cmdDetails[i] + " ";
-		}
-		return command.trim();
-	}
-
-	/**
 	 * This method is used to split the full command into single command of list
 	 * 
 	 * @param fullCommand input command with multiple add and remove
-	 * @return single command in arraylist
+	 * @return single command in arrayList
 	 */
 	public ArrayList<String> multipleCommands(String fullCommand) {
 		String[] commandArrays = fullCommand.split(" ");
@@ -474,7 +420,7 @@ public class StartupPhase {
 				cmdDetails[1] = "-add";
 				i = i + 1;
 				cmdDetails[2] = commandArrays[i];
-				String addCoammand = singleCommandOperation(cmdDetails);
+				String addCoammand = mapOperations.singleCommandOperation(cmdDetails);
 				splitCommands.add(addCoammand);
 				suspend = false;
 				break;
@@ -484,13 +430,36 @@ public class StartupPhase {
 				cmdDetails[1] = "-remove";
 				i = i + 1;
 				cmdDetails[2] = commandArrays[i];
-				String removeCommand = singleCommandOperation(cmdDetails);
+				String removeCommand = mapOperations.singleCommandOperation(cmdDetails);
 				splitCommands.add(removeCommand);
 				suspend = false;
 				break;
 			}
 		}
 		return splitCommands;
+	}
+
+	/**
+	 * This method is used place all the remaining armies randomly to each player in
+	 * a round robin fashion
+	 */
+	public void placeallAmry() {
+		for (int round = 1; round <= playersList.size(); round++) {
+			gameplayer = roundRobin.nextTurn();
+			while (gameplayer.getNoOfArmies() > 0) {
+				int index = new Random().nextInt(gameplayer.getPlayerCountries().size());
+				Country selectedCountry = gameplayer.getPlayerCountries().get(index);
+				if (gameplayer.getNoOfArmies() > 0) {
+					selectedCountry.setNoOfArmies(selectedCountry.getNoOfArmies() + 1);
+					gameplayer.setNoOfArmies(gameplayer.getNoOfArmies() - 1);
+				} else {
+					System.out.println("All armies are placed.\n");
+				}
+			}
+			System.out.println("Player Name: " + gameplayer.getPlayerName());
+			System.out.println("Countries: " + gameplayer.getPlayerCountries());
+			System.out.println("No of Armies remaining: " + gameplayer.getNoOfArmies());
+		}
 	}
 
 }
