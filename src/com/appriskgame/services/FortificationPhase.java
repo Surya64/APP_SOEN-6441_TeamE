@@ -63,7 +63,8 @@ public class FortificationPhase {
 					if (playersCommandList.size() == 2) {
 						playersCommandList = Arrays.asList(strUser.split(" "));
 						String none = playersCommandList.get(1);
-						if (none.equalsIgnoreCase("none")) {
+						String cmd = playersCommandList.get(0);
+						if (none.equalsIgnoreCase("none") && cmd.equalsIgnoreCase("fortify")) {
 							System.out.println("No Move in Forification Phase");
 							doFortificationNone = true;
 							doFortification = true;
@@ -82,13 +83,16 @@ public class FortificationPhase {
 						strfromCountry = playersCommandList.get(1);
 						strtoCountry = playersCommandList.get(2);
 						countryNumToPlace = playersCommandList.get(3);
-						Pattern namePattern1 = Pattern.compile("[a-zA-Z-\\s]+");
-						Matcher match = namePattern1.matcher(strfromCountry);
-						Pattern numberPattern3 = Pattern.compile("[0-9]+");
-						Matcher match1 = numberPattern3.matcher(countryNumToPlace);
-						while (!match.matches() || strfromCountry.isEmpty() || !match.matches()
-								|| strtoCountry.isEmpty() || !match1.matches() || countryNumToPlace.isEmpty()) {
-							if (!match.matches() || strfromCountry.isEmpty()) {
+						Pattern cmdPattern = Pattern.compile("fortify");
+						Matcher cmdMatch = cmdPattern.matcher(playersCommandList.get(0));
+						Pattern namePattern = Pattern.compile("[a-zA-Z-_]+");
+						Matcher matchFromCountry = namePattern.matcher(strfromCountry);
+						Matcher matchToCountry = namePattern.matcher(strtoCountry);
+						Pattern numberPattern = Pattern.compile("[0-9]+");
+						Matcher match1 = numberPattern.matcher(countryNumToPlace);
+						while (!matchFromCountry.matches() || strfromCountry.isEmpty() || !matchToCountry.matches()
+								|| strtoCountry.isEmpty() || !match1.matches() || countryNumToPlace.isEmpty() || !cmdMatch.matches()) {
+							if (!matchFromCountry.matches() || strfromCountry.isEmpty()) {
 								System.out.println("\\nInCorrect fromcountry name, please enter the command again:");
 								strUser = br.readLine().trim().toUpperCase();
 								playersCommandList = Arrays.asList(strUser.split(" "));
@@ -96,7 +100,7 @@ public class FortificationPhase {
 								strtoCountry = playersCommandList.get(2);
 								countryNumToPlace = playersCommandList.get(3);
 							}
-							if (!match.matches() || strtoCountry.isEmpty()) {
+							if (!matchToCountry.matches() || strtoCountry.isEmpty()) {
 								System.out.println("\nInCorrect tocountry name, please enter the command again:");
 								strUser = br.readLine().trim().toUpperCase();
 								playersCommandList = Arrays.asList(strUser.split(" "));
@@ -111,7 +115,16 @@ public class FortificationPhase {
 								strfromCountry = playersCommandList.get(1);
 								strtoCountry = playersCommandList.get(2);
 								countryNumToPlace = playersCommandList.get(3);
-								match1 = numberPattern3.matcher(countryNumToPlace);
+								match1 = numberPattern.matcher(countryNumToPlace);
+							}
+							if (!cmdMatch.matches() || playersCommandList.get(0).isEmpty()) {
+								System.out.println("\nInCorrect Command, please enter the command again:");
+								strUser = br.readLine().trim().toUpperCase();
+								playersCommandList = Arrays.asList(strUser.split(" "));
+								strfromCountry = playersCommandList.get(1);
+								strtoCountry = playersCommandList.get(2);
+								countryNumToPlace = playersCommandList.get(3);
+								cmdMatch = cmdPattern.matcher(playersCommandList.get(0));
 							}
 						}
 						for (Country country : player.getPlayerCountries()) {
