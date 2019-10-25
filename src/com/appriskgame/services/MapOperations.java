@@ -610,14 +610,14 @@ public class MapOperations {
 		boolean suspend = false;
 		ArrayList<String> splitCommands = new ArrayList<String>();
 
-		if (commandArrays[0].equalsIgnoreCase("editcontinent")) {
+		if (commandArrays[0].equalsIgnoreCase("editcontinent") || commandArrays[0].equalsIgnoreCase("editcountry")) {
 			for (int i = 1; i < commandArrays.length && suspend == false; i = i + 1) {
 				String[] cmdDetails = new String[4];
 				String decider = commandArrays[i];
 
 				switch (decider) {
 				case "-add":
-					cmdDetails[0] = "editcontinent";
+					cmdDetails[0] = commandArrays[0];
 					cmdDetails[1] = "-add";
 					i = i + 1;
 					cmdDetails[2] = commandArrays[i];
@@ -629,38 +629,7 @@ public class MapOperations {
 					break;
 				case "-remove":
 					cmdDetails = new String[3];
-					cmdDetails[0] = "editcontinent";
-					cmdDetails[1] = "-remove";
-					i = i + 1;
-					cmdDetails[2] = commandArrays[i];
-					String removeCommand = singleCommandOperation(cmdDetails);
-					splitCommands.add(removeCommand);
-					suspend = false;
-					break;
-				}
-			}
-		}
-
-		else if (commandArrays[0].equalsIgnoreCase("editcountry")) {
-			for (int i = 1; i < commandArrays.length && suspend == false; i = i + 1) {
-				String[] cmdDetails = new String[4];
-				String decider = commandArrays[i];
-
-				switch (decider) {
-				case "-add":
-					cmdDetails[0] = "editcountry";
-					cmdDetails[1] = "-add";
-					i = i + 1;
-					cmdDetails[2] = commandArrays[i];
-					i = i + 1;
-					cmdDetails[3] = commandArrays[i];
-					String addCoammand = singleCommandOperation(cmdDetails);
-					splitCommands.add(addCoammand);
-					suspend = false;
-					break;
-				case "-remove":
-					cmdDetails = new String[3];
-					cmdDetails[0] = "editcountry";
+					cmdDetails[0] = commandArrays[0];
 					cmdDetails[1] = "-remove";
 					i = i + 1;
 					cmdDetails[2] = commandArrays[i];

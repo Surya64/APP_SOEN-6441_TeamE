@@ -21,6 +21,7 @@ import com.appriskgame.model.GamePlayer;
  * the player.
  *
  * @author Dolly
+ * @author Sahana
  */
 public class FortificationPhase {
 	public boolean doFortification = false;
@@ -29,6 +30,7 @@ public class FortificationPhase {
 	String strfromCountry;
 	String strtoCountry;
 	String countryNumToPlace;
+	String cmd;
 
 	/**
 	 * This method is called from the Startup phase when the user opts to start the
@@ -58,7 +60,7 @@ public class FortificationPhase {
 						System.out.println("* " + country.getCountryName() + ":" + country.getNoOfArmies() + "\n");
 					}
 					System.out.println("Enter the Command for fortification");
-					strUser = br.readLine().trim().toUpperCase();
+					strUser = br.readLine().trim();
 					playersCommandList = Arrays.asList(strUser.split(" "));
 					if (playersCommandList.size() == 2) {
 						playersCommandList = Arrays.asList(strUser.split(" "));
@@ -83,18 +85,20 @@ public class FortificationPhase {
 						strfromCountry = playersCommandList.get(1);
 						strtoCountry = playersCommandList.get(2);
 						countryNumToPlace = playersCommandList.get(3);
+						cmd = playersCommandList.get(0);
 						Pattern cmdPattern = Pattern.compile("fortify");
-						Matcher cmdMatch = cmdPattern.matcher(playersCommandList.get(0));
+						Matcher cmdMatch = cmdPattern.matcher(cmd);
 						Pattern namePattern = Pattern.compile("[a-zA-Z-_]+");
 						Matcher matchFromCountry = namePattern.matcher(strfromCountry);
 						Matcher matchToCountry = namePattern.matcher(strtoCountry);
 						Pattern numberPattern = Pattern.compile("[0-9]+");
 						Matcher match1 = numberPattern.matcher(countryNumToPlace);
 						while (!matchFromCountry.matches() || strfromCountry.isEmpty() || !matchToCountry.matches()
-								|| strtoCountry.isEmpty() || !match1.matches() || countryNumToPlace.isEmpty() || !cmdMatch.matches()) {
+								|| strtoCountry.isEmpty() || !match1.matches() || countryNumToPlace.isEmpty()
+								|| !cmdMatch.matches()) {
 							if (!matchFromCountry.matches() || strfromCountry.isEmpty()) {
-								System.out.println("\\nInCorrect fromcountry name, please enter the command again:");
-								strUser = br.readLine().trim().toUpperCase();
+								System.out.println("\nInCorrect fromcountry name, please enter the command again:");
+								strUser = br.readLine().trim();
 								playersCommandList = Arrays.asList(strUser.split(" "));
 								strfromCountry = playersCommandList.get(1);
 								strtoCountry = playersCommandList.get(2);
@@ -102,7 +106,7 @@ public class FortificationPhase {
 							}
 							if (!matchToCountry.matches() || strtoCountry.isEmpty()) {
 								System.out.println("\nInCorrect tocountry name, please enter the command again:");
-								strUser = br.readLine().trim().toUpperCase();
+								strUser = br.readLine().trim();
 								playersCommandList = Arrays.asList(strUser.split(" "));
 								strfromCountry = playersCommandList.get(1);
 								strtoCountry = playersCommandList.get(2);
@@ -110,21 +114,22 @@ public class FortificationPhase {
 							}
 							if (!match1.matches() || countryNumToPlace.isEmpty()) {
 								System.out.println("\nInCorrect Army Count, please enter the command again:");
-								strUser = br.readLine().trim().toUpperCase();
+								strUser = br.readLine().trim();
 								playersCommandList = Arrays.asList(strUser.split(" "));
 								strfromCountry = playersCommandList.get(1);
 								strtoCountry = playersCommandList.get(2);
 								countryNumToPlace = playersCommandList.get(3);
 								match1 = numberPattern.matcher(countryNumToPlace);
 							}
-							if (!cmdMatch.matches() || playersCommandList.get(0).isEmpty()) {
+							if (!cmdMatch.matches()) {
 								System.out.println("\nInCorrect Command, please enter the command again:");
-								strUser = br.readLine().trim().toUpperCase();
+								strUser = br.readLine().trim();
 								playersCommandList = Arrays.asList(strUser.split(" "));
+								cmd = playersCommandList.get(0);
 								strfromCountry = playersCommandList.get(1);
 								strtoCountry = playersCommandList.get(2);
 								countryNumToPlace = playersCommandList.get(3);
-								cmdMatch = cmdPattern.matcher(playersCommandList.get(0));
+								cmdMatch = cmdPattern.matcher(cmd);
 							}
 						}
 						for (Country country : player.getPlayerCountries()) {
@@ -149,18 +154,7 @@ public class FortificationPhase {
 				} while (doFortification && !doFortificationNone);
 				if (!doFortification) {
 					countOfArmies = Integer.parseInt(countryNumToPlace);
-					if (countOfArmies >= givingCountry.getNoOfArmies()) {
-						System.out.println(
-								"Insufficient armies available, fortification is not possible with asked number of armies.");
-						doFortification = true;
-					}
-					if (givingCountry.getNoOfArmies() == 1) {
-						System.out.println("Insufficient armies available, " + givingCountry.getCountryName()
-								+ " should have more than 1 army to Move");
-						doFortification = true;
-					}
-					if (countOfArmies < 0) {
-						System.out.println("Army count should be a positive number");
+					if (isArmyCountSufficient(countOfArmies, givingCountry)) {
 						doFortification = true;
 					}
 				}
@@ -187,6 +181,33 @@ public class FortificationPhase {
 		} else {
 			System.out.println("Sorry, Fortification is not possible if the country owned is less than 2");
 		}
+	}
+
+	/**
+	 * This method checks if the provided army count is sufficient for
+	 * fortification.
+	 * 
+	 * @param armyCount     Number of armies to move
+	 * @param givingCountry Country name where armies are moved from
+	 * @return true if the army count is insufficient or else false
+	 */
+	public boolean isArmyCountSufficient(int armyCount, Country givingCountry) {
+		if (armyCount >= givingCountry.getNoOfArmies()) {
+			System.out.println(
+					"Insufficient armies available, fortification is not possible with asked number of armies.");
+			return true;
+		}
+		if (givingCountry.getNoOfArmies() == 1) {
+			System.out.println("Insufficient armies available, " + givingCountry.getCountryName()
+					+ " should have more than 1 army to Move");
+			return true;
+		}
+		if (armyCount < 0) {
+			System.out.println("Army count should be a positive number");
+			return true;
+		}
+		return false;
+
 	}
 
 	/**
