@@ -6,9 +6,9 @@ import java.io.InputStreamReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.appriskgame.controller.MapOperations;
+import com.appriskgame.controller.Player;
 import com.appriskgame.model.GameMap;
-import com.appriskgame.services.MapOperations;
-import com.appriskgame.services.StartupPhase;
 
 /**
  * GameDriver class launches the Risk Game and provided options for the users to
@@ -117,7 +117,7 @@ public class GameDriver {
 						if (cmdType.equals("loadmap")) {
 							loadGameMap = new MapOperations();
 							if (loadGameMap.isMapExists(cmdDetails[1])) {
-								StartupPhase start = new StartupPhase();
+								Player start = new Player();
 								createMapGraph = loadGameMap.readGameMap(inputGameMapName);
 								start.gamePlay(createMapGraph);
 							} else {

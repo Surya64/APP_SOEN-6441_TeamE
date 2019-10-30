@@ -2,8 +2,10 @@ package com.appriskgame.test;
 
 import org.junit.Test;
 import org.junit.Before;
+
+import com.appriskgame.controller.MapOperations;
 import com.appriskgame.model.Continent;
-import com.appriskgame.services.MapOperations;
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;

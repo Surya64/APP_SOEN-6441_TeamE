@@ -1,4 +1,4 @@
-package com.appriskgame.services;
+package com.appriskgame.controller;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -388,7 +388,7 @@ public class MapOperations {
 			}
 			// remove country from the neighbor country list
 			neighborCountry.getNeighbourCountriesToAdd().remove(removeneighborIndex);
-			neighborCountry.getNeighbourCountries().remove(removeneighborIndex);
+			neighborCountry.getNeighbourCountries().remove(removeCountryName);
 		}
 		// 3. Last remove the country from the country List
 		if (gameMap.getCountries().size() >= 1) {
@@ -418,7 +418,7 @@ public class MapOperations {
 			desiredNeighborIndex = i + 1;
 		}
 		gameMap.getCountries().get(desiredCountryIndex).getNeighbourCountriesToAdd().remove(desiredNeighborIndex);
-		gameMap.getCountries().get(desiredNeighborIndex).getNeighbourCountries().remove(desiredNeighborIndex);
+		gameMap.getCountries().get(desiredCountryIndex).getNeighbourCountries().remove(neighborRemoveCountryName);
 	}
 
 	/**

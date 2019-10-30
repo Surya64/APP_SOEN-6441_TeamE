@@ -7,6 +7,6 @@
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
-	<classpathentry kind="lib" path="/Users/dollymodha/Desktop/JUnit/junit-4.10.jar"/>
+	<classpathentry kind="lib" path="C:/Surya/Concordia/SOEN 6441/Project/APP_SOEN-6441_TeamE/junit-4.10.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
