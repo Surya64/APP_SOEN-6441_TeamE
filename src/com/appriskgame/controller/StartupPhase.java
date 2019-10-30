@@ -1,4 +1,4 @@
-package com.appriskgame.services;
+package com.appriskgame.controller;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -47,7 +47,7 @@ public class StartupPhase {
 	public static List<String> playersChoiceList = new ArrayList<String>();
 	
 	
-	public boolean doFortification = false;
+	public static boolean doFortification = false;
 
 	/**
 	 * This method is used to set the player's list.
@@ -875,7 +875,7 @@ public class StartupPhase {
 	 * @param toCountry   - The country to where player want to move army
 	 * @param armiesCount - Count of armies player wish to move
 	 */
-	public void moveArmies(Country fromCountry, Country toCountry, int armiesCount) {
+	public static void moveArmies(Country fromCountry, Country toCountry, int armiesCount) {
 
 		boolean neighbourCountries = false;
 		for (String country : fromCountry.getNeighbourCountries()) {

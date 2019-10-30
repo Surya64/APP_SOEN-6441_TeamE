@@ -1,7 +1,9 @@
 package com.appriskgame.test;
 
 import org.junit.Test;
-import com.appriskgame.services.MapValidation;
+
+import com.appriskgame.controller.MapValidation;
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import java.io.IOException;

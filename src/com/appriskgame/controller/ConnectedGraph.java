@@ -1,4 +1,4 @@
-package com.appriskgame.services;
+package com.appriskgame.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;

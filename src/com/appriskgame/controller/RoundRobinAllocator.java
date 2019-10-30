@@ -1,4 +1,4 @@
-package com.appriskgame.services;
+package com.appriskgame.controller;
 
 import java.util.ArrayList;
 import java.util.Iterator;

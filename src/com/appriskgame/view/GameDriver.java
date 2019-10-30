@@ -6,9 +6,9 @@ import java.io.InputStreamReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.appriskgame.controller.MapOperations;
+import com.appriskgame.controller.StartupPhase;
 import com.appriskgame.model.GameMap;
-import com.appriskgame.services.MapOperations;
-import com.appriskgame.services.StartupPhase;
 
 /**
  * GameDriver class launches the Risk Game and provided options for the users to

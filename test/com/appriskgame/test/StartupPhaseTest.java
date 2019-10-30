@@ -4,10 +4,11 @@ import static org.junit.Assert.assertEquals;
 import java.util.HashMap;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.appriskgame.controller.StartupPhase;
 import com.appriskgame.model.Country;
 import com.appriskgame.model.GameMap;
 import com.appriskgame.model.GamePlayer;
-import com.appriskgame.services.StartupPhase;
 
 /**
  * Test Class for StartUpPhase class

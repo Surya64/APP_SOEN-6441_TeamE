@@ -1,5 +1,5 @@
 
-package com.appriskgame.services;
+package com.appriskgame.controller;
 
 import java.io.BufferedReader;
 import java.io.IOException;

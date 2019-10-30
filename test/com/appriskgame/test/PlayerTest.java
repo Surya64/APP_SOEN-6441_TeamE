@@ -6,27 +6,26 @@ import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import com.appriskgame.controller.StartupPhase;
 import com.appriskgame.model.Continent;
 import com.appriskgame.model.Country;
 import com.appriskgame.model.GamePlayer;
-import com.appriskgame.services.ReinforcementPhase;
 
-/**
- * This Test class tests the ReinforcementPhaseTest class functionalities
- *
- * @author Shruthi
- */
-public class ReinforcementPhaseTest {
+public class PlayerTest {
 	private GamePlayer player1, player2;
 	private Country country1, country2, country3, country4, country5, country6, country7, country8, country9, country10,
 			country11, country12, country13, country14;
 	private Continent continent;
 
+	private Country country, toCountry, fromCountry, toCountry1;
+	private ArrayList<String> NeighbourCountries;
+
 	/**
 	 * This is the setup method for the pre-requisite values before the test cases
 	 */
 	@Before
-	public void initializeReinforcementPhaseTest() {
+	public void initializePlayerTest() {
 		continent = new Continent();
 		player1 = new GamePlayer();
 		player2 = new GamePlayer();
@@ -50,6 +49,37 @@ public class ReinforcementPhaseTest {
 
 		continent.setContinentName("Northern Africa");
 		continent.setContinentControlValue(4);
+
+		NeighbourCountries = new ArrayList<String>();
+
+		country = new Country();
+		country.setCountryName("India");
+		NeighbourCountries.add("India");
+
+		country = new Country();
+		country.setCountryName("Nepal");
+		NeighbourCountries.add("Nepal");
+
+		country = new Country();
+		country.setCountryName("Srilanka");
+		NeighbourCountries.add("Srilanka");
+
+		country = new Country();
+		country.setCountryName("China");
+		NeighbourCountries.add("China");
+
+		fromCountry = new Country();
+		fromCountry.setCountryName("Bangladesh");
+		fromCountry.setNoOfArmies(8);
+
+		toCountry = new Country();
+		toCountry.setCountryName("India");
+		toCountry.setNoOfArmies(4);
+
+		toCountry1 = new Country();
+		toCountry1.setCountryName("Canada");
+		toCountry1.setNoOfArmies(2);
+		fromCountry.setNeighbourCountries(NeighbourCountries);
 	}
 
 	/**
@@ -58,7 +88,7 @@ public class ReinforcementPhaseTest {
 	@Test
 	public void testassignReinforcedArmies() {
 		int expected = 3;
-		assertEquals(expected, ReinforcementPhase.assignReinforcedArmies(player1, continent));
+		assertEquals(expected, StartupPhase.assignReinforcedArmies(player1, continent));
 	}
 
 	/**
@@ -78,6 +108,31 @@ public class ReinforcementPhaseTest {
 		player2.getPlayerCountries().add(country12);
 		player2.getPlayerCountries().add(country13);
 		player2.getPlayerCountries().add(country14);
-		assertEquals(expected, ReinforcementPhase.assignReinforcedArmies(player2, continent));
+		assertEquals(expected, StartupPhase.assignReinforcedArmies(player2, continent));
 	}
+
+	/**
+	 * Test method to validate the number of armies present in the fromCountry and
+	 * the toCountry after the player moves the armies between the adjacent
+	 * fromCountry and toCountry.
+	 */
+	@Test
+	public void isFortificationComplete() {
+		StartupPhase.moveArmies(fromCountry, toCountry, 2);
+		assertEquals(6, fromCountry.getNoOfArmies());
+		assertEquals(6, toCountry.getNoOfArmies());
+	}
+
+	/**
+	 * Test method to validate the number of armies present in the fromCountry and
+	 * the toCountry after the player moves the armies between fromCountry and
+	 * toCountry which are not adjacent.
+	 */
+	@Test
+	public void isFortificationNotComplete() {
+		StartupPhase.moveArmies(fromCountry, toCountry1, 2);
+		assertEquals(8, fromCountry.getNoOfArmies());
+		assertEquals(2, toCountry1.getNoOfArmies());
+	}
+
 }
