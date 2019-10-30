@@ -7,7 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.appriskgame.controller.MapOperations;
-import com.appriskgame.controller.StartupPhase;
+import com.appriskgame.controller.Player;
 import com.appriskgame.model.GameMap;
 
 /**
@@ -117,7 +117,7 @@ public class GameDriver {
 						if (cmdType.equals("loadmap")) {
 							loadGameMap = new MapOperations();
 							if (loadGameMap.isMapExists(cmdDetails[1])) {
-								StartupPhase start = new StartupPhase();
+								Player start = new Player();
 								createMapGraph = loadGameMap.readGameMap(inputGameMapName);
 								start.gamePlay(createMapGraph);
 							} else {

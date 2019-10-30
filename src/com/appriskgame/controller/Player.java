@@ -24,7 +24,7 @@ import com.appriskgame.model.GamePlayer;
  * @author Sahana
  * @author Surya
  */
-public class StartupPhase {
+public class Player {
 	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	ArrayList<GamePlayer> playersList = new ArrayList<GamePlayer>();
 	ArrayList<String> playerNames;
@@ -38,16 +38,14 @@ public class StartupPhase {
 	static int SIXPLAYERARMYCOUNT = 20;
 	public static int MINIMUM_REINFORCEMENT_ARMY = 3;
 	public static int MINIMUM_NUM_OF_PLAYERS_COUNTRY = 9;
-	
-	
+
 	public static ArrayList<Country> listOfContries = new ArrayList<Country>();
 	public static ArrayList<Country> listOfCountriesOfPlayersContinent = new ArrayList<Country>();
 	public static ArrayList<Continent> listOfPlayerContinents = new ArrayList<Continent>();
 	public static String playersChoice;
 	public static List<String> playersChoiceList = new ArrayList<String>();
-	
-	
-	public static boolean doFortification = false;
+
+	public boolean doFortification = false;
 
 	/**
 	 * This method is used to set the player's list.
@@ -278,6 +276,7 @@ public class StartupPhase {
 
 		}
 		boolean gameContinue;
+		AttackPhase attack = new AttackPhase();
 		do {
 			gameContinue = false;
 			for (int round = 1; round <= playersList.size(); round++) {
@@ -292,13 +291,9 @@ public class StartupPhase {
 				}
 				System.out.println("** Reinforcement Phase Ends for Player: " + gameplayer.getPlayerName() + " **");
 				System.out.println("Attack Begin");
+				attack.attackPhaseControl(gameplayer, gameMap);
 				System.out.println("Attack Ends");
 				System.out.println("** Fortification Phase Begins for Player: " + gameplayer.getPlayerName() + " **");
-				System.out.println("Enter the Command to display Map");
-				String mapCommand = br.readLine().trim();
-				if (mapCommand.equalsIgnoreCase("showmap")) {
-					showMap(gameMap);
-				}
 				startGameFortification(gameplayer, gameMap);
 				System.out.println("** Fortification Phase Ends for Player: " + gameplayer.getPlayerName() + " **");
 			}
@@ -333,6 +328,7 @@ public class StartupPhase {
 		}
 	}
 
+	//startup phase methods
 	/**
 	 * This method is used to assign countries to the players Random allocation of
 	 * countries to players will take place in this method.
@@ -474,9 +470,9 @@ public class StartupPhase {
 			System.out.println("No of Armies remaining: " + gameplayer.getNoOfArmies());
 		}
 	}
-	
-	//reinforcement Methods
-	
+
+	// reinforcement Methods
+
 	/**
 	 * This method asks the player to be continued with Reinforcement phase. If the
 	 * player choose to continue this will call a method assigningReinforcedArmies
@@ -620,7 +616,7 @@ public class StartupPhase {
 			}
 		}
 	}
-	
+
 	/**
 	 *
 	 * This method check the army count entered by the user and if it is less than
@@ -642,7 +638,7 @@ public class StartupPhase {
 			System.out.println("This country is not owned by you!\n");
 		}
 	}
-	
+
 	/**
 	 * Based on Reinforcement conditions the player will be allocated with some
 	 * armies to assign to countries
@@ -651,7 +647,7 @@ public class StartupPhase {
 	 * @param continent - Continent to which the player belongs to
 	 * @return armies to be assigned to any country of players choice
 	 */
-	public static int assignReinforcedArmies(GamePlayer player, Continent continent) {
+	public int assignReinforcedArmies(GamePlayer player, Continent continent) {
 		int contriesPlyerOwns = player.getPlayerCountries().size();
 		int reinformentArmiesAssigned;
 		if (contriesPlyerOwns >= MINIMUM_NUM_OF_PLAYERS_COUNTRY) {
@@ -661,11 +657,12 @@ public class StartupPhase {
 		}
 		for (int i = 0; i < listOfPlayerContinents.size(); i++) {
 			if (doesPlayerOwnAContinent(player, listOfPlayerContinents.get(i).getListOfCountries()))
-				reinformentArmiesAssigned = reinformentArmiesAssigned + listOfPlayerContinents.get(i).getContinentControlValue();
+				reinformentArmiesAssigned = reinformentArmiesAssigned
+						+ listOfPlayerContinents.get(i).getContinentControlValue();
 		}
 		return reinformentArmiesAssigned;
 	}
-	
+
 	/**
 	 * This method is to check whether player owns whole continent
 	 *
@@ -681,9 +678,9 @@ public class StartupPhase {
 		}
 		return flag;
 	}
-	
-	//fortification methods
-	
+
+	// fortification methods
+
 	/**
 	 * This method is called from the Startup phase when the user opts to start the
 	 * fortification. It internally calls the moveArmies method once all the
@@ -839,7 +836,7 @@ public class StartupPhase {
 			System.out.println("Sorry, Fortification is not possible if the country owned is less than 2");
 		}
 	}
-	
+
 	/**
 	 * This method checks if the provided army count is sufficient for
 	 * fortification.
@@ -875,7 +872,7 @@ public class StartupPhase {
 	 * @param toCountry   - The country to where player want to move army
 	 * @param armiesCount - Count of armies player wish to move
 	 */
-	public static void moveArmies(Country fromCountry, Country toCountry, int armiesCount) {
+	public void moveArmies(Country fromCountry, Country toCountry, int armiesCount) {
 
 		boolean neighbourCountries = false;
 		for (String country : fromCountry.getNeighbourCountries()) {
@@ -896,8 +893,5 @@ public class StartupPhase {
 			doFortification = true;
 		}
 	}
-	
-	
-	
 
 }
