@@ -105,6 +105,7 @@ public class AttackPhase {
 										defenderCountryObject);
 								if (isAttackerWon(defenderCountryObject)) {
 									moveArmyToConquredCountry(attackCountryObject, defenderCountryObject);
+								break;
 								}
 							}
 
