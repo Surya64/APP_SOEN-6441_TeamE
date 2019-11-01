@@ -18,11 +18,14 @@ import com.appriskgame.model.GamePlayer;
 /**
  * This class contains methods which will take the input to add or remove
  * players , Populate countries to players randomly , to allocate armies to the
- * players initially and then place the remaining armies in round robin fashion
- * and includes to initialize the reinforcement phase
+ * players initially and then place the remaining armies in round robin fashion.
+ * Contains methods for Reinforcement, Attack and fortification phase.
  * 
  * @author Sahana
  * @author Surya
+ * @author Shruthi
+ * @author Dolly
+ * @author Sai
  */
 public class Player {
 	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -162,6 +165,7 @@ public class Player {
 			gamePlayers.setPlayerName(player);
 			playersList.add(gamePlayers);
 		}
+		gameMap.setPlayers(playersList);
 
 		do {
 			populateFlag = false;
@@ -180,7 +184,7 @@ public class Player {
 		} while (populateFlag);
 		defaultArmiesToPlayer();
 		initialArmyAllocation(gameMap);
-
+		gameMap.setDomination(gameMap);
 		do {
 			System.out.println("Enter the Command to display Map");
 			String mapCommand = br.readLine().trim();
@@ -328,7 +332,7 @@ public class Player {
 		}
 	}
 
-	//startup phase methods
+	// startup phase methods
 	/**
 	 * This method is used to assign countries to the players Random allocation of
 	 * countries to players will take place in this method.
@@ -482,6 +486,7 @@ public class Player {
 	 * @throws Exception -IOException
 	 */
 	public void startReinforcement(GamePlayer player, GameMap mapDetails) throws Exception {
+		mapDetails.setDomination(mapDetails);
 		Continent playerContinent = player.getPlayerCountries().get(0).getPartOfContinent();
 		int sizeOfPlayerCountries = player.getPlayerCountries().size();
 		for (int i = 0; i < sizeOfPlayerCountries; i++) {
