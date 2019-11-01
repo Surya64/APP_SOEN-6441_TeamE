@@ -184,7 +184,7 @@ public class Player {
 		} while (populateFlag);
 		defaultArmiesToPlayer();
 		initialArmyAllocation(gameMap);
-		gameMap.setDomination(gameMap);
+
 		do {
 			System.out.println("Enter the Command to display Map");
 			String mapCommand = br.readLine().trim();
@@ -290,13 +290,15 @@ public class Player {
 				Continent playerContinent = gameplayer.getPlayerCountries().get(0).getPartOfContinent();
 				int reInforceAmries = assignReinforcedArmies(gameplayer, playerContinent);
 				gameplayer.setNoOfArmies(reInforceAmries);
+				gameMap.setDomination(gameMap);
 				while (gameplayer.getNoOfArmies() > 0) {
 					startReinforcement(gameplayer, gameMap);
 				}
 				System.out.println("** Reinforcement Phase Ends for Player: " + gameplayer.getPlayerName() + " **");
 				System.out.println("Attack Begin");
-				attack.attackPhaseControl(playersList,gameplayer, gameMap);
+				attack.attackPhaseControl(playersList, gameplayer, gameMap);
 				System.out.println("Attack Ends");
+				gameMap.setDomination(gameMap);
 				System.out.println("** Fortification Phase Begins for Player: " + gameplayer.getPlayerName() + " **");
 				startGameFortification(gameplayer, gameMap);
 				System.out.println("** Fortification Phase Ends for Player: " + gameplayer.getPlayerName() + " **");
@@ -486,7 +488,6 @@ public class Player {
 	 * @throws Exception -IOException
 	 */
 	public void startReinforcement(GamePlayer player, GameMap mapDetails) throws Exception {
-		mapDetails.setDomination(mapDetails);
 		Continent playerContinent = player.getPlayerCountries().get(0).getPartOfContinent();
 		int sizeOfPlayerCountries = player.getPlayerCountries().size();
 		for (int i = 0; i < sizeOfPlayerCountries; i++) {
@@ -675,7 +676,7 @@ public class Player {
 	 * @param countriesList - The count of countries a continent has
 	 * @return True if a player own a continent
 	 */
-	private static boolean doesPlayerOwnAContinent(GamePlayer player, ArrayList<Country> countriesList) {
+	public boolean doesPlayerOwnAContinent(GamePlayer player, ArrayList<Country> countriesList) {
 		boolean flag = true;
 		for (int i = 0; i < countriesList.size(); i++) {
 			if (!player.getPlayerCountries().contains(countriesList.get(i)))

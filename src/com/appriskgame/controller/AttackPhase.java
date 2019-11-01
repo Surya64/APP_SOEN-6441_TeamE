@@ -130,7 +130,6 @@ public class AttackPhase {
 			} else {
 				gameContinue = false;
 				System.out.println("Attacking Phase is ended");
-				System.exit(0);
 			}
 		} while (gameContinue);
 	}
