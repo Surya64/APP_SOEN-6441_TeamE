@@ -80,77 +80,7 @@ public class Player {
 		boolean proceed = false, populateFlag = false, mapFlag = true;
 		playerNames = new ArrayList<String>();
 		do {
-			boolean flag;
-			do {
-				flag = false;
-				System.out.println("Enter Command to add or remove player");
-				String input = br.readLine().trim();
-				Pattern multiPattern = Pattern.compile("[a-zA-z]+ [-[a-z]+ [a-zA-Z]+ ]*");
-				Matcher multiCommandPattern = multiPattern.matcher(input);
-				if (!multiCommandPattern.matches() || input.isEmpty()) {
-					System.out.println("\nIncorrect Command");
-					flag = true;
-				}
-				if (!flag) {
-					ArrayList<String> multiCommand = multipleCommands(input);
-					for (int p = 0; p < multiCommand.size(); p++) {
-						String data = multiCommand.get(p);
-						Pattern commandPattern = Pattern.compile("[a-zA-z]+ -[a-zA-z\\s-]*");
-						Pattern commandName = Pattern.compile("gameplayer");
-						Matcher commandMatch = commandPattern.matcher(data);
-						String[] command = data.split("-");
-						Matcher commandNameMatch = commandName.matcher(command[0].trim());
-						if (!commandMatch.matches() || input.isEmpty() || !commandNameMatch.matches()) {
-							System.out.println("\nIncorrect Command");
-							flag = true;
-						}
-						if (!flag) {
-							if (data.contains("-add")) {
-								String[] addData = data.split("-add ");
-								for (int i = 1; i < addData.length; i++) {
-									String name = addData[i].trim();
-									Pattern namePattern = Pattern.compile("[a-zA-z0-9]+");
-									Matcher match = namePattern.matcher(name);
-									if (!match.matches() || name.isEmpty()) {
-										System.out.println("\nPlease enter the correct player name");
-										flag = true;
-									}
-									playerNames.add(name);
-								}
-							} else if (data.contains("-remove")) {
-								String[] removeData = data.split("-remove ");
-								for (int i = 1; i < removeData.length; i++) {
-									String name = removeData[i].trim();
-									Pattern namePattern = Pattern.compile("[a-zA-z0-9]+");
-									Matcher match = namePattern.matcher(name);
-									if (!match.matches() || name.isEmpty()) {
-										System.out.println("\nPlease enter the correct player name");
-										flag = true;
-									}
-									if (playerNames.contains(name)) {
-										playerNames.remove(name);
-									} else {
-										System.out.println(name + "doesn't exist");
-									}
-								}
-							}
-
-						}
-					}
-					System.out.println("Do you want to add/remove players? Yes/No");
-					String choice = br.readLine().trim();
-					while (!(choice.equalsIgnoreCase("Yes") || choice.equalsIgnoreCase("No") || choice == null)) {
-						System.err.println("\nPlease enter the choice as either Yes or No:");
-						choice = br.readLine().trim();
-					}
-
-					if (choice.equalsIgnoreCase("Yes")) {
-						flag = true;
-					} else {
-						flag = false;
-					}
-				}
-			} while (flag);
+			playerNames = playerCreation();
 			if (playerNames.size() > 5 || playerNames.size() < 2) {
 				System.out.println("Sorry! The numbers of players can be between 2 and 6.\n Current size is "
 						+ playerNames.size() + "\nPlayers are : " + playerNames);
@@ -259,7 +189,6 @@ public class Player {
 						}
 
 					} while (placeArmyFlag);
-
 				}
 			}
 		} else {
@@ -333,6 +262,99 @@ public class Player {
 	}
 
 	// startup phase methods
+	/**
+	 * This Method is used to Add and remove players to playerList.
+	 * 
+	 * @return List of Player Names
+	 */
+	public ArrayList<String> playerCreation() {
+		boolean flag;
+		do {
+			flag = false;
+			System.out.println("Enter Command to add or remove player");
+			String input = "";
+			try {
+				input = br.readLine().trim();
+			} catch (IOException e2) {
+				e2.printStackTrace();
+			}
+			Pattern multiPattern = Pattern.compile("[a-zA-z]+ [-[a-z]+ [a-zA-Z]+ ]*");
+			Matcher multiCommandPattern = multiPattern.matcher(input);
+			if (!multiCommandPattern.matches() || input.isEmpty()) {
+				System.out.println("\nIncorrect Command");
+				flag = true;
+			}
+			if (!flag) {
+				ArrayList<String> multiCommand = multipleCommands(input);
+				for (int p = 0; p < multiCommand.size(); p++) {
+					String data = multiCommand.get(p);
+					Pattern commandPattern = Pattern.compile("[a-zA-z]+ -[a-zA-z\\s-]*");
+					Pattern commandName = Pattern.compile("gameplayer");
+					Matcher commandMatch = commandPattern.matcher(data);
+					String[] command = data.split("-");
+					Matcher commandNameMatch = commandName.matcher(command[0].trim());
+					if (!commandMatch.matches() || input.isEmpty() || !commandNameMatch.matches()) {
+						System.out.println("\nIncorrect Command");
+						flag = true;
+					}
+					if (!flag) {
+						if (data.contains("-add")) {
+							String[] addData = data.split("-add ");
+							for (int i = 1; i < addData.length; i++) {
+								String name = addData[i].trim();
+								Pattern namePattern = Pattern.compile("[a-zA-z0-9]+");
+								Matcher match = namePattern.matcher(name);
+								if (!match.matches() || name.isEmpty()) {
+									System.out.println("\nPlease enter the correct player name");
+									flag = true;
+								}
+								playerNames.add(name);
+							}
+						} else if (data.contains("-remove")) {
+							String[] removeData = data.split("-remove ");
+							for (int i = 1; i < removeData.length; i++) {
+								String name = removeData[i].trim();
+								Pattern namePattern = Pattern.compile("[a-zA-z0-9]+");
+								Matcher match = namePattern.matcher(name);
+								if (!match.matches() || name.isEmpty()) {
+									System.out.println("\nPlease enter the correct player name");
+									flag = true;
+								}
+								if (playerNames.contains(name)) {
+									playerNames.remove(name);
+								} else {
+									System.out.println(name + "doesn't exist");
+								}
+							}
+						}
+
+					}
+				}
+				System.out.println("Do you want to add/remove players? Yes/No");
+				String choice = null;
+				try {
+					choice = br.readLine().trim();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				while (!(choice.equalsIgnoreCase("Yes") || choice.equalsIgnoreCase("No") || choice == null)) {
+					System.err.println("\nPlease enter the choice as either Yes or No:");
+					try {
+						choice = br.readLine().trim();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				if (choice.equalsIgnoreCase("Yes")) {
+					flag = true;
+				} else {
+					flag = false;
+				}
+			}
+		} while (flag);
+		return playerNames;
+	}
+
 	/**
 	 * This method is used to assign countries to the players Random allocation of
 	 * countries to players will take place in this method.
