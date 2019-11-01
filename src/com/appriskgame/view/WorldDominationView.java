@@ -15,11 +15,20 @@ import com.appriskgame.model.Country;
 import com.appriskgame.model.GameMap;
 import com.appriskgame.model.GamePlayer;
 
+/**
+ * This Class is used for implementation of World Domination View. Gets Notified
+ * whenever there is an update to the game player
+ * 
+ * @author Surya
+ */
 public class WorldDominationView implements Observer {
 	public JTextArea log = new JTextArea(200, 200);
 	JFrame f = new JFrame("World Domination Map");
 	String output;
 
+	/**
+	 * Method to initialize the frame.
+	 */
 	public void initialize() {
 		f.add(log);
 		log.setText(output);
