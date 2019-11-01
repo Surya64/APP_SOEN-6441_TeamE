@@ -16,8 +16,8 @@ import com.appriskgame.model.GamePlayer;
 public class AttackPhase {
 	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-	public void attackPhaseControl(GamePlayer player, GameMap mapDetails) throws IOException {
-
+	public void attackPhaseControl(ArrayList<GamePlayer> playersList, GamePlayer player, GameMap mapDetails)
+			throws IOException {
 		boolean gameContinue;
 
 		do {
@@ -75,7 +75,9 @@ public class AttackPhase {
 						if (attackerDices > 0 && defenderDices > 0) {
 							attackingStarted(attackerDices, defenderDices, attackCountryObject, defenderCountryObject);
 							if (isAttackerWon(defenderCountryObject)) {
-								moveArmyToConquredCountry(attackCountryObject, defenderCountryObject);
+								moveArmyToConquredCountry(playersList, player, attackCountryObject,
+										defenderCountryObject);
+								break;
 							}
 						}
 					}
@@ -92,9 +94,9 @@ public class AttackPhase {
 							if (isDefenderDicePossible(defenderArmies, defenderDices)) {
 								attackingStarted(attackerDices, defenderDices, attackCountryObject,
 										defenderCountryObject);
-
 								if (isAttackerWon(defenderCountryObject)) {
-									moveArmyToConquredCountry(attackCountryObject, defenderCountryObject);
+									moveArmyToConquredCountry(playersList, player, attackCountryObject,
+											defenderCountryObject);
 								}
 							} else {
 								reasonForFailedDefender(defenderArmies, defenderDices);
@@ -128,9 +130,12 @@ public class AttackPhase {
 			} else {
 				gameContinue = false;
 				System.out.println("Attacking Phase is ended");
+				System.exit(0);
 			}
 		} while (gameContinue);
 	}
+
+	// First Start//
 
 	public boolean isCountryPresent(String currentCountry, GameMap mapDetails) {
 		for (int i = 0; i < mapDetails.getCountries().size(); i++) {
@@ -193,7 +198,9 @@ public class AttackPhase {
 		}
 		return false;
 	}
+	// First End//
 
+	// Second Start//
 	public Country getCountryObject(String currentCountry, GameMap mapDetails) {
 		Country attackCountryObject = null;
 		for (int i = 0; i < mapDetails.getCountries().size(); i++) {
@@ -223,6 +230,9 @@ public class AttackPhase {
 			return defenderDices;
 		}
 	}
+	// Second End//
+
+	// Third Start//
 
 	public void reasonForFailedAttack(int attackerArmies, int attackerDices) {
 		if (attackerArmies == 1) {
@@ -246,6 +256,10 @@ public class AttackPhase {
 		}
 	}
 
+	// Third End//
+
+	// Forth Start//
+
 	public int maxAllowableAttackerDice(int attackerArmies) {
 		if (attackerArmies >= 3) {
 			return 3;
@@ -261,7 +275,9 @@ public class AttackPhase {
 			return DefenderArmies;
 		}
 	}
+	// Forth End//
 
+	// Fifth Start//
 	public void attackingStarted(int attackerDices, int defenderDices, Country attackCountryObject,
 			Country defenderCountryObject) {
 		List<Integer> attackerOutcomes = outComesOfDices(attackerDices);
@@ -285,17 +301,20 @@ public class AttackPhase {
 		}
 	}
 
-	public void moveArmyToConquredCountry(Country attackCountryObject, Country defenderCountryObject)
-			throws IOException {
+	public void moveArmyToConquredCountry(ArrayList<GamePlayer> playersList, GamePlayer player,
+			Country attackCountryObject, Country defenderCountryObject) throws IOException {
 		String choice = "";
 		do {
 			try {
-				System.out.println("Enter the Attack Move command?");
+				System.out.println("Enter the Attack Move command? " + " Maximum allowable Armies to move is: "
+						+ (attackCountryObject.getNoOfArmies() - 1));
 				String userCommand = br.readLine().trim();
 				String[] attackMoveDetails = userCommand.split(" ");
 				int moveNumberOfArmies = Integer.parseInt(attackMoveDetails[1]);
 				if (checkUserAttackMoveValidation(userCommand)
 						&& ableToMoveArmy(attackCountryObject, moveNumberOfArmies)) {
+					removeOwnerAddNewOwner(playersList, player, defenderCountryObject.getCountryName());
+
 					defenderCountryObject.setPlayer(attackCountryObject.getPlayer());
 					defenderCountryObject.setNoOfArmies(moveNumberOfArmies);
 					attackCountryObject.setNoOfArmies(attackCountryObject.getNoOfArmies() - moveNumberOfArmies);
@@ -320,7 +339,10 @@ public class AttackPhase {
 						"Do you want to still move the Army? Yes/No[Incase of 'No' By default 1 Army will be moved to the conqured Country");
 				choice = br.readLine().trim();
 			}
+
 			if (choice.equalsIgnoreCase("No")) {
+				removeOwnerAddNewOwner(playersList, player, defenderCountryObject.getCountryName());
+
 				defenderCountryObject.setPlayer(attackCountryObject.getPlayer());
 				defenderCountryObject.setNoOfArmies(1);
 				attackCountryObject.setNoOfArmies(attackCountryObject.getNoOfArmies() - 1);
@@ -329,10 +351,18 @@ public class AttackPhase {
 		} while (choice.equalsIgnoreCase("Yes"));
 	}
 
+	// Fifth End//
+
 	public boolean isAllOut(Country attackCountryObject, Country defenderCountryObject) {
 		return true;
 	}
 
+	/**
+	 * This method is used show the details of the countries and continents, armies
+	 * on each country, ownership of each country.
+	 * 
+	 * @param gameMap Object of GameMap which consists of Map details
+	 */
 	public void showMap(GameMap gameMap) {
 		ArrayList<Country> print = gameMap.getCountries();
 		for (Country country : print) {
@@ -461,4 +491,28 @@ public class AttackPhase {
 			return false;
 		}
 	}
+
+	public void removeOwnerAddNewOwner(ArrayList<GamePlayer> playersList, GamePlayer player, String countryName) {
+		// 1 Country owner list is removed with the lost country
+		Country conquredCountry = null;
+		for (int i = 0; i < playersList.size(); i++) {
+			GamePlayer currentPlayer = playersList.get(i);
+			for (int j = 0; j < currentPlayer.getPlayerCountries().size(); j++) {
+
+				String currentCountryName = currentPlayer.getPlayerCountries().get(j).getCountryName();
+				if (currentCountryName.equalsIgnoreCase(countryName)) {
+					conquredCountry = currentPlayer.getPlayerCountries().get(j);
+					currentPlayer.getPlayerCountries().remove(j);
+					break;
+				}
+			}
+		}
+		// 2 Country owner list is updated with the conquered country
+
+		if (conquredCountry != null) {
+			player.getPlayerCountries().add(conquredCountry);
+		}
+
+	}
+
 }
