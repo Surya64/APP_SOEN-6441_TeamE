@@ -291,7 +291,7 @@ public class Player {
 				}
 				System.out.println("** Reinforcement Phase Ends for Player: " + gameplayer.getPlayerName() + " **");
 				System.out.println("Attack Begin");
-				attack.attackPhaseControl(gameplayer, gameMap);
+				attack.attackPhaseControl(playersList,gameplayer, gameMap);
 				System.out.println("Attack Ends");
 				System.out.println("** Fortification Phase Begins for Player: " + gameplayer.getPlayerName() + " **");
 				startGameFortification(gameplayer, gameMap);
