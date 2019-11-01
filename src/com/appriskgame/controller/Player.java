@@ -18,11 +18,14 @@ import com.appriskgame.model.GamePlayer;
 /**
  * This class contains methods which will take the input to add or remove
  * players , Populate countries to players randomly , to allocate armies to the
- * players initially and then place the remaining armies in round robin fashion
- * and includes to initialize the reinforcement phase
+ * players initially and then place the remaining armies in round robin fashion.
+ * Contains methods for Reinforcement, Attack and fortification phase.
  * 
  * @author Sahana
  * @author Surya
+ * @author Shruthi
+ * @author Dolly
+ * @author Sai
  */
 public class Player {
 	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -162,6 +165,7 @@ public class Player {
 			gamePlayers.setPlayerName(player);
 			playersList.add(gamePlayers);
 		}
+		gameMap.setPlayers(playersList);
 
 		do {
 			populateFlag = false;
@@ -286,13 +290,15 @@ public class Player {
 				Continent playerContinent = gameplayer.getPlayerCountries().get(0).getPartOfContinent();
 				int reInforceAmries = assignReinforcedArmies(gameplayer, playerContinent);
 				gameplayer.setNoOfArmies(reInforceAmries);
+				gameMap.setDomination(gameMap);
 				while (gameplayer.getNoOfArmies() > 0) {
 					startReinforcement(gameplayer, gameMap);
 				}
 				System.out.println("** Reinforcement Phase Ends for Player: " + gameplayer.getPlayerName() + " **");
 				System.out.println("Attack Begin");
-				attack.attackPhaseControl(playersList,gameplayer, gameMap);
+				attack.attackPhaseControl(playersList, gameplayer, gameMap);
 				System.out.println("Attack Ends");
+				gameMap.setDomination(gameMap);
 				System.out.println("** Fortification Phase Begins for Player: " + gameplayer.getPlayerName() + " **");
 				startGameFortification(gameplayer, gameMap);
 				System.out.println("** Fortification Phase Ends for Player: " + gameplayer.getPlayerName() + " **");
@@ -328,7 +334,7 @@ public class Player {
 		}
 	}
 
-	//startup phase methods
+	// startup phase methods
 	/**
 	 * This method is used to assign countries to the players Random allocation of
 	 * countries to players will take place in this method.
@@ -670,7 +676,7 @@ public class Player {
 	 * @param countriesList - The count of countries a continent has
 	 * @return True if a player own a continent
 	 */
-	private static boolean doesPlayerOwnAContinent(GamePlayer player, ArrayList<Country> countriesList) {
+	public boolean doesPlayerOwnAContinent(GamePlayer player, ArrayList<Country> countriesList) {
 		boolean flag = true;
 		for (int i = 0; i < countriesList.size(); i++) {
 			if (!player.getPlayerCountries().contains(countriesList.get(i)))

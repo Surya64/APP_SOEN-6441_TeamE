@@ -2,6 +2,8 @@ package com.appriskgame.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Observable;
+import com.appriskgame.view.WorldDominationView;
 
 /**
  * This class stores the value associated to map.It holds the values required to
@@ -10,10 +12,20 @@ import java.util.HashMap;
  * @author Surya
  * @author Sahana
  */
-public class GameMap {
+public class GameMap extends Observable {
 	private ArrayList<Country> countries = new ArrayList<Country>();
 	private ArrayList<Continent> continents = new ArrayList<Continent>();
+	private ArrayList<GamePlayer> players = new ArrayList<GamePlayer>();
 	private HashMap<String, Country> countrySet;
+	public GameMap gameMap;
+
+	/**
+	 * GameMap Constructor
+	 */
+	public GameMap() {
+		WorldDominationView worldDominationView = new WorldDominationView();
+		this.addObserver(worldDominationView);
+	}
 
 	/**
 	 * Get the list of continents.
@@ -67,6 +79,38 @@ public class GameMap {
 	 */
 	public void setCountrySet(HashMap<String, Country> countrySet) {
 		this.countrySet = countrySet;
+	}
+
+	/**
+	 * This method sets the message for observer of domination and knows them when
+	 * it is changed.
+	 */
+	public void setDomination(GameMap gameMap) {
+		this.gameMap = gameMap;
+		setChanged();
+		notifyObservers();
+	}
+
+	public GameMap getDomination() {
+		return gameMap;
+	}
+	
+	/**
+	 * Gets the list of the Player
+	 * 
+	 * @return the arrayList of the Player
+	 */
+	public ArrayList<GamePlayer> getPlayers() {
+		return players;
+	}
+
+	/**
+	 * Sets the list of the Players
+	 * 
+	 * @param players - the players array list
+	 */
+	public void setPlayers(ArrayList<GamePlayer> players) {
+		this.players = players;
 	}
 
 	@Override

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.Scanner;
+
 import com.appriskgame.model.Country;
 import com.appriskgame.model.GameMap;
 import com.appriskgame.model.GamePlayer;
@@ -18,7 +18,6 @@ public class AttackPhase {
 
 	public void attackPhaseControl(ArrayList<GamePlayer> playersList, GamePlayer player, GameMap mapDetails)
 			throws IOException {
-
 		boolean gameContinue;
 
 		do {
@@ -27,11 +26,8 @@ public class AttackPhase {
 			gameContinue = false;
 			showMap(mapDetails);
 			System.out.println("Enter the Attacker command?" + player.getPlayerName());
-			Scanner sc = new Scanner(System.in);
-			String userCommand = sc.nextLine();
-
+			String userCommand = br.readLine().trim();
 			if (checkUserValidation(userCommand)) {
-
 				String[] attackDetails = userCommand.split(" ");
 				String attackCountry = attackDetails[1];
 				if (attackCountry.equalsIgnoreCase("-noattack")) {
@@ -43,17 +39,14 @@ public class AttackPhase {
 				boolean defenderCountryPresent = isCountryPresent(defenderCountry, mapDetails);
 				Country attackCountryObject = null;
 				Country defenderCountryObject = null;
-
 				if (!attackerCountryPresent) {
 					errorDetails = attackCountry + " is not owned by the current player" + "\n";
 					errorOccured = true;
 				}
-
 				if (!defenderCountryPresent) {
 					errorDetails = errorDetails + defenderCountry + "This is not in map" + "\n";
 					errorOccured = true;
 				}
-
 				boolean isAttackAndDefenderAdajacent = false;
 				if (attackerCountryPresent && defenderCountryPresent) {
 					attackCountryObject = getCountryObject(attackCountry, mapDetails);
@@ -61,7 +54,6 @@ public class AttackPhase {
 
 					isAttackAndDefenderAdajacent = isCountryAdjacent(attackCountryObject, defenderCountry, mapDetails);
 				}
-
 				if (defenderCountryPresent) {
 					if (defenderCountryObject != null) {
 						if (defenderCountryObject.getPlayer().equalsIgnoreCase(player.getPlayerName())) {
@@ -69,23 +61,17 @@ public class AttackPhase {
 							errorOccured = true;
 						}
 					}
-
 				}
-
 				if (!isAttackAndDefenderAdajacent) {
-
 					if (attackerCountryPresent) {
 						errorDetails = errorDetails + attackCountry + " is not adjacent to the " + defenderCountry;
 						errorOccured = true;
 					}
 				}
-
 				if (decision.equalsIgnoreCase("-allout") && errorOccured == false) {
-
 					while (attackCountryObject.getNoOfArmies() > 1 && defenderCountryObject.getNoOfArmies() != 0) {
 						int attackerDices = maxAllowableAttackerDice(attackCountryObject.getNoOfArmies());
 						int defenderDices = maxAllowableDefenderDice(defenderCountryObject.getNoOfArmies());
-
 						if (attackerDices > 0 && defenderDices > 0) {
 							attackingStarted(attackerDices, defenderDices, attackCountryObject, defenderCountryObject);
 							if (isAttackerWon(defenderCountryObject)) {
@@ -93,18 +79,14 @@ public class AttackPhase {
 										defenderCountryObject);
 								break;
 							}
-
 						}
-
 					}
-
 				} else if (errorOccured == false) {
 					int attackerDices = Integer.parseInt(attackDetails[3]);
 					int attackerArmies = attackCountryObject.getNoOfArmies();
 					if (isAttackerDicePossible(attackerArmies, attackerDices)) {
 						System.out.println("Enter the Defender command?");
-						Scanner sc1 = new Scanner(System.in);
-						String defenderUserCommand = sc.nextLine();
+						String defenderUserCommand = br.readLine().trim();
 						if (checkUserDefenderValidation(defenderUserCommand)) {
 							String[] defenderDetails = defenderUserCommand.split(" ");
 							int defenderDices = Integer.parseInt(defenderDetails[1]);
@@ -112,12 +94,10 @@ public class AttackPhase {
 							if (isDefenderDicePossible(defenderArmies, defenderDices)) {
 								attackingStarted(attackerDices, defenderDices, attackCountryObject,
 										defenderCountryObject);
-
 								if (isAttackerWon(defenderCountryObject)) {
 									moveArmyToConquredCountry(playersList, player, attackCountryObject,
 											defenderCountryObject);
 								}
-
 							} else {
 								reasonForFailedDefender(defenderArmies, defenderDices);
 							}
@@ -127,9 +107,7 @@ public class AttackPhase {
 						}
 					} else {
 						reasonForFailedAttack(attackerArmies, attackerDices);
-
 					}
-
 				} else if (errorOccured == true) {
 					System.out.println(errorDetails);
 					errorDetails = "";
@@ -140,7 +118,6 @@ public class AttackPhase {
 						+ "Format 1:attack countrynamefrom countynameto numdice[numdice>0]\n"
 						+ "Format 2:attack countrynamefrom countynameto  –allout\n" + "Format 3:attack -noattack\n");
 			}
-
 			System.out.println("Do you want to attack again? Yes/No");
 			String continueAttacking = br.readLine().trim();
 			while (!(continueAttacking.equalsIgnoreCase("Yes") || continueAttacking.equalsIgnoreCase("No")
@@ -153,33 +130,28 @@ public class AttackPhase {
 			} else {
 				gameContinue = false;
 				System.out.println("Attacking Phase is ended");
-				System.exit(0);
 			}
-
 		} while (gameContinue);
-
 	}
 
 	// First Start//
+
 	public boolean isCountryPresent(String currentCountry, GameMap mapDetails) {
 		for (int i = 0; i < mapDetails.getCountries().size(); i++) {
 			if (mapDetails.getCountries().get(i).getCountryName().toString().equalsIgnoreCase(currentCountry)) {
 				return true;
 			}
-
 		}
 		return false;
 	}
 
 	public boolean isCountryAttackPresent(GamePlayer player, String currentCountry, GameMap mapDetails) {
-
 		for (int i = 0; i < mapDetails.getCountries().size(); i++) {
 			if (mapDetails.getCountries().get(i).getCountryName().toString().equalsIgnoreCase(currentCountry)) {
 				if (mapDetails.getCountries().get(i).getPlayer().equalsIgnoreCase(player.getPlayerName())) {
 					return true;
 				}
 			}
-
 		}
 		return false;
 	}
@@ -211,7 +183,6 @@ public class AttackPhase {
 	}
 
 	public boolean ableToMoveArmy(Country attackCountryObject, int moveNumberOfArmies) {
-
 		if (moveNumberOfArmies <= 0) {
 			return false;
 		} else if (attackCountryObject.getNoOfArmies() - 1 >= moveNumberOfArmies) {
@@ -235,23 +206,18 @@ public class AttackPhase {
 			if (mapDetails.getCountries().get(i).getCountryName().toString().equalsIgnoreCase(currentCountry)) {
 				attackCountryObject = mapDetails.getCountries().get(i);
 			}
-
 		}
 		return attackCountryObject;
 	}
 
 	public List<Integer> outComesOfDices(int noOfDices) {
-
 		List<Integer> outComes = new ArrayList<Integer>();
-
 		for (int i = 0; i < noOfDices; i++) {
 			Random random = new Random();
 			int result = random.nextInt(5) + 1;
 			outComes.add(result);
-
 		}
 		return outComes;
-
 	}
 
 	public int minimumBattles(int attackerDices, int defenderDices) {
@@ -265,14 +231,14 @@ public class AttackPhase {
 	}
 	// Second End//
 
-	// Thrid Start//
+	// Third Start//
+
 	public void reasonForFailedAttack(int attackerArmies, int attackerDices) {
 		if (attackerArmies == 1) {
 			System.out.println("Attacking is not possible.As the Attacking Country has only 1 Army");
 		} else if (attackerDices > 3) {
 			System.out.println("Attacking Dice cannot be more than 3");
 		} else {
-
 			System.out.println(attackerArmies - 1 + " Attacking Armies should be more than or equal to Attacking Dices"
 					+ attackerDices);
 		}
@@ -284,18 +250,16 @@ public class AttackPhase {
 		} else if (defenderArmies > 2) {
 			System.out.println("Defending Army should be less than or equal to 2");
 		} else {
-
 			System.out.println(defenderArmies + " Defending Armies should be more than or equal to Defending Dices"
 					+ defenderDices);
 		}
 	}
 
-	// Thrid End//
+	// Third End//
 
 	// Forth Start//
 
 	public int maxAllowableAttackerDice(int attackerArmies) {
-
 		if (attackerArmies >= 3) {
 			return 3;
 		} else {
@@ -304,7 +268,6 @@ public class AttackPhase {
 	}
 
 	public int maxAllowableDefenderDice(int DefenderArmies) {
-
 		if (DefenderArmies >= 2) {
 			return 2;
 		} else {
@@ -318,30 +281,23 @@ public class AttackPhase {
 			Country defenderCountryObject) {
 		List<Integer> attackerOutcomes = outComesOfDices(attackerDices);
 		List<Integer> defenderOutcomes = outComesOfDices(defenderDices);
-
 		Collections.sort(attackerOutcomes);
 		Collections.reverse(attackerOutcomes);
-
 		Collections.sort(defenderOutcomes);
 		Collections.reverse(defenderOutcomes);
-
 		int battles = minimumBattles(attackerDices, defenderDices);
-
 		for (int i = 0; i < battles; i++) {
 			System.out.println("Battle :" + i);
-
 			System.out.println("Attacker value is: " + attackerOutcomes.get(i));
 			System.out.println("Defender value is: " + defenderOutcomes.get(i));
 			if (attackerOutcomes.get(i) > defenderOutcomes.get(i)) {
 				System.out.println("Attacker won the battle");
 				defenderCountryObject.setNoOfArmies(defenderCountryObject.getNoOfArmies() - 1);
-
 			} else {
 				System.out.println("Defender won the battle");
 				attackCountryObject.setNoOfArmies(attackCountryObject.getNoOfArmies() - 1);
 			}
 		}
-
 	}
 
 	public void moveArmyToConquredCountry(ArrayList<GamePlayer> playersList, GamePlayer player,
@@ -349,15 +305,15 @@ public class AttackPhase {
 		String choice = "";
 		do {
 			try {
-				System.out.println("Enter the Attack Move command?" + "Maximum allowable Armies to move is: "
+				System.out.println("Enter the Attack Move command? " + " Maximum allowable Armies to move is: "
 						+ (attackCountryObject.getNoOfArmies() - 1));
-				Scanner sc = new Scanner(System.in);
-				String userCommand = sc.nextLine();
+				String userCommand = br.readLine().trim();
 				String[] attackMoveDetails = userCommand.split(" ");
 				int moveNumberOfArmies = Integer.parseInt(attackMoveDetails[1]);
 				if (checkUserAttackMoveValidation(userCommand)
 						&& ableToMoveArmy(attackCountryObject, moveNumberOfArmies)) {
 					removeOwnerAddNewOwner(playersList, player, defenderCountryObject.getCountryName());
+
 					defenderCountryObject.setPlayer(attackCountryObject.getPlayer());
 					defenderCountryObject.setNoOfArmies(moveNumberOfArmies);
 					attackCountryObject.setNoOfArmies(attackCountryObject.getNoOfArmies() - moveNumberOfArmies);
@@ -374,7 +330,6 @@ public class AttackPhase {
 							"Do you want to still move the Army? Yes/No[Incase of 'No' By default 1 Army will be moved to the conqured Country");
 					choice = br.readLine().trim();
 				}
-
 			} catch (Exception ex) {
 				System.out.println("Please enter the Attack Move Command in the below correct Format\n"
 						+ "Format :attackmove num[num>0]\n");
@@ -386,14 +341,13 @@ public class AttackPhase {
 
 			if (choice.equalsIgnoreCase("No")) {
 				removeOwnerAddNewOwner(playersList, player, defenderCountryObject.getCountryName());
+
 				defenderCountryObject.setPlayer(attackCountryObject.getPlayer());
 				defenderCountryObject.setNoOfArmies(1);
 				attackCountryObject.setNoOfArmies(attackCountryObject.getNoOfArmies() - 1);
 				choice = "";
 			}
-
 		} while (choice.equalsIgnoreCase("Yes"));
-
 	}
 
 	// Fifth End//
@@ -411,7 +365,6 @@ public class AttackPhase {
 	public void showMap(GameMap gameMap) {
 		ArrayList<Country> print = gameMap.getCountries();
 		for (Country country : print) {
-
 			System.out.println(country);
 		}
 	}
@@ -430,13 +383,11 @@ public class AttackPhase {
 		default:
 			validationOfUserCommand = false;
 			break;
-
 		}
 		return validationOfUserCommand;
 	}
 
 	public boolean checkNoAttackCommand(String[] attackDetails) {
-
 		String firstString = attackDetails[0];
 		String secondString = attackDetails[1];
 		if (firstString.equalsIgnoreCase("attack") && secondString.equalsIgnoreCase("-noattack")) {
@@ -447,7 +398,6 @@ public class AttackPhase {
 	}
 
 	public boolean checkAllOutCommand(String[] attackDetails) {
-
 		String firstString = attackDetails[0];
 		String fourthString = attackDetails[3];
 		if (firstString.equalsIgnoreCase("attack") && fourthString.equalsIgnoreCase("-allout")) {
@@ -458,7 +408,6 @@ public class AttackPhase {
 	}
 
 	public boolean checkSingleAttackCommand(String[] attackDetails) {
-
 		try {
 			String firstString = attackDetails[0];
 			int diceValue = Integer.parseInt(attackDetails[3]);
@@ -470,11 +419,9 @@ public class AttackPhase {
 		} catch (Exception ex) {
 			return false;
 		}
-
 	}
 
 	public boolean checkAttackCommand(String[] attackDetails) {
-
 		String thridString = attackDetails[3];
 		boolean validationOfUserCommand = true;
 		if (thridString.equalsIgnoreCase("-allout")) {
@@ -494,11 +441,9 @@ public class AttackPhase {
 		case 2:
 			validationOfUserCommand = checkDefenderCommand(defenderDetails);
 			break;
-
 		default:
 			validationOfUserCommand = false;
 			break;
-
 		}
 		return validationOfUserCommand;
 	}
@@ -515,7 +460,6 @@ public class AttackPhase {
 		} catch (Exception ex) {
 			return false;
 		}
-
 	}
 
 	public boolean checkUserAttackMoveValidation(String userCommand) {
@@ -526,11 +470,9 @@ public class AttackPhase {
 		case 2:
 			validationOfUserCommand = checkAttackMoveCommand(attackMoverDetails);
 			break;
-
 		default:
 			validationOfUserCommand = false;
 			break;
-
 		}
 		return validationOfUserCommand;
 	}
@@ -547,7 +489,6 @@ public class AttackPhase {
 		} catch (Exception ex) {
 			return false;
 		}
-
 	}
 
 	public void removeOwnerAddNewOwner(ArrayList<GamePlayer> playersList, GamePlayer player, String countryName) {
