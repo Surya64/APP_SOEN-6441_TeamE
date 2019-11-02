@@ -744,6 +744,11 @@ public class Player {
 						if (attackerDices > 0 && defenderDices > 0) {
 							attackingStarted(attackerDices, defenderDices, attackCountryObject, defenderCountryObject);
 							if (isAttackerWon(defenderCountryObject)) {
+								if(isPlayerWinner(player,mapDetails))
+								{
+									System.out.println(player.getPlayerName()+" won the Game!");
+									System.exit(0);
+								}
 								moveArmyToConquredCountry(playersList, player, attackCountryObject,
 										defenderCountryObject);
 								break;
@@ -764,6 +769,11 @@ public class Player {
 								attackingStarted(attackerDices, defenderDices, attackCountryObject,
 										defenderCountryObject);
 								if (isAttackerWon(defenderCountryObject)) {
+									if(isPlayerWinner(player,mapDetails))
+									{
+										System.out.println(player.getPlayerName()+" won the Game!");
+										System.exit(0);
+									}
 									moveArmyToConquredCountry(playersList, player, attackCountryObject,
 											defenderCountryObject);
 								}
@@ -803,6 +813,15 @@ public class Player {
 		} while (gameContinue);
 	}
 
+	public boolean isPlayerWinner(GamePlayer player,GameMap mapDetails)
+	{
+		
+		if(mapDetails.getCountries().size()==player.getPlayerCountries().size())
+		{
+			return true;
+		}
+		return false;
+	}
 	public boolean isCountryPresent(String currentCountry, GameMap mapDetails) {
 		for (int i = 0; i < mapDetails.getCountries().size(); i++) {
 			if (mapDetails.getCountries().get(i).getCountryName().toString().equalsIgnoreCase(currentCountry)) {
