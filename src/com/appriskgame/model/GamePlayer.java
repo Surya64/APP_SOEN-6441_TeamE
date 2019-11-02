@@ -1,7 +1,9 @@
 package com.appriskgame.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
 
 /**
  * This class stores the value associated to each player. It stores player's
@@ -11,7 +13,7 @@ import java.util.List;
  * @author Dolly
  * @author Sahana
  */
-public class GamePlayer {
+public class GamePlayer extends Observable implements Serializable {
 
 	private String playerName;
 	private ArrayList<Country> playerCountries = new ArrayList<Country>();
@@ -19,6 +21,16 @@ public class GamePlayer {
 	private int NumOfTypeCardsExchanged = 0;
 	private String SameCardExchangeThrice = "";
 	private List<Card> cardList = new ArrayList<>();
+	private Deck deck = Deck.getInstance();
+	private boolean exchanged = false;
+
+	public boolean isExchanged() {
+		return exchanged;
+	}
+
+	public void setExchanged(boolean exchanged) {
+		this.exchanged = exchanged;
+	}
 
 	/**
 	 * This method returns the number of type of cards
@@ -142,5 +154,84 @@ public class GamePlayer {
 	public String toString() {
 		return "Player [PlayerName=" + playerName + ", Armies=" + noOfArmies + ", Countries=" + playerCountries + "]";
 
+	}
+
+	/**
+	 * Checks if the given three types of cards are same
+	 *
+	 * @param exchangeCards       exchange cards
+	 * @param cardAppearingThrice Card's name which is appearing thrice
+	 * @return true if all are same else false
+	 */
+	public boolean checkCardSameType(List<Card> exchangeCards, String cardAppearingThrice) {
+		int cardAppearingCount = 0;
+		if (exchangeCards.size() < 3) {
+			return false;
+		} else {
+			for (Card card : exchangeCards) {
+				if (card.getType().equals(cardAppearingThrice)) {
+					cardAppearingCount++;
+				}
+			}
+			if (cardAppearingCount == 3) {
+				SameCardExchangeThrice = cardAppearingThrice;
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * To check exchanging cards are of different types
+	 *
+	 * @param exchangeCards exchange cards
+	 * @param cardTypes     card types
+	 * @return true or false depending on the types of cards
+	 */
+	public boolean checkDiffTypesOfCards(List<Card> exchangeCards, int cardTypes) {
+		if (cardTypes < 3) {
+			return false;
+		}
+		List<String> types = new ArrayList<>();
+		for (Card card : exchangeCards) {
+			types.add(card.getType());
+		}
+		if (!types.get(0).equals(types.get(1)) && !types.get(1).equals(types.get(2))
+				&& !types.get(2).equals(types.get(0))) {
+			NumOfTypeCardsExchanged = 3;
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * This method helps to get the cards from the player's list and add to the deck
+	 * of cards
+	 *
+	 * @param cardTypes                   Type of cards
+	 * @param cardAppearingMoreThanThrice Card name appearing thrice
+	 * @param player                      Gameplayer object
+	 * @param cardNumbers                 the cardNumbers
+	 * @throws Exception exception of method
+	 */
+	public void exchangeCards(int cardTypes, String cardAppearingMoreThanThrice, GamePlayer player,
+			List<Integer> cardNumbers) throws Exception {
+
+		if (cardTypes == 3 || (cardAppearingMoreThanThrice != null && !cardAppearingMoreThanThrice.isEmpty())) {
+			Card card1 = player.getCardList().get(cardNumbers.get(0) - 1);
+			Card card2 = player.getCardList().get(cardNumbers.get(1) - 1);
+			Card card3 = player.getCardList().get(cardNumbers.get(2) - 1);
+			player.getCardList().remove(card1);
+			player.getCardList().remove(card2);
+			player.getCardList().remove(card3);
+
+			deck.add(card1);
+			deck.add(card2);
+			deck.add(card3);
+			setExchanged(true);
+			setCardList(player.getCardList());
+			setChanged();
+			notifyObservers(player);
+		}
 	}
 }
