@@ -23,6 +23,15 @@ public class GamePlayer extends Observable implements Serializable {
 	private List<Card> cardList = new ArrayList<>();
 	private Deck deck = Deck.getInstance();
 	private boolean exchanged = false;
+	public int playerCardExchangeCount = 0;
+
+	public int getPlayerCardExchangeCount() {
+		return playerCardExchangeCount;
+	}
+
+	public void setPlayerCardExchangeCount(int playerCardExchangeCount) {
+		this.playerCardExchangeCount = playerCardExchangeCount;
+	}
 
 	public boolean isExchanged() {
 		return exchanged;
@@ -234,4 +243,48 @@ public class GamePlayer extends Observable implements Serializable {
 			notifyObservers(player);
 		}
 	}
+
+	/**
+	 * If player has the card territory, he will get the extra set of armies
+	 *
+	 *
+	 * @param exchangeCards list of cards
+	 * @param player        GamePlayer object
+	 * @return playerObject GamePlayer Object
+	 */
+	public GamePlayer exChangeCardTerritoryExist(List<Card> exchangeCards, GamePlayer player) {
+
+		GamePlayer playerObject = new GamePlayer();
+		playerObject = player;
+
+		ArrayList<Country> countryList = new ArrayList<Country>();
+		countryList = player.getPlayerCountries();
+
+		ArrayList<Country> updatedCountryList = new ArrayList<Country>();
+
+		System.out.println("Inside Exchange card Territory");
+
+		for (Country country : countryList) {
+			for (Card card : exchangeCards) {
+				String[] CountryNameInCard = card.getName().split(",");
+				String countryName = CountryNameInCard[0];
+				if (countryName.equalsIgnoreCase(country.getCountryName())) {
+					System.out
+							.println("country name for the exchnage is :" + country.getCountryName());
+					System.out
+							.println("armies before exchnage in the Country is :" + country.getNoOfArmies());
+					int NumOfarmies = country.getNoOfArmies();
+					NumOfarmies = NumOfarmies + 2;
+					country.setNoOfArmies(NumOfarmies);
+					System.out.println("armies before exchnage in the Country is :" + country.getNoOfArmies());
+				}
+			}
+			updatedCountryList.add(country);
+		}
+
+		playerObject.setPlayerCountries(updatedCountryList);
+		return playerObject;
+
+	}
+
 }
