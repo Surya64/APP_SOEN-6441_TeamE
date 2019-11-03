@@ -15,6 +15,10 @@ import java.util.Observable;
  */
 public class GamePlayer extends Observable implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String playerName;
 	private ArrayList<Country> playerCountries = new ArrayList<Country>();
 	private int noOfArmies = 0;
@@ -25,18 +29,34 @@ public class GamePlayer extends Observable implements Serializable {
 	private boolean exchanged = false;
 	public int playerCardExchangeCount = 0;
 
+	/**
+	 * This method gives the count for player's card exchange.
+	 * @return
+	 */
 	public int getPlayerCardExchangeCount() {
 		return playerCardExchangeCount;
 	}
 
+	/**
+	 * This method sets the count for player's card exchange.
+	 * @param playerCardExchangeCount
+	 */
 	public void setPlayerCardExchangeCount(int playerCardExchangeCount) {
 		this.playerCardExchangeCount = playerCardExchangeCount;
 	}
 
+	/**
+	 * This method does the exchange.
+	 * @return
+	 */
 	public boolean isExchanged() {
 		return exchanged;
 	}
 
+	/**
+	 * This method sets the exchanged ones.
+	 * @param exchanged
+	 */
 	public void setExchanged(boolean exchanged) {
 		this.exchanged = exchanged;
 	}
