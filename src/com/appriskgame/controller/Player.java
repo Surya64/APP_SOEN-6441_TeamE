@@ -11,8 +11,10 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.appriskgame.model.Card;
 import com.appriskgame.model.Continent;
 import com.appriskgame.model.Country;
+import com.appriskgame.model.Deck;
 import com.appriskgame.model.GameMap;
 import com.appriskgame.model.GamePlayer;
 
@@ -21,7 +23,7 @@ import com.appriskgame.model.GamePlayer;
  * players , Populate countries to players randomly , to allocate armies to the
  * players initially and then place the remaining armies in round robin fashion.
  * Contains methods for Reinforcement, Attack and fortification phase.
- * 
+ *
  * @author Sahana
  * @author Surya
  * @author Shruthi
@@ -50,10 +52,109 @@ public class Player {
 	public static List<String> playersChoiceList = new ArrayList<String>();
 
 	public boolean doFortification = false;
+	private int NumOfTypeCardsExchanged = 0;
+	private String SameCardExchangeThrice = "";
+
+	private Deck deck = Deck.getInstance();
+	private boolean exchanged = false;
+	public int playerCardExchangeCount = 0;
+	private List<Card> cardList = new ArrayList<>();
+
+	/**
+	 * This method returns the list of cards player has
+	 *
+	 * @return cardList list of cards
+	 */
+	public List<Card> getCardList() {
+		return cardList;
+	}
+
+	/**
+	 * This method sets the list of cards player has
+	 *
+	 * @return cardList list of cards
+	 */
+	public void setCardList(List<Card> cardList) {
+		this.cardList = cardList;
+	}
+
+	/**
+	 * This method gives the count for player's card exchange.
+	 *
+	 * @return
+	 */
+	public int getPlayerCardExchangeCount() {
+		return playerCardExchangeCount;
+	}
+
+	/**
+	 * This method sets the count for player's card exchange.
+	 *
+	 * @param playerCardExchangeCount
+	 */
+	public void setPlayerCardExchangeCount(int playerCardExchangeCount) {
+		this.playerCardExchangeCount = playerCardExchangeCount;
+	}
+
+	/**
+	 * This method does the exchange.
+	 *
+	 * @return
+	 */
+	public boolean isExchanged() {
+		return exchanged;
+	}
+
+	/**
+	 * This method sets the exchanged ones.
+	 *
+	 * @param exchanged
+	 */
+	public void setExchanged(boolean exchanged) {
+		this.exchanged = exchanged;
+	}
+
+	/**
+	 * This method returns the number of type of cards
+	 *
+	 * @return NumOfTypeCardsExchanged number of type of cards
+	 */
+	public int getNumOfTypeCardsExchanged() {
+		return NumOfTypeCardsExchanged;
+	}
+
+	/**
+	 * This method sets the number of type of cards
+	 *
+	 * @param numOfTypeCardsExchanged number of type of cards
+	 */
+	public void setNumOfTypeCardsExchanged(int numOfTypeCardsExchanged) {
+		NumOfTypeCardsExchanged = numOfTypeCardsExchanged;
+	}
+
+	/**
+	 * This method returns card which appear more than thrice during exchange
+	 *
+	 * @return SameCardExchangeThrice card which appear more that thrice in exchange
+	 */
+	public String getSameCardExchangeThrice() {
+		return SameCardExchangeThrice;
+	}
+
+	/**
+	 * This method sets the number of cards which appear more than thrice during
+	 * exchange
+	 *
+	 * @param sameCardExchangeThrice card which appear more that thrice in exchange
+	 */
+	public void setSameCardExchangeThrice(String sameCardExchangeThrice) {
+		SameCardExchangeThrice = sameCardExchangeThrice;
+	}
+
 
 	/**
 	 * This method is used to set the player's list.
-	 * 
+	 *
 	 * @param playersList It is the player's List need to be set
 	 */
 	public void setPlayerList(ArrayList<GamePlayer> playersList) {
@@ -62,7 +163,7 @@ public class Player {
 
 	/**
 	 * This method is used to get the player's list.
-	 * 
+	 *
 	 * @return ArrayList of Players
 	 */
 	public ArrayList<GamePlayer> getPlayerList() {
@@ -72,7 +173,7 @@ public class Player {
 	/**
 	 * This method starts the game by obtaining the number of players and taking the
 	 * input from the players and initialize them.
-	 * 
+	 *
 	 * @param gameMap Object of GameMap which consists of Map details
 	 * @throws Exception IO Exception
 	 */
@@ -197,7 +298,7 @@ public class Player {
 				mapFlag = true;
 			}
 		} while (mapFlag);
-		
+
 		roundRobin = new RoundRobinAllocator(playersList);
 		System.out.println("Do you want to place army Individually? Yes/No");
 		String choice = br.readLine().trim();
@@ -322,7 +423,7 @@ public class Player {
 	/**
 	 * This method is used show the details of the countries and continents, armies
 	 * on each country, ownership of each country.
-	 * 
+	 *
 	 * @param gameMap Object of GameMap which consists of Map details
 	 */
 	public void showMap(GameMap gameMap) {
@@ -336,7 +437,7 @@ public class Player {
 	/**
 	 * This method is used to assign countries to the players Random allocation of
 	 * countries to players will take place in this method.
-	 * 
+	 *
 	 * @param gameMap Object of GameMap which consists of Map details
 	 */
 	public void populateCountries(GameMap gameMap) {
@@ -363,7 +464,7 @@ public class Player {
 	/**
 	 * This method is used to allocate Armies to players which depends on the
 	 * players count in the game.
-	 * 
+	 *
 	 */
 	public void defaultArmiesToPlayer() {
 		playersList.forEach(player -> {
@@ -390,7 +491,7 @@ public class Player {
 	/**
 	 * This method is used to assign armies to the countries so that each country
 	 * will get at least one army according to the game rule.
-	 * 
+	 *
 	 * @param gameMap Object of mapGraph which consists of map details
 	 */
 	public void initialArmyAllocation(GameMap gameMap) {
@@ -414,7 +515,7 @@ public class Player {
 
 	/**
 	 * This method is used to split the full command into single command of list
-	 * 
+	 *
 	 * @param fullCommand input command with multiple add and remove
 	 * @return single command in arrayList
 	 */
@@ -686,9 +787,9 @@ public class Player {
 	// Attack Phase methods
 
 	/**
-	 * 
+	 *
 	 * This method has attack phase control.
-	 * 
+	 *
 	 * @param playersList
 	 * @param player
 	 * @param mapDetails
@@ -823,27 +924,27 @@ public class Player {
 	}
 
 	/**
-	 * 
+	 *
 	 * This method checks that player is winner or not.
-	 * 
+	 *
 	 * @param player
 	 * @param mapDetails
 	 * @return
 	 */
 	public boolean isPlayerWinner(GamePlayer player,GameMap mapDetails)
 	{
-		
+
 		if(mapDetails.getCountries().size()==player.getPlayerCountries().size())
 		{
 			return true;
 		}
 		return false;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * This method checks whether this country is present or not.
-	 * 
+	 *
 	 * @param currentCountry
 	 * @param mapDetails
 	 * @return
@@ -857,11 +958,11 @@ public class Player {
 		return false;
 	}
 
-	
+
 	/**
-	 * 
+	 *
 	 * This method checks whether the country which is being attacked is present or not.
-	 * 
+	 *
 	 * @param player
 	 * @param currentCountry
 	 * @param mapDetails
@@ -879,9 +980,9 @@ public class Player {
 	}
 
 	/**
-	 * 
+	 *
 	 * This method checks whether the country is adjacent or not.
-	 * 
+	 *
 	 * @param attackCountryObject
 	 * @param defenderCountry
 	 * @param mapDetails
@@ -898,9 +999,9 @@ public class Player {
 	}
 
 	/**
-	 * 
+	 *
 	 * This method checks whether the defender dice is possible or not.
-	 * 
+	 *
 	 * @param DefenderArmies
 	 * @param defenderDices
 	 * @return
@@ -913,9 +1014,9 @@ public class Player {
 	}
 
 	/**
-	 * 
+	 *
 	 * This method checks whether the attacker dice is possible or not.
-	 * 
+	 *
 	 * @param AttackerArmies
 	 * @param attackDices
 	 * @return
@@ -929,9 +1030,9 @@ public class Player {
 	}
 
 	/**
-	 * 
+	 *
 	 * This method checks that it is able to move country.
-	 * 
+	 *
 	 * @param attackCountryObject
 	 * @param moveNumberOfArmies
 	 * @return
@@ -946,9 +1047,9 @@ public class Player {
 	}
 
 	/**
-	 * 
+	 *
 	 * This method checks that whether the attacker is winning or not.
-	 * 
+	 *
 	 * @param defenderCountryObject
 	 * @return
 	 */
@@ -960,9 +1061,9 @@ public class Player {
 	}
 
 	/**
-	 * 
+	 *
 	 * This method gets the country object.
-	 * 
+	 *
 	 * @param currentCountry
 	 * @param mapDetails
 	 * @return
@@ -978,9 +1079,9 @@ public class Player {
 	}
 
 	/**
-	 * 
+	 *
 	 * This method gives the outcome of dices.
-	 * 
+	 *
 	 * @param noOfDices
 	 * @return
 	 */
@@ -995,9 +1096,9 @@ public class Player {
 	}
 
 	/**
-	 * 
+	 *
 	 * This method gives the minimum battles.
-	 * 
+	 *
 	 * @param attackerDices
 	 * @param defenderDices
 	 * @return
@@ -1013,9 +1114,9 @@ public class Player {
 	}
 
 	/**
-	 * 
+	 *
 	 * This method gives the reason for failed attacks.
-	 * 
+	 *
 	 * @param attackerArmies
 	 * @param attackerDices
 	 */
@@ -1031,9 +1132,9 @@ public class Player {
 	}
 
 	/**
-	 * 
+	 *
 	 * This method gives the reason for failed defender.
-	 * 
+	 *
 	 * @param defenderArmies
 	 * @param defenderDices
 	 */
@@ -1049,9 +1150,9 @@ public class Player {
 	}
 
 	/**
-	 * 
+	 *
 	 * This method gives maximum allowable attcker dice.
-	 * 
+	 *
 	 * @param attackerArmies
 	 * @return
 	 */
@@ -1064,9 +1165,9 @@ public class Player {
 	}
 
 	/**
-	 * 
+	 *
 	 * This method gives the maximum allowable defender dice.
-	 * 
+	 *
 	 * @param DefenderArmies
 	 * @return
 	 */
@@ -1079,9 +1180,9 @@ public class Player {
 	}
 
 	/**
-	 * 
+	 *
 	 * This method starts the attack.
-	 * 
+	 *
 	 * @param attackerDices
 	 * @param defenderDices
 	 * @param attackCountryObject
@@ -1111,9 +1212,9 @@ public class Player {
 	}
 
 	/**
-	 * 
+	 *
 	 * This method checks that army is moved to conquered country or not.
-	 * 
+	 *
 	 * @param playersList
 	 * @param player
 	 * @param attackCountryObject
@@ -1176,9 +1277,9 @@ public class Player {
 	}
 
 	/**
-	 * 
+	 *
 	 * This method checks user validation.
-	 * 
+	 *
 	 * @param userCommand
 	 * @return
 	 */
@@ -1201,9 +1302,9 @@ public class Player {
 	}
 
 	/**
-	 * 
+	 *
 	 * This method checks that it is not attack command.
-	 * 
+	 *
 	 * @param attackDetails
 	 * @return
 	 */
@@ -1218,9 +1319,9 @@ public class Player {
 	}
 
 	/**
-	 * 
+	 *
 	 * This method checks that all out command.
-	 * 
+	 *
 	 * @param attackDetails
 	 * @return
 	 */
@@ -1235,9 +1336,9 @@ public class Player {
 	}
 
 	/**
-	 * 
+	 *
 	 * This method checks single attack commands.
-	 * 
+	 *
 	 * @param attackDetails
 	 * @return
 	 */
@@ -1257,7 +1358,7 @@ public class Player {
 
 	/*
 	 * This method checks the attack command.
-	 * 
+	 *
 	 */
 	public boolean checkAttackCommand(String[] attackDetails) {
 		String thridString = attackDetails[3];
@@ -1271,9 +1372,9 @@ public class Player {
 	}
 
 	/**
-	 * 
+	 *
 	 * This method checks whether the defender validation is validated or not.
-	 * 
+	 *
 	 * @param userCommand User gives command.
 	 * @return
 	 */
@@ -1293,9 +1394,9 @@ public class Player {
 	}
 
 	/**
-	 * 
+	 *
 	 * This method checks defenders' commands.
-	 * 
+	 *
 	 * @param defenderDetails
 	 * @return
 	 */
@@ -1314,9 +1415,9 @@ public class Player {
 	}
 
 	/**
-	 * 
+	 *
 	 * This method checks whether the move is validated or not.
-	 * 
+	 *
 	 * @param userCommand
 	 * @return
 	 */
@@ -1337,7 +1438,7 @@ public class Player {
 
 	/**
 	 * This method checks whether any move has taken place or not.
-	 * 
+	 *
 	 * @param attackMoverDetails Gives the details for attack mover.
 	 * @return
 	 */
@@ -1357,7 +1458,7 @@ public class Player {
 
 	/**
 	 * This method adds new owner and removes old owner.
-	 * 
+	 *
 	 * @param playersList
 	 * @param player
 	 * @param countryName
@@ -1542,7 +1643,7 @@ public class Player {
 	/**
 	 * This method checks if the provided army count is sufficient for
 	 * fortification.
-	 * 
+	 *
 	 * @param armyCount     Number of armies to move
 	 * @param givingCountry Country name where armies are moved from
 	 * @return true if the army count is insufficient or else false
@@ -1594,6 +1695,126 @@ public class Player {
 			System.out.println("Countries are not adjacent!");
 			doFortification = true;
 		}
+	}
+
+	/**
+	 * Checks if the given three types of cards are same
+	 *
+	 * @param exchangeCards       exchange cards
+	 * @param cardAppearingThrice Card's name which is appearing thrice
+	 * @return true if all are same else false
+	 */
+	public boolean checkCardSameType(List<Card> exchangeCards, String cardAppearingThrice) {
+		int cardAppearingCount = 0;
+		if (exchangeCards.size() < 3) {
+			return false;
+		} else {
+			for (Card card : exchangeCards) {
+				if (card.getType().equals(cardAppearingThrice)) {
+					cardAppearingCount++;
+				}
+			}
+			if (cardAppearingCount == 3) {
+				SameCardExchangeThrice = cardAppearingThrice;
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * To check exchanging cards are of different types
+	 *
+	 * @param exchangeCards exchange cards
+	 * @param cardTypes     card types
+	 * @return true or false depending on the types of cards
+	 */
+	public boolean checkDiffTypesOfCards(List<Card> exchangeCards, int cardTypes) {
+		if (cardTypes < 3) {
+			return false;
+		}
+		List<String> types = new ArrayList<>();
+		for (Card card : exchangeCards) {
+			types.add(card.getType());
+		}
+		if (!types.get(0).equals(types.get(1)) && !types.get(1).equals(types.get(2))
+				&& !types.get(2).equals(types.get(0))) {
+			NumOfTypeCardsExchanged = 3;
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * This method helps to get the cards from the player's list and add to the deck
+	 * of cards
+	 *
+	 * @param cardTypes                   Type of cards
+	 * @param cardAppearingMoreThanThrice Card name appearing thrice
+	 * @param player                      Gameplayer object
+	 * @param cardNumbers                 the cardNumbers
+	 * @throws Exception exception of method
+	 */
+	public void exchangeCards(int cardTypes, String cardAppearingMoreThanThrice, GamePlayer player,
+			List<Integer> cardNumbers) throws Exception {
+
+		if (cardTypes == 3 || (cardAppearingMoreThanThrice != null && !cardAppearingMoreThanThrice.isEmpty())) {
+			Card card1 = getCardList().get(cardNumbers.get(0) - 1);
+			Card card2 = getCardList().get(cardNumbers.get(1) - 1);
+			Card card3 = getCardList().get(cardNumbers.get(2) - 1);
+			getCardList().remove(card1);
+			getCardList().remove(card2);
+			getCardList().remove(card3);
+
+			deck.add(card1);
+			deck.add(card2);
+			deck.add(card3);
+			setExchanged(true);
+			setCardList(getCardList());
+//			setChanged();
+//			notifyObservers(player);
+		}
+	}
+
+	/**
+	 * If player has the card territory, he will get the extra set of armies
+	 *
+	 *
+	 * @param exchangeCards list of cards
+	 * @param player        GamePlayer object
+	 * @return playerObject GamePlayer Object
+	 */
+	public GamePlayer exChangeCardTerritoryExist(List<Card> exchangeCards, GamePlayer player) {
+
+		GamePlayer playerObject = new GamePlayer();
+		playerObject = player;
+
+		ArrayList<Country> countryList = new ArrayList<Country>();
+		countryList = player.getPlayerCountries();
+
+		ArrayList<Country> updatedCountryList = new ArrayList<Country>();
+
+		System.out.println("Inside Exchange card Territory");
+
+		for (Country country : countryList) {
+			for (Card card : exchangeCards) {
+				String[] CountryNameInCard = card.getName().split(",");
+				String countryName = CountryNameInCard[0];
+				if (countryName.equalsIgnoreCase(country.getCountryName())) {
+					System.out.println("country name for the exchnage is :" + country.getCountryName());
+					System.out.println("armies before exchnage in the Country is :" + country.getNoOfArmies());
+					int NumOfarmies = country.getNoOfArmies();
+					NumOfarmies = NumOfarmies + 2;
+					country.setNoOfArmies(NumOfarmies);
+					System.out.println("armies before exchnage in the Country is :" + country.getNoOfArmies());
+				}
+			}
+			updatedCountryList.add(country);
+		}
+
+		playerObject.setPlayerCountries(updatedCountryList);
+		return playerObject;
+
 	}
 
 }
