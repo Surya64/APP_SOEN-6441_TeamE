@@ -3,12 +3,13 @@ package com.appriskgame.model;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Observable;
+
 import com.appriskgame.view.WorldDominationView;
 
 /**
  * This class stores the value associated to map.It holds the values required to
  * build the map.
- * 
+ *
  * @author Surya
  * @author Sahana
  */
@@ -18,6 +19,12 @@ public class GameMap extends Observable {
 	private ArrayList<GamePlayer> players = new ArrayList<GamePlayer>();
 	private HashMap<String, Country> countrySet;
 	public GameMap gameMap;
+	public static int cardExchangeCountinTheGame = 0;
+
+	public static int getCardExchangeCountinTheGame() {
+		return cardExchangeCountinTheGame;
+	}
+
 
 	/**
 	 * GameMap Constructor
@@ -29,7 +36,7 @@ public class GameMap extends Observable {
 
 	/**
 	 * Get the list of continents.
-	 * 
+	 *
 	 * @return list of continents.
 	 */
 	public ArrayList<Continent> getContinents() {
@@ -38,7 +45,7 @@ public class GameMap extends Observable {
 
 	/**
 	 * Set the list of continents
-	 * 
+	 *
 	 * @param continents To set the list of continents.
 	 */
 	public void setContinents(ArrayList<Continent> continents) {
@@ -47,7 +54,7 @@ public class GameMap extends Observable {
 
 	/**
 	 * Get the list of Countries.
-	 * 
+	 *
 	 * @return list of Countries.
 	 */
 	public ArrayList<Country> getCountries() {
@@ -56,7 +63,7 @@ public class GameMap extends Observable {
 
 	/**
 	 * Set the list of Countries
-	 * 
+	 *
 	 * @param countries To set the list of Countries.
 	 */
 	public void setCountries(ArrayList<Country> countries) {
@@ -65,7 +72,7 @@ public class GameMap extends Observable {
 
 	/**
 	 * Get the Country details.
-	 * 
+	 *
 	 * @return Country details
 	 */
 	public HashMap<String, Country> getCountrySet() {
@@ -74,7 +81,7 @@ public class GameMap extends Observable {
 
 	/**
 	 * Set the Country details.
-	 * 
+	 *
 	 * @param countrySet To set the Country details
 	 */
 	public void setCountrySet(HashMap<String, Country> countrySet) {
@@ -94,10 +101,10 @@ public class GameMap extends Observable {
 	public GameMap getDomination() {
 		return gameMap;
 	}
-	
+
 	/**
 	 * Gets the list of the Player
-	 * 
+	 *
 	 * @return the arrayList of the Player
 	 */
 	public ArrayList<GamePlayer> getPlayers() {
@@ -106,7 +113,7 @@ public class GameMap extends Observable {
 
 	/**
 	 * Sets the list of the Players
-	 * 
+	 *
 	 * @param players - the players array list
 	 */
 	public void setPlayers(ArrayList<GamePlayer> players) {
