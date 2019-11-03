@@ -1,24 +1,34 @@
 package com.appriskgame.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Observable;
 
 /**
  * This class stores the value associated to each player. It stores player's
  * name of String type, total armyCount of player as Integer type, and the
  * ArrayList of type Country which the player owns.
- * 
+ *
  * @author Dolly
  * @author Sahana
  */
-public class GamePlayer {
+public class GamePlayer extends Observable implements Serializable {
 
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 	private String playerName;
 	private ArrayList<Country> playerCountries = new ArrayList<Country>();
 	private int noOfArmies = 0;
 
+
+
+
+
 	/**
 	 * Get the Player name.
-	 * 
+	 *
 	 * @return Name of the player
 	 */
 	public String getPlayerName() {
@@ -27,7 +37,7 @@ public class GamePlayer {
 
 	/**
 	 * Set the Player name.
-	 * 
+	 *
 	 * @param name To set the name of the Player
 	 */
 	public void setPlayerName(String name) {
@@ -36,7 +46,7 @@ public class GamePlayer {
 
 	/**
 	 * Get the list of the countries assigned to player.
-	 * 
+	 *
 	 * @return Countries List of countries of player .
 	 */
 	public ArrayList<Country> getPlayerCountries() {
@@ -45,7 +55,7 @@ public class GamePlayer {
 
 	/**
 	 * Set the list of the countries to player.
-	 * 
+	 *
 	 * @param countries To set the list of the countries to player.
 	 */
 	public void setPlayerCountries(ArrayList<Country> countries) {
@@ -54,7 +64,7 @@ public class GamePlayer {
 
 	/**
 	 * Get the army count of the player.
-	 * 
+	 *
 	 * @return Army count
 	 */
 	public int getNoOfArmies() {
@@ -63,7 +73,7 @@ public class GamePlayer {
 
 	/**
 	 * Set the army count of the player.
-	 * 
+	 *
 	 * @param count To set the army count of the player
 	 */
 	public void setNoOfArmies(int count) {
@@ -72,7 +82,7 @@ public class GamePlayer {
 
 	/**
 	 * This method is used to add the country to the player's countries list.
-	 * 
+	 *
 	 * @param country The country that needs to be added.
 	 */
 	public void addCountry(Country country) {
@@ -84,4 +94,7 @@ public class GamePlayer {
 		return "Player [PlayerName=" + playerName + ", Armies=" + noOfArmies + ", Countries=" + playerCountries + "]";
 
 	}
+
+
+
 }
