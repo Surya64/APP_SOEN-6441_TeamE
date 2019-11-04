@@ -15,27 +15,37 @@ import com.appriskgame.model.Country;
 import com.appriskgame.model.GameMap;
 import com.appriskgame.model.GamePlayer;
 
+/**
+ * This Class is used for implementation of World Domination View. Gets Notified
+ * whenever there is an update to the game player
+ * 
+ * @author Surya
+ */
 public class WorldDominationView implements Observer {
-	public JTextArea log = new JTextArea(200, 200);
-	JFrame f = new JFrame("World Domination Map");
+	public JTextArea info = new JTextArea(50, 50);
+	JFrame frame = new JFrame("World Domination Map");
 	String output;
 
+	/**
+	 * Method to initialize the frame.
+	 * @wbp.parser.entryPoint
+	 */
 	public void initialize() {
-		f.add(log);
-		log.setText(output);
-		JScrollPane scroll = new JScrollPane(log);
-		f.add(scroll);
-		f.setSize(500, 500);
-		f.setLocation(500, 200);
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.setVisible(true);
+		frame.getContentPane().add(info);
+		info.setText(output);
+		JScrollPane scroll = new JScrollPane(info);
+		frame.getContentPane().add(scroll);
+		frame.setSize(500, 500);
+		frame.setLocation(500, 200);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
 	}
 
 	@Override
 	public void update(Observable o, Object arg) {
 		GameMap gameMap = (GameMap) o;
 
-		if (!f.isVisible()) {
+		if (!frame.isVisible()) {
 			initialize();
 		}
 		DecimalFormat df = new DecimalFormat("#.##");
@@ -72,11 +82,11 @@ public class WorldDominationView implements Observer {
 					+ (continents.isEmpty() ? "None" : continents) + "\n";
 
 		}
-		String currentText = log.getText();
-		String newLog = "*******-------*******" + " " + output;
-		String appendLog = newLog + "\n" + currentText;
-		log.setText(appendLog);
-		f.revalidate();
-		f.repaint();
+		//String currentText = log.getText();
+		String newInfo = "*******-------*******" + " " + output;
+		//String appendLog = newLog + "\n" + currentText;
+		info.setText(newInfo);
+		frame.revalidate();
+		frame.repaint();
 	}
 }
