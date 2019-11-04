@@ -26,9 +26,11 @@ public class PlayerView implements Observer {
 	String playerName = "";
 	String mapinfo = "";
 	JTextArea textInfo;
+	JTextArea textArea;
 	JTextField textGamePhase;
 	JTextField textPlayerName;
 	JScrollPane scrollPane;
+	JScrollPane scrollPane_1;
 
 	/**
 	 * Method to initialize the frame.
@@ -37,7 +39,7 @@ public class PlayerView implements Observer {
 	 */
 	public void initialize() {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(500, 500);
+		frame.setSize(500, 650);
 		frame.setLocation(500, 200);
 		frame.getContentPane().setLayout(null);
 
@@ -64,17 +66,29 @@ public class PlayerView implements Observer {
 		frame.getContentPane().add(textPlayerName);
 
 		JLabel lblNewLabel = new JLabel("Map Information :");
-		lblNewLabel.setBounds(20, 145, 73, 25);
+		lblNewLabel.setBounds(20, 135, 105, 25);
 		frame.getContentPane().add(lblNewLabel);
 
 		scrollPane = new JScrollPane();
-		scrollPane.setBounds(20, 181, 438, 193);
+		scrollPane.setBounds(20, 158, 438, 193);
 		frame.getContentPane().add(scrollPane);
 
 		textInfo = new JTextArea();
 		scrollPane.setViewportView(textInfo);
 		textInfo.setColumns(10);
 
+		JLabel actionNewLabel = new JLabel("Actions :");
+		actionNewLabel.setBounds(20, 362, 46, 14);
+		frame.getContentPane().add(actionNewLabel);
+
+		scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(20, 387, 436, 191);
+		frame.getContentPane().add(scrollPane_1);
+
+		textArea = new JTextArea();
+		scrollPane_1.setViewportView(textArea);
+		textArea.setColumns(10);
+		
 		frame.setVisible(true);
 	}
 
@@ -92,8 +106,9 @@ public class PlayerView implements Observer {
 		phaseName = gameMap.getGamePhase();
 		playerName = gameMap.getCurrentPlayer();
 		textGamePhase.setText(phaseName);
-		textPlayerName.setText(playerName);
+		textPlayerName.setText(playerName.toUpperCase());
 		textInfo.setText(mapinfo);
+		textArea.setText(mapinfo);
 		frame.revalidate();
 		frame.repaint();
 
