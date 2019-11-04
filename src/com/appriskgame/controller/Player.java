@@ -210,38 +210,45 @@ public class Player {
 		boolean gameContinue;
 		do {
 			gameContinue = false;
-			for (int round = 1; round <= playersList.size(); round++) {
+			int size = playersList.size();
+			roundRobin = new RoundRobinAllocator(playersList);
+			for (int round = 1; round <= size; round++) {
 				gameplayer = roundRobin.nextTurn();
-				String playerName = gameplayer.getPlayerName();
-				gameMap.setCurrentPlayer(playerName);
-				gameMap.setGamePhase("Reinforcement Phase");
-				System.out.println("** Reinforcement Phase Begins for Player: " + gameplayer.getPlayerName() + " **");
-				System.out.println(gameplayer.getPlayerCountries());
-				Continent playerContinent = gameplayer.getPlayerCountries().get(0).getPartOfContinent();
-				int reInforceAmries = assignReinforcedArmies(gameplayer, playerContinent);
-				gameplayer.setNoOfArmies(reInforceAmries);
-				gameMap.setDomination(gameMap);
-				while (gameplayer.getNoOfArmies() > 0) {
-					startReinforcement(gameplayer, gameMap);
+				
+				if(gameplayer!=null)
+				{
+					String playerName = gameplayer.getPlayerName();
+					gameMap.setCurrentPlayer(playerName);
+					gameMap.setGamePhase("Reinforcement Phase");
+					System.out.println("** Reinforcement Phase Begins for Player: " + gameplayer.getPlayerName() + " **");
+					System.out.println(gameplayer.getPlayerCountries());
+					Continent playerContinent = gameplayer.getPlayerCountries().get(0).getPartOfContinent();
+					int reInforceAmries = assignReinforcedArmies(gameplayer, playerContinent);
+					gameplayer.setNoOfArmies(reInforceAmries);
+					gameMap.setDomination(gameMap);
+					while (gameplayer.getNoOfArmies() > 0) {
+						startReinforcement(gameplayer, gameMap);
+					}
+					System.out.println("** Reinforcement Phase Ends for Player: " + gameplayer.getPlayerName() + " **");
+					System.out.println("Attack Begin");
+					gameMap.setGamePhase("Attack Phase");
+					attackPhaseControl(playersList, gameplayer, gameMap);
+					System.out.println("Attack Ends");
+					gameMap.setDomination(gameMap);
+					System.out.println("** Fortification Phase Begins for Player: " + gameplayer.getPlayerName() + " **");
+					gameMap.setGamePhase("Fortification Phase");
+					startGameFortification(gameplayer, gameMap);
+					System.out.println("** Fortification Phase Ends for Player: " + gameplayer.getPlayerName() + " **");
 				}
-				System.out.println("** Reinforcement Phase Ends for Player: " + gameplayer.getPlayerName() + " **");
-				System.out.println("Attack Begin");
-				gameMap.setGamePhase("Attack Phase");
-				attackPhaseControl(playersList, gameplayer, gameMap);
-				System.out.println("Attack Ends");
-				gameMap.setDomination(gameMap);
-				System.out.println("** Fortification Phase Begins for Player: " + gameplayer.getPlayerName() + " **");
-				gameMap.setGamePhase("Fortification Phase");
-				startGameFortification(gameplayer, gameMap);
-				System.out.println("** Fortification Phase Ends for Player: " + gameplayer.getPlayerName() + " **");
 			}
 
 			if (gameplayer.getPlayerCountries().size() <= 0) {
-				gameContinue = true;
-			} else {
 				gameContinue = false;
-				System.out.println("Thank You!!");
+				System.out.println("Game Over!");
 				System.exit(0);
+				
+			} else {
+				gameContinue = true;
 			}
 		} while (gameContinue);
 	}
@@ -775,12 +782,16 @@ public class Player {
 						if (attackerDices > 0 && defenderDices > 0) {
 							attackingStarted(attackerDices, defenderDices, attackCountryObject, defenderCountryObject);
 							if (isAttackerWon(defenderCountryObject)) {
+								
 								if (isPlayerWinner(player, mapDetails)) {
 									System.out.println(player.getPlayerName() + " won the Game!");
 									System.exit(0);
 								}
+								String removePlayerName=defenderCountryObject.getPlayer();
 								moveArmyToConquredCountry(playersList, player, attackCountryObject,
 										defenderCountryObject);
+								
+								removePlayer(playersList,mapDetails,removePlayerName);
 								break;
 							}
 						}
@@ -799,12 +810,15 @@ public class Player {
 								attackingStarted(attackerDices, defenderDices, attackCountryObject,
 										defenderCountryObject);
 								if (isAttackerWon(defenderCountryObject)) {
+									
 									if (isPlayerWinner(player, mapDetails)) {
 										System.out.println(player.getPlayerName() + " won the Game!");
 										System.exit(0);
 									}
+									String removePlayerName=defenderCountryObject.getPlayer();
 									moveArmyToConquredCountry(playersList, player, attackCountryObject,
 											defenderCountryObject);
+									removePlayer(playersList,mapDetails,removePlayerName);
 								}
 							} else {
 								reasonForFailedDefender(defenderArmies, defenderDices);
@@ -976,6 +990,39 @@ public class Player {
 		}
 		return false;
 	}
+	
+	
+	
+	public void removePlayer(ArrayList<GamePlayer> playersList,GameMap mapDetails,String playerName)
+	{
+		
+	for(int i=0;i<playersList.size();i++)
+	{
+		if(playersList.get(i).getPlayerName().equalsIgnoreCase(playerName))
+		{
+			if((playersList.get(i).getPlayerCountries().size()==0))
+			{
+				playersList.remove(i);
+				break;
+			}
+		}
+	}
+	
+	for(int i=0;i<mapDetails.getPlayers().size();i++)
+	{
+		if(mapDetails.getPlayers().get(i).getPlayerName().equalsIgnoreCase(playerName))
+		{
+			if((mapDetails.getPlayers().get(i).getPlayerCountries().size()==0))
+			{
+				mapDetails.getPlayers().remove(i);
+				break;
+			}
+		}
+	}
+		
+	}
+	
+	
 
 	/**
 	 *
@@ -1612,4 +1659,123 @@ public class Player {
 			doFortification = true;
 		}
 	}
+
+	/**
+	 * Checks if the given three types of cards are same
+	 *
+	 * @param exchangeCards       exchange cards
+	 * @param cardAppearingThrice Card's name which is appearing thrice
+	 * @return true if all are same else false
+	 */
+	public boolean checkCardSameType(List<Card> exchangeCards, String cardAppearingThrice) {
+		int cardAppearingCount = 0;
+		if (exchangeCards.size() < 3) {
+			return false;
+		} else {
+			for (Card card : exchangeCards) {
+				if (card.getType().equals(cardAppearingThrice)) {
+					cardAppearingCount++;
+				}
+			}
+			if (cardAppearingCount == 3) {
+				SameCardExchangeThrice = cardAppearingThrice;
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * To check exchanging cards are of different types
+	 *
+	 * @param exchangeCards exchange cards
+	 * @param cardTypes     card types
+	 * @return true or false depending on the types of cards
+	 */
+	public boolean checkDiffTypesOfCards(List<Card> exchangeCards, int cardTypes) {
+		if (cardTypes < 3) {
+			return false;
+		}
+		List<String> types = new ArrayList<>();
+		for (Card card : exchangeCards) {
+			types.add(card.getType());
+		}
+		if (!types.get(0).equals(types.get(1)) && !types.get(1).equals(types.get(2))
+				&& !types.get(2).equals(types.get(0))) {
+			NumOfTypeCardsExchanged = 3;
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * This method helps to get the cards from the player's list and add to the deck
+	 * of cards
+	 *
+	 * @param cardTypes                   Type of cards
+	 * @param cardAppearingMoreThanThrice Card name appearing thrice
+	 * @param player                      Game player object
+	 * @param cardNumbers                 the cardNumbers
+	 * @throws Exception exception of method
+	 */
+	public void exchangeCards(int cardTypes, String cardAppearingMoreThanThrice, GamePlayer player,
+			List<Integer> cardNumbers) throws Exception {
+
+		if (cardTypes == 3 || (cardAppearingMoreThanThrice != null && !cardAppearingMoreThanThrice.isEmpty())) {
+			Card card1 = getCardList().get(cardNumbers.get(0) - 1);
+			Card card2 = getCardList().get(cardNumbers.get(1) - 1);
+			Card card3 = getCardList().get(cardNumbers.get(2) - 1);
+			getCardList().remove(card1);
+			getCardList().remove(card2);
+			getCardList().remove(card3);
+
+			deck.add(card1);
+			deck.add(card2);
+			deck.add(card3);
+			setExchanged(true);
+			setCardList(getCardList());
+//			setChanged();
+//			notifyObservers(player);
+		}
+	}
+
+	/**
+	 * If player has the card territory, he will get the extra set of armies
+	 *
+	 *
+	 * @param exchangeCards list of cards
+	 * @param player        GamePlayer object
+	 * @return playerObject GamePlayer Object
+	 */
+	public GamePlayer exChangeCardTerritoryExist(List<Card> exchangeCards, GamePlayer player) {
+		GamePlayer playerObject = new GamePlayer();
+		playerObject = player;
+		ArrayList<Country> countryList = new ArrayList<Country>();
+		countryList = player.getPlayerCountries();
+		ArrayList<Country> updatedCountryList = new ArrayList<Country>();
+		System.out.println("Inside Exchange card Territory");
+		for (Country country : countryList) {
+			for (Card card : exchangeCards) {
+				String[] CountryNameInCard = card.getName().split(",");
+				String countryName = CountryNameInCard[0];
+				if (countryName.equalsIgnoreCase(country.getCountryName())) {
+					System.out.println("country name for the exchnage is :" + country.getCountryName());
+					System.out.println("armies before exchnage in the Country is :" + country.getNoOfArmies());
+					int NumOfarmies = country.getNoOfArmies();
+					NumOfarmies = NumOfarmies + 2;
+					country.setNoOfArmies(NumOfarmies);
+					System.out.println("armies before exchnage in the Country is :" + country.getNoOfArmies());
+				}
+			}
+			updatedCountryList.add(country);
+		}
+		playerObject.setPlayerCountries(updatedCountryList);
+		return playerObject;
+	}
+
+	public void attackPhaseControl(GameMap gameMap, Object attackercountry, Country toCountry) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
