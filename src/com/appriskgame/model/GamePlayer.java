@@ -1,7 +1,7 @@
 package com.appriskgame.model;
 
 import java.util.ArrayList;
-import java.util.Observable;
+import java.util.List;
 
 /**
  * This class stores the value associated to each player. It stores player's
@@ -11,11 +11,21 @@ import java.util.Observable;
  * @author Dolly
  * @author Sahana
  */
-public class GamePlayer extends Observable {
+public class GamePlayer {
 
 	private String playerName;
 	private ArrayList<Country> playerCountries = new ArrayList<Country>();
 	private int noOfArmies = 0;
+
+	private List<Card> cardList = new ArrayList<>();
+
+	public List<Card> getCardList() {
+		return cardList;
+	}
+
+	public void setCardList(List<Card> cardList) {
+		this.cardList = cardList;
+	}
 
 	/**
 	 * Get the Player name.

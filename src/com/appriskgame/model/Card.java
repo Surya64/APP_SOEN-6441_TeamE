@@ -1,5 +1,9 @@
 package com.appriskgame.model;
 
+import java.util.ArrayList;
+
+import com.appriskgame.controller.Player;
+
 /**
  * Card definition, to have different types of cards
  *
@@ -9,18 +13,22 @@ package com.appriskgame.model;
 
 public class Card {
 
-	private final String type;
-	private final Country country;
+	private String type;
+
+	private Country country;
+
+	public final static String INFANTRY = "infantry";
+
+	public final static String CAVALRY = "cavalry";
+
+	public final static String ARTILLERY = "artillery";
+
+	private Player currentPlayer;
 
 	/**
-	 * this constructor method assigning the country and the card type
-	 *
-	 * @param type    card type
-	 * @param country name of the country
+	 * Card Constructor
 	 */
-	public Card(String type, Country country) {
-		this.type = type;
-		this.country = country;
+	public Card() {
 	}
 
 	/**
@@ -33,12 +41,21 @@ public class Card {
 	}
 
 	/**
-	 * This method returns type of the card
+	 * Gets the card type
 	 *
-	 * @return string card object
+	 * @return Card type
 	 */
 	public String getType() {
 		return type;
+	}
+
+	/**
+	 * Sets the card type
+	 *
+	 * @param cardType - the card type
+	 */
+	public void settype(String cardType) {
+		this.type = cardType;
 	}
 
 	/**
@@ -49,4 +66,37 @@ public class Card {
 	public Country getCountry() {
 		return country;
 	}
+
+	/**
+	 * Gets the current player
+	 *
+	 * @return the player object
+	 */
+	public Player getCurrentPlayer() {
+		return currentPlayer;
+	}
+
+	/**
+	 * Sets the current player
+	 *
+	 * @param currentPlayer - the player object
+	 */
+	public void setCurrentPlayer(Player currentPlayer) {
+		this.currentPlayer = currentPlayer;
+	}
+
+	// Methods related to Card
+	/**
+	 * This method creates an arrayList of cards
+	 *
+	 * @return the list of card
+	 */
+	public ArrayList<String> totalCardType() {
+		ArrayList<String> cardTypes = new ArrayList<>();
+		cardTypes.add(ARTILLERY);
+		cardTypes.add(CAVALRY);
+		cardTypes.add(INFANTRY);
+		return cardTypes;
+	}
+
 }
