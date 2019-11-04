@@ -1871,4 +1871,9 @@ public class Player {
 		playerObject.setPlayerCountries(updatedCountryList);
 		return playerObject;
 	}
+
+	public void attackPhaseControl(GameMap gameMap, Object attackercountry, Country toCountry) {
+		// TODO Auto-generated method stub
+		
+	}
 }
