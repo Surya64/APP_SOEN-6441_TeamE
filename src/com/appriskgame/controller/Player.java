@@ -311,38 +311,45 @@ public class Player {
 		boolean gameContinue;
 		do {
 			gameContinue = false;
-			for (int round = 1; round <= playersList.size(); round++) {
+			int size = playersList.size();
+			roundRobin = new RoundRobinAllocator(playersList);
+			for (int round = 1; round <= size; round++) {
 				gameplayer = roundRobin.nextTurn();
-				String playerName = gameplayer.getPlayerName();
-				gameMap.setCurrentPlayer(playerName);
-				gameMap.setGamePhase("Reinforcement Phase");
-				System.out.println("** Reinforcement Phase Begins for Player: " + gameplayer.getPlayerName() + " **");
-				System.out.println(gameplayer.getPlayerCountries());
-				Continent playerContinent = gameplayer.getPlayerCountries().get(0).getPartOfContinent();
-				int reInforceAmries = assignReinforcedArmies(gameplayer, playerContinent);
-				gameplayer.setNoOfArmies(reInforceAmries);
-				gameMap.setDomination(gameMap);
-				while (gameplayer.getNoOfArmies() > 0) {
-					startReinforcement(gameplayer, gameMap);
+				
+				if(gameplayer!=null)
+				{
+					String playerName = gameplayer.getPlayerName();
+					gameMap.setCurrentPlayer(playerName);
+					gameMap.setGamePhase("Reinforcement Phase");
+					System.out.println("** Reinforcement Phase Begins for Player: " + gameplayer.getPlayerName() + " **");
+					System.out.println(gameplayer.getPlayerCountries());
+					Continent playerContinent = gameplayer.getPlayerCountries().get(0).getPartOfContinent();
+					int reInforceAmries = assignReinforcedArmies(gameplayer, playerContinent);
+					gameplayer.setNoOfArmies(reInforceAmries);
+					gameMap.setDomination(gameMap);
+					while (gameplayer.getNoOfArmies() > 0) {
+						startReinforcement(gameplayer, gameMap);
+					}
+					System.out.println("** Reinforcement Phase Ends for Player: " + gameplayer.getPlayerName() + " **");
+					System.out.println("Attack Begin");
+					gameMap.setGamePhase("Attack Phase");
+					attackPhaseControl(playersList, gameplayer, gameMap);
+					System.out.println("Attack Ends");
+					gameMap.setDomination(gameMap);
+					System.out.println("** Fortification Phase Begins for Player: " + gameplayer.getPlayerName() + " **");
+					gameMap.setGamePhase("Fortification Phase");
+					startGameFortification(gameplayer, gameMap);
+					System.out.println("** Fortification Phase Ends for Player: " + gameplayer.getPlayerName() + " **");
 				}
-				System.out.println("** Reinforcement Phase Ends for Player: " + gameplayer.getPlayerName() + " **");
-				System.out.println("Attack Begin");
-				gameMap.setGamePhase("Attack Phase");
-				attackPhaseControl(playersList, gameplayer, gameMap);
-				System.out.println("Attack Ends");
-				gameMap.setDomination(gameMap);
-				System.out.println("** Fortification Phase Begins for Player: " + gameplayer.getPlayerName() + " **");
-				gameMap.setGamePhase("Fortification Phase");
-				startGameFortification(gameplayer, gameMap);
-				System.out.println("** Fortification Phase Ends for Player: " + gameplayer.getPlayerName() + " **");
 			}
 
 			if (gameplayer.getPlayerCountries().size() <= 0) {
-				gameContinue = true;
-			} else {
 				gameContinue = false;
-				System.out.println("Thank You!!");
+				System.out.println("Game Over!");
 				System.exit(0);
+				
+			} else {
+				gameContinue = true;
 			}
 		} while (gameContinue);
 	}
@@ -874,12 +881,16 @@ public class Player {
 						if (attackerDices > 0 && defenderDices > 0) {
 							attackingStarted(attackerDices, defenderDices, attackCountryObject, defenderCountryObject);
 							if (isAttackerWon(defenderCountryObject)) {
+								
 								if (isPlayerWinner(player, mapDetails)) {
 									System.out.println(player.getPlayerName() + " won the Game!");
 									System.exit(0);
 								}
+								String removePlayerName=defenderCountryObject.getPlayer();
 								moveArmyToConquredCountry(playersList, player, attackCountryObject,
 										defenderCountryObject);
+								
+								removePlayer(playersList,mapDetails,removePlayerName);
 								break;
 							}
 						}
@@ -898,12 +909,15 @@ public class Player {
 								attackingStarted(attackerDices, defenderDices, attackCountryObject,
 										defenderCountryObject);
 								if (isAttackerWon(defenderCountryObject)) {
+									
 									if (isPlayerWinner(player, mapDetails)) {
 										System.out.println(player.getPlayerName() + " won the Game!");
 										System.exit(0);
 									}
+									String removePlayerName=defenderCountryObject.getPlayer();
 									moveArmyToConquredCountry(playersList, player, attackCountryObject,
 											defenderCountryObject);
+									removePlayer(playersList,mapDetails,removePlayerName);
 								}
 							} else {
 								reasonForFailedDefender(defenderArmies, defenderDices);
@@ -1075,6 +1089,39 @@ public class Player {
 		}
 		return false;
 	}
+	
+	
+	
+	public void removePlayer(ArrayList<GamePlayer> playersList,GameMap mapDetails,String playerName)
+	{
+		
+	for(int i=0;i<playersList.size();i++)
+	{
+		if(playersList.get(i).getPlayerName().equalsIgnoreCase(playerName))
+		{
+			if((playersList.get(i).getPlayerCountries().size()==0))
+			{
+				playersList.remove(i);
+				break;
+			}
+		}
+	}
+	
+	for(int i=0;i<mapDetails.getPlayers().size();i++)
+	{
+		if(mapDetails.getPlayers().get(i).getPlayerName().equalsIgnoreCase(playerName))
+		{
+			if((mapDetails.getPlayers().get(i).getPlayerCountries().size()==0))
+			{
+				mapDetails.getPlayers().remove(i);
+				break;
+			}
+		}
+	}
+		
+	}
+	
+	
 
 	/**
 	 *
@@ -1823,5 +1870,10 @@ public class Player {
 		}
 		playerObject.setPlayerCountries(updatedCountryList);
 		return playerObject;
+	}
+
+	public void attackPhaseControl(GameMap gameMap, Object attackercountry, Country toCountry) {
+		// TODO Auto-generated method stub
+		
 	}
 }
