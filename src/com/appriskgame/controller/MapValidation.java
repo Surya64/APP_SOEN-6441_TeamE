@@ -1,6 +1,7 @@
 package com.appriskgame.controller;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -252,10 +253,19 @@ public class MapValidation {
 	 * @throws IOException -throws for input output
 	 */
 	public boolean validateMap(String fileName) throws IOException {
-		BufferedReader read = new BufferedReader(new FileReader(fileName));
-		String fileData;
+		BufferedReader read = null;
+		try {
+			read = new BufferedReader(new FileReader(fileName));
+		} catch (FileNotFoundException e) {
+			System.out.println("Error File Not found Exception");
+		}
+		String fileData = "";
 		String tagerror = new String();
-		fileData = new String(Files.readAllBytes(Paths.get(fileName)));
+		try {
+			fileData = new String(Files.readAllBytes(Paths.get(fileName)));
+		} catch (IOException e) {
+			System.out.println("Error Message : " + e.getMessage());
+		}
 		String[] requiredData = fileData.split("files");
 		fileData = "[files" + requiredData[1];
 		errorMessage = new String();

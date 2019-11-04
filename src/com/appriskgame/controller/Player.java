@@ -151,7 +151,6 @@ public class Player {
 		SameCardExchangeThrice = sameCardExchangeThrice;
 	}
 
-
 	/**
 	 * This method is used to set the player's list.
 	 *
@@ -337,14 +336,8 @@ public class Player {
 				startGameFortification(gameplayer, gameMap);
 				System.out.println("** Fortification Phase Ends for Player: " + gameplayer.getPlayerName() + " **");
 			}
-			System.out.println("Do you want to continue playing? Yes/No");
-			String continuePlaying = br.readLine().trim();
-			while (!(continuePlaying.equalsIgnoreCase("Yes") || continuePlaying.equalsIgnoreCase("No")
-					|| continuePlaying == null)) {
-				System.err.println("\nPlease enter the choice as either Yes or No:");
-				choice = br.readLine().trim();
-			}
-			if (continuePlaying.equalsIgnoreCase("Yes")) {
+
+			if (gameplayer.getPlayerCountries().size() <= 0) {
 				gameContinue = true;
 			} else {
 				gameContinue = false;
@@ -881,9 +874,8 @@ public class Player {
 						if (attackerDices > 0 && defenderDices > 0) {
 							attackingStarted(attackerDices, defenderDices, attackCountryObject, defenderCountryObject);
 							if (isAttackerWon(defenderCountryObject)) {
-								if(isPlayerWinner(player,mapDetails))
-								{
-									System.out.println(player.getPlayerName()+" won the Game!");
+								if (isPlayerWinner(player, mapDetails)) {
+									System.out.println(player.getPlayerName() + " won the Game!");
 									System.exit(0);
 								}
 								moveArmyToConquredCountry(playersList, player, attackCountryObject,
@@ -906,9 +898,8 @@ public class Player {
 								attackingStarted(attackerDices, defenderDices, attackCountryObject,
 										defenderCountryObject);
 								if (isAttackerWon(defenderCountryObject)) {
-									if(isPlayerWinner(player,mapDetails))
-									{
-										System.out.println(player.getPlayerName()+" won the Game!");
+									if (isPlayerWinner(player, mapDetails)) {
+										System.out.println(player.getPlayerName() + " won the Game!");
 										System.exit(0);
 									}
 									moveArmyToConquredCountry(playersList, player, attackCountryObject,
@@ -958,11 +949,9 @@ public class Player {
 	 * @param mapDetails
 	 * @return
 	 */
-	public boolean isPlayerWinner(GamePlayer player,GameMap mapDetails)
-	{
+	public boolean isPlayerWinner(GamePlayer player, GameMap mapDetails) {
 
-		if(mapDetails.getCountries().size()==player.getPlayerCountries().size())
-		{
+		if (mapDetails.getCountries().size() == player.getPlayerCountries().size()) {
 			return true;
 		}
 		return false;
@@ -985,10 +974,10 @@ public class Player {
 		return false;
 	}
 
-
 	/**
 	 *
-	 * This method checks whether the country which is being attacked is present or not.
+	 * This method checks whether the country which is being attacked is present or
+	 * not.
 	 *
 	 * @param player
 	 * @param currentCountry
@@ -1703,7 +1692,6 @@ public class Player {
 	 * @param armiesCount - Count of armies player wish to move
 	 */
 	public void moveArmies(Country fromCountry, Country toCountry, int armiesCount) {
-
 		boolean neighbourCountries = false;
 		for (String country : fromCountry.getNeighbourCountries()) {
 			if (country.equalsIgnoreCase(toCountry.getCountryName())) {
@@ -1778,7 +1766,7 @@ public class Player {
 	 *
 	 * @param cardTypes                   Type of cards
 	 * @param cardAppearingMoreThanThrice Card name appearing thrice
-	 * @param player                      Gameplayer object
+	 * @param player                      Game player object
 	 * @param cardNumbers                 the cardNumbers
 	 * @throws Exception exception of method
 	 */
@@ -1812,17 +1800,12 @@ public class Player {
 	 * @return playerObject GamePlayer Object
 	 */
 	public GamePlayer exChangeCardTerritoryExist(List<Card> exchangeCards, GamePlayer player) {
-
 		GamePlayer playerObject = new GamePlayer();
 		playerObject = player;
-
 		ArrayList<Country> countryList = new ArrayList<Country>();
 		countryList = player.getPlayerCountries();
-
 		ArrayList<Country> updatedCountryList = new ArrayList<Country>();
-
 		System.out.println("Inside Exchange card Territory");
-
 		for (Country country : countryList) {
 			for (Card card : exchangeCards) {
 				String[] CountryNameInCard = card.getName().split(",");
@@ -1838,10 +1821,7 @@ public class Player {
 			}
 			updatedCountryList.add(country);
 		}
-
 		playerObject.setPlayerCountries(updatedCountryList);
 		return playerObject;
-
 	}
-
 }

@@ -13,6 +13,13 @@ import com.appriskgame.model.Country;
 import com.appriskgame.model.GameMap;
 import javax.swing.JTextField;
 
+/**
+ * This Class is used to display Player information, Game phase and actions
+ * taking place in the each phase.
+ * 
+ * @author Sahana
+ *
+ */
 public class PlayerView implements Observer {
 	JFrame frame = new JFrame("Player View");
 	String phaseName = "";
@@ -25,6 +32,7 @@ public class PlayerView implements Observer {
 
 	/**
 	 * Method to initialize the frame.
+	 * 
 	 * @wbp.parser.entryPoint
 	 */
 	public void initialize() {
