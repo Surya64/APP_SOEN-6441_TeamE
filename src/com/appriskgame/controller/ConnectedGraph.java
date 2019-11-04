@@ -1,21 +1,20 @@
 package com.appriskgame.controller;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import com.appriskgame.model.Continent;
 import com.appriskgame.model.Country;
 
 /**
- * This Class containing the method to check whether a map is a connected graph or
- * not
+ * This Class containing the method to check whether a map is a connected graph
+ * or not
  * 
  * @author Surya
  * @author Sahana
  * 
  */
 public class ConnectedGraph {
-	String adjancencyError="";
-	
+	String adjancencyError = "";
+
 	/**
 	 * This method is used to check adjacency between countries in the uploaded file
 	 * and check for correct format.
@@ -23,9 +22,8 @@ public class ConnectedGraph {
 	 * @param listOfCountries contains all countries
 	 * @param listOfContinent contains all Continent
 	 * @return flag returns boolean value if adjacency are defined correctly.
-	 * @throws IOException - throws input output exception
 	 */
-	public String checkCountryAdjacency(ArrayList<Country> listOfCountries, ArrayList<Continent> listOfContinent ) throws IOException {
+	public String checkCountryAdjacency(ArrayList<Country> listOfCountries, ArrayList<Continent> listOfContinent) {
 		String adjError = new String(), contError = new String(), connectedError = new String();
 		ArrayList<String> adjacentCountries = new ArrayList<>();
 		ArrayList<String> availableContinent = new ArrayList<>();
