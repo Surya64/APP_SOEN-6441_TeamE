@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Observable;
 
+import com.appriskgame.view.PlayerView;
 import com.appriskgame.view.WorldDominationView;
 
 /**
@@ -19,19 +20,22 @@ public class GameMap extends Observable {
 	private ArrayList<GamePlayer> players = new ArrayList<GamePlayer>();
 	private HashMap<String, Country> countrySet;
 	public GameMap gameMap;
+	public String gamePhaseName;
+	public String currentPlayer;
 	public static int cardExchangeCountinTheGame = 0;
 
 	public static int getCardExchangeCountinTheGame() {
 		return cardExchangeCountinTheGame;
 	}
 
-
 	/**
 	 * GameMap Constructor
 	 */
 	public GameMap() {
 		WorldDominationView worldDominationView = new WorldDominationView();
+		PlayerView playerView = new PlayerView();
 		this.addObserver(worldDominationView);
+		this.addObserver(playerView);
 	}
 
 	/**
@@ -100,6 +104,46 @@ public class GameMap extends Observable {
 
 	public GameMap getDomination() {
 		return gameMap;
+	}
+
+	/**
+	 * Gets the current game phase
+	 * 
+	 * @return the phase
+	 */
+	public String getGamePhase() {
+		return gamePhaseName;
+	}
+
+	/**
+	 * Sets the current game phase
+	 * 
+	 * @param gamePhase - the phase of the game
+	 */
+	public void setGamePhase(String gamePhase) {
+		this.gamePhaseName = gamePhase;
+		setChanged();
+		notifyObservers();
+	}
+
+	/**
+	 * Gets the current player Name
+	 * 
+	 * @return current Player
+	 */
+	public String getCurrentPlayer() {
+		return currentPlayer;
+	}
+
+	/**
+	 * Sets the current game phase
+	 * 
+	 * @param currentPlayer - Current Player Name
+	 */
+	public void setCurrentPlayer(String currentPlayer) {
+		this.currentPlayer = currentPlayer;
+		setChanged();
+		notifyObservers();
 	}
 
 	/**

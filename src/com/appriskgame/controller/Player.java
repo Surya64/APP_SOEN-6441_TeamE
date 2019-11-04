@@ -314,6 +314,9 @@ public class Player {
 			gameContinue = false;
 			for (int round = 1; round <= playersList.size(); round++) {
 				gameplayer = roundRobin.nextTurn();
+				String playerName = gameplayer.getPlayerName();
+				gameMap.setCurrentPlayer(playerName);
+				gameMap.setGamePhase("Reinforcement Phase");
 				System.out.println("** Reinforcement Phase Begins for Player: " + gameplayer.getPlayerName() + " **");
 				System.out.println(gameplayer.getPlayerCountries());
 				Continent playerContinent = gameplayer.getPlayerCountries().get(0).getPartOfContinent();
@@ -325,10 +328,12 @@ public class Player {
 				}
 				System.out.println("** Reinforcement Phase Ends for Player: " + gameplayer.getPlayerName() + " **");
 				System.out.println("Attack Begin");
+				gameMap.setGamePhase("Attack Phase");
 				attackPhaseControl(playersList, gameplayer, gameMap);
 				System.out.println("Attack Ends");
 				gameMap.setDomination(gameMap);
 				System.out.println("** Fortification Phase Begins for Player: " + gameplayer.getPlayerName() + " **");
+				gameMap.setGamePhase("Fortification Phase");
 				startGameFortification(gameplayer, gameMap);
 				System.out.println("** Fortification Phase Ends for Player: " + gameplayer.getPlayerName() + " **");
 			}

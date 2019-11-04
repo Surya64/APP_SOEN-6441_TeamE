@@ -1,6 +1,5 @@
 package com.appriskgame.model;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Observable;
 
@@ -12,19 +11,11 @@ import java.util.Observable;
  * @author Dolly
  * @author Sahana
  */
-public class GamePlayer extends Observable implements Serializable {
+public class GamePlayer extends Observable {
 
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
 	private String playerName;
 	private ArrayList<Country> playerCountries = new ArrayList<Country>();
 	private int noOfArmies = 0;
-
-
-
-
 
 	/**
 	 * Get the Player name.
@@ -94,7 +85,5 @@ public class GamePlayer extends Observable implements Serializable {
 		return "Player [PlayerName=" + playerName + ", Armies=" + noOfArmies + ", Countries=" + playerCountries + "]";
 
 	}
-
-
 
 }
