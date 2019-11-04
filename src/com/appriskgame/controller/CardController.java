@@ -1,4 +1,4 @@
-package com.appriskgame.model;
+package com.appriskgame.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,8 +8,12 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CardController {
+import com.appriskgame.model.Card;
+import com.appriskgame.model.Deck;
+import com.appriskgame.model.GameMap;
+import com.appriskgame.model.GamePlayer;
 
+public class CardController {
 	public void setDeckOfCards() {
 		Deck.getInstance().setDeckOfCards();
 	}
@@ -130,7 +134,8 @@ public class CardController {
 				Matcher match2 = numberPattern.matcher(cardsList[1]);
 				Matcher match3 = numberPattern.matcher(cardsList[2]);
 				Matcher match4 = numberPattern.matcher(cardsList[3]);
-				while (cardsList.length < 4||!match1.matches() || !match2.matches() || !match3.matches() || !match4.matches()) {
+				while (cardsList.length < 4 || !match1.matches() || !match2.matches() || !match3.matches()
+						|| !match4.matches()) {
 					System.out.println(
 							"Enter atleast 3 cards you want to exchange in the format exchangecards num num num");
 					cardsList = input.nextLine().split(" ");
@@ -162,7 +167,6 @@ public class CardController {
 				for (int c : cardNumbers) {
 					player.getCardList().remove(c - 1);
 				}
-
 
 			}
 		}
@@ -216,5 +220,4 @@ public class CardController {
 		}
 		return false;
 	}
-
 }
