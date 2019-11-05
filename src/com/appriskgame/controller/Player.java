@@ -315,6 +315,7 @@ public class Player {
 				gameplayer = playersList.get(round);
 				// gameplayer = roundRobin.nextTurn();
 				if (gameplayer.getPlayerCountries().size() > 0) {
+
 					String playerName = gameplayer.getPlayerName();
 					gameMap.setCurrentPlayer(playerName);
 					gameMap.setGamePhase("Reinforcement Phase");
@@ -342,6 +343,7 @@ public class Player {
 				}
 			}
 			gameContinue = true;
+
 		} while (gameContinue);
 	}
 
@@ -361,7 +363,7 @@ public class Player {
 	// startup phase methods
 	/**
 	 * This Method is used to Add and remove players to playerList.
-	 * 
+	 *
 	 * @return List of Player Names
 	 */
 	public ArrayList<String> playerCreation() {
@@ -624,8 +626,10 @@ public class Player {
 				listOfContries.add(country);
 			}
 		}
+		CardController cardController = new CardController();
+		int exchangeInCard = cardController.exchangeCards(player);
 		int reinforcementArmies = assignReinforcedArmies(player, playerContinent);
-		player.setNoOfArmies((reinforcementArmies));
+		player.setNoOfArmies((reinforcementArmies + exchangeInCard));
 
 		while (player.getNoOfArmies() > 0) {
 			System.out.println(" Player Name :" + player.getPlayerName());
@@ -881,6 +885,11 @@ public class Player {
 							attackingStarted(attackerDices, defenderDices, attackCountryObject, defenderCountryObject);
 							if (isAttackerWon(defenderCountryObject)) {
 
+								System.out.println("Card Phase");
+								CardController cardController = new CardController();
+								cardController.setDeckOfCards();
+								cardController.allocateCardToPlayer(player);
+
 								if (isPlayerWinner(player, mapDetails)) {
 									System.out.println(player.getPlayerName() + " won the Game!");
 									System.exit(0);
@@ -888,8 +897,8 @@ public class Player {
 								String removePlayerName = defenderCountryObject.getPlayer();
 								moveArmyToConquredCountry(playersList, player, attackCountryObject,
 										defenderCountryObject);
-
 								removePlayer(playersList, mapDetails, removePlayerName);
+
 								break;
 							}
 						}
@@ -908,7 +917,10 @@ public class Player {
 								attackingStarted(attackerDices, defenderDices, attackCountryObject,
 										defenderCountryObject);
 								if (isAttackerWon(defenderCountryObject)) {
-
+									System.out.println("Card Phase");
+									CardController cardController = new CardController();
+									cardController.setDeckOfCards();
+									cardController.allocateCardToPlayer(player);
 									if (isPlayerWinner(player, mapDetails)) {
 										System.out.println(player.getPlayerName() + " won the Game!");
 										System.exit(0);
@@ -959,6 +971,7 @@ public class Player {
 				System.out.println("Attacking Phase is ended");
 			}
 		} while (gameContinue);
+
 	}
 
 	/**
@@ -1111,9 +1124,9 @@ public class Player {
 					mapDetails.getPlayers().remove(i);
 					break;
 				}
+
 			}
 		}
-
 	}
 
 	/**
@@ -1826,8 +1839,7 @@ public class Player {
 			deck.add(card3);
 			setExchanged(true);
 			setCardList(getCardList());
-//			setChanged();
-//			notifyObservers(player);
+
 		}
 	}
 
@@ -1880,6 +1892,5 @@ public class Player {
 
 		}
 		return false;
-
 	}
 }
