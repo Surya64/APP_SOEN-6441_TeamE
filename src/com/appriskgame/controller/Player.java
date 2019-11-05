@@ -822,16 +822,15 @@ public class Player {
 								cardController.setDeckOfCards();
 								cardController.allocateCardToPlayer(player);
 
+								String removePlayerName = defenderCountryObject.getPlayer();
+								moveArmyToConquredCountry(playersList, player, attackCountryObject,
+										defenderCountryObject);
+								removePlayer(playersList, mapDetails, removePlayerName);
 								if (isPlayerWinner(player, mapDetails)) {
 									mapDetails.setActionMsg(player.getPlayerName() + " won the Game!");
 									System.out.println(player.getPlayerName() + " won the Game!");
 									System.exit(0);
 								}
-								String removePlayerName = defenderCountryObject.getPlayer();
-								moveArmyToConquredCountry(playersList, player, attackCountryObject,
-										defenderCountryObject);
-								removePlayer(playersList, mapDetails, removePlayerName);
-
 								break;
 							}
 						}
@@ -855,14 +854,15 @@ public class Player {
 									CardController cardController = new CardController();
 									cardController.setDeckOfCards();
 									cardController.allocateCardToPlayer(player);
-									if (isPlayerWinner(player, mapDetails)) {
-										System.out.println(player.getPlayerName() + " won the Game!");
-										System.exit(0);
-									}
+
 									String removePlayerName = defenderCountryObject.getPlayer();
 									moveArmyToConquredCountry(playersList, player, attackCountryObject,
 											defenderCountryObject);
 									removePlayer(playersList, mapDetails, removePlayerName);
+									if (isPlayerWinner(player, mapDetails)) {
+										System.out.println(player.getPlayerName() + " won the Game!");
+										System.exit(0);
+									}
 								}
 							} else {
 								reasonForFailedDefender(defenderArmies, defenderDices);
