@@ -14,9 +14,9 @@ import com.appriskgame.model.GamePlayer;
 public class RoundRobinAllocator {
 	private ArrayList<GamePlayer> listOfPlayers;
 	private Iterator<GamePlayer> iterator;
-	
+
 	/**
-	 * RoundRobinAllocator constructor 
+	 * RoundRobinAllocator constructor
 	 * 
 	 * @param playersList List of players
 	 */
@@ -24,7 +24,7 @@ public class RoundRobinAllocator {
 		this.listOfPlayers = playersList;
 		iterator = playersList.iterator();
 	}
-	
+
 	/**
 	 * This method is used to move on the turn to next Player.
 	 * 

@@ -309,19 +309,17 @@ public class Player {
 			} while (placeAllArmyFlag);
 		}
 		boolean gameContinue;
+
 		do {
-			gameContinue = false;
-			int size = playersList.size();
-			roundRobin = new RoundRobinAllocator(playersList);
-			for (int round = 1; round <= size; round++) {
-				gameplayer = roundRobin.nextTurn();
-				
-				if(gameplayer!=null)
-				{
+			for (int round = 0; round < playersList.size(); round++) {
+				gameplayer = playersList.get(round);
+				// gameplayer = roundRobin.nextTurn();
+				if (gameplayer.getPlayerCountries().size() > 0) {
 					String playerName = gameplayer.getPlayerName();
 					gameMap.setCurrentPlayer(playerName);
 					gameMap.setGamePhase("Reinforcement Phase");
-					System.out.println("** Reinforcement Phase Begins for Player: " + gameplayer.getPlayerName() + " **");
+					System.out
+							.println("** Reinforcement Phase Begins for Player: " + gameplayer.getPlayerName() + " **");
 					System.out.println(gameplayer.getPlayerCountries());
 					Continent playerContinent = gameplayer.getPlayerCountries().get(0).getPartOfContinent();
 					int reInforceAmries = assignReinforcedArmies(gameplayer, playerContinent);
@@ -336,21 +334,14 @@ public class Player {
 					attackPhaseControl(playersList, gameplayer, gameMap);
 					System.out.println("Attack Ends");
 					gameMap.setDomination(gameMap);
-					System.out.println("** Fortification Phase Begins for Player: " + gameplayer.getPlayerName() + " **");
+					System.out
+							.println("** Fortification Phase Begins for Player: " + gameplayer.getPlayerName() + " **");
 					gameMap.setGamePhase("Fortification Phase");
 					startGameFortification(gameplayer, gameMap);
 					System.out.println("** Fortification Phase Ends for Player: " + gameplayer.getPlayerName() + " **");
 				}
 			}
-
-			if (gameplayer.getPlayerCountries().size() <= 0) {
-				gameContinue = false;
-				System.out.println("Game Over!");
-				System.exit(0);
-				
-			} else {
-				gameContinue = true;
-			}
+			gameContinue = true;
 		} while (gameContinue);
 	}
 
@@ -831,20 +822,16 @@ public class Player {
 			String errorDetails = "";
 			gameContinue = false;
 			showMap(mapDetails);
-			boolean isAttackPossible=isAttackPossible(player);
-			String userCommand="";
-			if(isAttackPossible)
-			{
+			boolean isAttackPossible = isAttackPossible(player);
+			String userCommand = "";
+			if (isAttackPossible) {
 				System.out.println("Enter the Attacker command?" + player.getPlayerName());
-				 userCommand = br.readLine().trim();
+				userCommand = br.readLine().trim();
+			} else {
+				userCommand = "attack -noattack";
+
 			}
-			else
-			{
-				userCommand="attack -noattack";
-				
-			}
-			
-	
+
 			if (checkUserValidation(userCommand)) {
 				String[] attackDetails = userCommand.split(" ");
 				String attackCountry = attackDetails[1];
@@ -893,16 +880,16 @@ public class Player {
 						if (attackerDices > 0 && defenderDices > 0) {
 							attackingStarted(attackerDices, defenderDices, attackCountryObject, defenderCountryObject);
 							if (isAttackerWon(defenderCountryObject)) {
-								
+
 								if (isPlayerWinner(player, mapDetails)) {
 									System.out.println(player.getPlayerName() + " won the Game!");
 									System.exit(0);
 								}
-								String removePlayerName=defenderCountryObject.getPlayer();
+								String removePlayerName = defenderCountryObject.getPlayer();
 								moveArmyToConquredCountry(playersList, player, attackCountryObject,
 										defenderCountryObject);
-								
-								removePlayer(playersList,mapDetails,removePlayerName);
+
+								removePlayer(playersList, mapDetails, removePlayerName);
 								break;
 							}
 						}
@@ -921,15 +908,15 @@ public class Player {
 								attackingStarted(attackerDices, defenderDices, attackCountryObject,
 										defenderCountryObject);
 								if (isAttackerWon(defenderCountryObject)) {
-									
+
 									if (isPlayerWinner(player, mapDetails)) {
 										System.out.println(player.getPlayerName() + " won the Game!");
 										System.exit(0);
 									}
-									String removePlayerName=defenderCountryObject.getPlayer();
+									String removePlayerName = defenderCountryObject.getPlayer();
 									moveArmyToConquredCountry(playersList, player, attackCountryObject,
 											defenderCountryObject);
-									removePlayer(playersList,mapDetails,removePlayerName);
+									removePlayer(playersList, mapDetails, removePlayerName);
 								}
 							} else {
 								reasonForFailedDefender(defenderArmies, defenderDices);
@@ -951,23 +938,20 @@ public class Player {
 						+ "Format 1:attack countrynamefrom countynameto numdice[numdice>0]\n"
 						+ "Format 2:attack countrynamefrom countynameto  allout\n" + "Format 3:attack -noattack\n");
 			}
-			boolean isAttackPossibleAfter=isAttackPossible(player);
-			String continueAttacking="";
-			if(isAttackPossibleAfter)
-			{
+			boolean isAttackPossibleAfter = isAttackPossible(player);
+			String continueAttacking = "";
+			if (isAttackPossibleAfter) {
 				System.out.println("Do you want to attack again? Yes/No");
-				 continueAttacking= br.readLine().trim();
+				continueAttacking = br.readLine().trim();
 				while (!(continueAttacking.equalsIgnoreCase("Yes") || continueAttacking.equalsIgnoreCase("No")
 						|| continueAttacking == null)) {
 					System.err.println("\nPlease enter the choice as either Yes or No:");
 					continueAttacking = br.readLine().trim();
 				}
+			} else {
+				continueAttacking = "No";
 			}
-			else
-			{
-				continueAttacking ="No";
-			}
-			
+
 			if (continueAttacking.equalsIgnoreCase("Yes")) {
 				gameContinue = true;
 			} else {
@@ -1111,39 +1095,26 @@ public class Player {
 		}
 		return false;
 	}
-	
-	
-	
-	public void removePlayer(ArrayList<GamePlayer> playersList,GameMap mapDetails,String playerName)
-	{
-		
-	for(int i=0;i<playersList.size();i++)
-	{
-		if(playersList.get(i).getPlayerName().equalsIgnoreCase(playerName))
-		{
-			if((playersList.get(i).getPlayerCountries().size()==0))
-			{
-				playersList.remove(i);
-				break;
+
+	public void removePlayer(ArrayList<GamePlayer> playersList, GameMap mapDetails, String playerName) {
+
+		/*
+		 * for (int i = 0; i < playersList.size(); i++) { if
+		 * (playersList.get(i).getPlayerName().equalsIgnoreCase(playerName)) { if
+		 * ((playersList.get(i).getPlayerCountries().size() == 0)) {
+		 * playersList.remove(i); break; } } }
+		 */
+
+		for (int i = 0; i < mapDetails.getPlayers().size(); i++) {
+			if (mapDetails.getPlayers().get(i).getPlayerName().equalsIgnoreCase(playerName)) {
+				if ((mapDetails.getPlayers().get(i).getPlayerCountries().size() == 0)) {
+					mapDetails.getPlayers().remove(i);
+					break;
+				}
 			}
 		}
+
 	}
-	
-	for(int i=0;i<mapDetails.getPlayers().size();i++)
-	{
-		if(mapDetails.getPlayers().get(i).getPlayerName().equalsIgnoreCase(playerName))
-		{
-			if((mapDetails.getPlayers().get(i).getPlayerCountries().size()==0))
-			{
-				mapDetails.getPlayers().remove(i);
-				break;
-			}
-		}
-	}
-		
-	}
-	
-	
 
 	/**
 	 *
@@ -1894,31 +1865,21 @@ public class Player {
 		return playerObject;
 	}
 
-	public void attackPhaseControl(GameMap gameMap, Object attackercountry, Country toCountry) {
-		// TODO Auto-generated method stub
-		
-	}
-	public boolean isAttackPossible(GamePlayer player)
-	{
-		
-		for(int i=0;i<player.getPlayerCountries().size();i++)
-		{
-			Country currentCountryObject=player.getPlayerCountries().get(i);
-			if(currentCountryObject.getNoOfArmies()>1)
-			{
-				for(int j=0;j<currentCountryObject.getNeighbourCountriesToAdd().size();j++)
-				{
-					Country defenderCountryObject=currentCountryObject.getNeighbourCountriesToAdd().get(j);
-							if (!defenderCountryObject.getPlayer().equalsIgnoreCase(player.getPlayerName()))
-									{
-								return true;
-									}
+	public boolean isAttackPossible(GamePlayer player) {
+
+		for (int i = 0; i < player.getPlayerCountries().size(); i++) {
+			Country currentCountryObject = player.getPlayerCountries().get(i);
+			if (currentCountryObject.getNoOfArmies() > 1) {
+				for (int j = 0; j < currentCountryObject.getNeighbourCountriesToAdd().size(); j++) {
+					Country defenderCountryObject = currentCountryObject.getNeighbourCountriesToAdd().get(j);
+					if (!defenderCountryObject.getPlayer().equalsIgnoreCase(player.getPlayerName())) {
+						return true;
+					}
 				}
 			}
 
 		}
 		return false;
-		
-		
+
 	}
 }
