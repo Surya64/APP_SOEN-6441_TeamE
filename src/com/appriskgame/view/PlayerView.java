@@ -88,7 +88,7 @@ public class PlayerView implements Observer {
 		textArea = new JTextArea();
 		scrollPane_1.setViewportView(textArea);
 		textArea.setColumns(10);
-		
+
 		frame.setVisible(true);
 	}
 
@@ -103,12 +103,24 @@ public class PlayerView implements Observer {
 		for (Country country : print) {
 			mapinfo = mapinfo + "\n" + country;
 		}
+		String CurrentPhase = textGamePhase.getText();
+
 		phaseName = gameMap.getGamePhase();
 		playerName = gameMap.getCurrentPlayer();
 		textGamePhase.setText(phaseName);
 		textPlayerName.setText(playerName.toUpperCase());
 		textInfo.setText(mapinfo);
-		textArea.setText(mapinfo);
+
+		if (CurrentPhase.equals(gameMap.getGamePhase())) {
+			String newLog = gameMap.getActionMsg();
+			String currentTxt = textArea.getText();
+			String appendLog = newLog + "\n" + currentTxt;
+			textArea.setText(appendLog);
+		} else {
+			String appendLog = gameMap.getActionMsg();
+			textArea.setText(appendLog);
+		}
+
 		frame.revalidate();
 		frame.repaint();
 

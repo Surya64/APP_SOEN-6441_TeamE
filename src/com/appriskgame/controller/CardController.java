@@ -50,7 +50,7 @@ public class CardController {
 					c++;
 					cardCount.put(card.getType(), c);
 				}
-				System.out.println(card.getType() + "with the CountryName:" + card.getCountry().getCountryName());
+				System.out.println(card.getType());
 			}
 		} else {
 			System.out.println("Not enough cards to exchange ,continuing with the reinforcement phase");
@@ -72,7 +72,7 @@ public class CardController {
 				int i = 0;
 				System.out.println("Available Cards to the player are");
 				for (int k = 0; k < player.getCardList().size(); k++) {
-					System.out.print(k + 1 + "." + player.getCardList().get(i).getType());
+					System.out.print(k + 1 + "." + player.getCardList().get(k).getType());
 				}
 				System.out.println(
 						"Enter the numbers of card you want to exchange in the format exchangecards num num num");
@@ -98,7 +98,7 @@ public class CardController {
 				List<Integer> cardNumbers = new ArrayList<>();
 
 				for (int k = 1; k < cardsList.length; k++) {
-					cardNumbers.add(Integer.parseInt(cardsList[i]));
+					cardNumbers.add(Integer.parseInt(cardsList[k]));
 				}
 
 				for (int c : cardNumbers) {
@@ -123,7 +123,7 @@ public class CardController {
 				int i = 0;
 				System.out.println("Available Cards to the player are");
 				for (int k = 0; k < player.getCardList().size(); k++) {
-					System.out.print(k + 1 + "." + player.getCardList().get(i).getType());
+					System.out.print(k + 1 + "." + player.getCardList().get(k).getType());
 				}
 
 				System.out.println(
@@ -172,6 +172,8 @@ public class CardController {
 				}
 
 			}
+		} else {
+			System.out.println("Not enough cards to exchange ,continuing with the reinforcement phase");
 		}
 		return armiesInExchange;
 	}
@@ -217,7 +219,6 @@ public class CardController {
 				}
 			}
 			if (cardAppearingCount == 3) {
-//				player.setSameCardExchangeThrice(cardAppearingThrice);
 				return true;
 			}
 		}

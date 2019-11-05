@@ -22,6 +22,7 @@ public class GameMap extends Observable {
 	public GameMap gameMap;
 	public String gamePhaseName;
 	public String currentPlayer;
+	public String actionMsg;
 	public static int cardExchangeCountinTheGame = 0;
 
 	public static int getCardExchangeCountinTheGame() {
@@ -102,6 +103,11 @@ public class GameMap extends Observable {
 		notifyObservers();
 	}
 
+	/**
+	 * Gets the current game map
+	 * 
+	 * @return gameMap object
+	 */
 	public GameMap getDomination() {
 		return gameMap;
 	}
@@ -142,6 +148,25 @@ public class GameMap extends Observable {
 	 */
 	public void setCurrentPlayer(String currentPlayer) {
 		this.currentPlayer = currentPlayer;
+		setChanged();
+		notifyObservers();
+	}
+	/**
+	 * Gets the current action message
+	 * 
+	 * @return current action message
+	 */
+	public String getActionMsg() {
+		return actionMsg;
+	}
+
+	/**
+	 * Sets the current action
+	 * 
+	 * @param gamePhase - the phase of the game
+	 */
+	public void setActionMsg(String actionMsg) {
+		this.actionMsg = actionMsg;
 		setChanged();
 		notifyObservers();
 	}
