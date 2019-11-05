@@ -1,10 +1,11 @@
 package com.appriskgame.controller;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,7 +36,7 @@ public class CardController {
 
 		HashMap<String, Integer> cardCount = new HashMap<>();
 		int armiesInExchange = 0;
-		Scanner input = new Scanner(System.in);
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int cardTypes = 0;
 		boolean cardExchangePossible = false;
 		String cardAppearingMoreThanThrice = null;
@@ -51,7 +52,7 @@ public class CardController {
 					c++;
 					cardCount.put(card.getType(), c);
 				}
-				System.out.println(card.getType() + "with the CountryName:" + card.getCountry().getCountryName());
+				System.out.println(card.getType());
 			}
 		}
 
@@ -74,7 +75,7 @@ public class CardController {
 				}
 				System.out.println(
 						"Enter the numbers of card you want to exchange in the format exchangecards num num num");
-				String[] cardsList = input.nextLine().split(" ");
+				String[] cardsList = br.readLine().split(" ");
 				if (cardsList.length == 4) {
 					Pattern namePattern2 = Pattern.compile("exchangecards");
 					Matcher match1 = namePattern2.matcher(cardsList[0]);
@@ -87,7 +88,7 @@ public class CardController {
 					while (!match1.matches() || !match2.matches() || !match3.matches() || !match4.matches()) {
 						System.out.println(
 								"Enter the numbers of card you want to exchange in the format exchangecards num num num");
-						cardsList = input.nextLine().split(" ");
+						cardsList = br.readLine().split(" ");
 						match1 = namePattern2.matcher(cardsList[0]);
 						match2 = numberPattern.matcher(cardsList[1]);
 						match3 = numberPattern.matcher(cardsList[2]);
@@ -102,7 +103,7 @@ public class CardController {
 					Matcher match2 = namePattern.matcher(cardsList[0]);
 					while (!match1.matches() || !match2.matches()) {
 						System.out.println("To not to exchange, Please enter the command as : exchangecards -none");
-						cardsList = input.nextLine().split(" ");
+						cardsList = br.readLine().split(" ");
 						match1 = namePattern2.matcher(cardsList[0]);
 						match2 = namePattern.matcher(cardsList[1]);
 					}
@@ -139,7 +140,6 @@ public class CardController {
 			}
 
 			if (player.getCardList().size() >= 5) {
-				int i = 0;
 				System.out.println("Available Cards to the player are");
 				for (int k = 0; k < player.getCardList().size(); k++) {
 					System.out.print(k + 1 + "." + player.getCardList().get(k).getType());
@@ -147,7 +147,7 @@ public class CardController {
 
 				System.out.println(
 						"Enter the numbers of card you want to exchange in the format exchangecards num num num");
-				String[] cardsList = input.nextLine().split(" ");
+				String[] cardsList = br.readLine().split(" ");
 
 				Pattern namePattern2 = Pattern.compile("exchangecards");
 				Matcher match1 = namePattern2.matcher(cardsList[0]);
@@ -161,7 +161,7 @@ public class CardController {
 							|| !match4.matches()) {
 						System.out.println(
 								"Enter atleast 3 cards you want to exchange in the format exchangecards num num num");
-						cardsList = input.nextLine().split(" ");
+						cardsList = br.readLine().split(" ");
 						match1 = namePattern2.matcher(cardsList[0]);
 						match2 = numberPattern.matcher(cardsList[1]);
 						match3 = numberPattern.matcher(cardsList[2]);
@@ -170,7 +170,7 @@ public class CardController {
 				} else {
 					System.out.println(
 							"Enter atleast 3 cards you want to exchange in the format exchangecards num num num");
-					cardsList = input.nextLine().split(" ");
+					cardsList = br.readLine().split(" ");
 				}
 				List<Card> exchangeCards = new ArrayList<>();
 				List<Integer> cardNumbers = new ArrayList<>();
@@ -244,7 +244,6 @@ public class CardController {
 				}
 			}
 			if (cardAppearingCount == 3) {
-//				player.setSameCardExchangeThrice(cardAppearingThrice);
 				return true;
 			}
 		}
