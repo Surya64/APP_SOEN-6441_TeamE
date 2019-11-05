@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 
+import com.appriskgame.view.CardView;
+
 /**
  * This class stores the value associated to each player. It stores player's
  * name of String type, total armyCount of player as Integer type, and the
@@ -18,6 +20,7 @@ public class GamePlayer extends Observable {
 	private ArrayList<Country> playerCountries = new ArrayList<Country>();
 	private int noOfArmies = 0;
 	private List<Card> cardList = new ArrayList<>();
+	public GamePlayer current;
 
 	public List<Card> getCardList() {
 		return cardList;
@@ -25,6 +28,11 @@ public class GamePlayer extends Observable {
 
 	public void setCardList(List<Card> cardList) {
 		this.cardList = cardList;
+	}
+	
+	public GamePlayer() {
+		CardView cardView = new CardView();
+		this.addObserver(cardView);
 	}
 
 	/**
@@ -88,6 +96,16 @@ public class GamePlayer extends Observable {
 	 */
 	public void addCountry(Country country) {
 		this.playerCountries.add(country);
+	}
+
+	public GamePlayer getCurrentPlayer() {
+		return current;
+	}
+
+	public void setCurrentPlayer(GamePlayer current) {
+		this.current = current;
+		setChanged();
+		notifyObservers();
 	}
 
 	@Override
