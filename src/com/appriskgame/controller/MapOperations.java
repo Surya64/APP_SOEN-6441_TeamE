@@ -32,7 +32,7 @@ public class MapOperations {
 	private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	String workingDir = System.getProperty("user.dir");
 	String mapLocation = workingDir + "/resources/maps/";
-	GameMap gameMap = new GameMap();
+	public GameMap gameMap = new GameMap();
 
 	/**
 	 * This Method is to check whether the Map File exists.
