@@ -58,7 +58,7 @@ public class MapValidationTest {
 	public void testIsInvalidMap() throws IOException {
 		assertFalse(mapValidation.validateMap(invalidMap));
 	}
-	
+
 	/**
 	 * Test method for testing whether the map connected or not.
 	 * 

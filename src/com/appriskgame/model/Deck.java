@@ -25,7 +25,6 @@ public class Deck {
 	 */
 	public void setDeckOfCards() {
 
-
 		typeOfCards = new String[] { "Infantry", "Cavalry", "Artillery" };
 
 		deckOfCards = new ArrayList<Card>();

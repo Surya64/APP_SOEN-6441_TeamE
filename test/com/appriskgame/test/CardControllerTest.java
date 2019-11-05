@@ -24,7 +24,7 @@ public class CardControllerTest {
 	GamePlayer player;
 
 	/**
-	 * Initial setup for Map Validation Test.
+	 * Initial setup for Card controller test.
 	 */
 	@Before
 	public void initialize() {
