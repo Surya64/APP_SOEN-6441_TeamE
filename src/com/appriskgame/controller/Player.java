@@ -315,7 +315,7 @@ public class Player {
 			roundRobin = new RoundRobinAllocator(playersList);
 			for (int round = 1; round <= size; round++) {
 				gameplayer = roundRobin.nextTurn();
-				
+
 				if(gameplayer!=null)
 				{
 					String playerName = gameplayer.getPlayerName();
@@ -347,7 +347,7 @@ public class Player {
 				gameContinue = false;
 				System.out.println("Game Over!");
 				System.exit(0);
-				
+
 			} else {
 				gameContinue = true;
 			}
@@ -370,7 +370,7 @@ public class Player {
 	// startup phase methods
 	/**
 	 * This Method is used to Add and remove players to playerList.
-	 * 
+	 *
 	 * @return List of Player Names
 	 */
 	public ArrayList<String> playerCreation() {
@@ -633,8 +633,10 @@ public class Player {
 				listOfContries.add(country);
 			}
 		}
+		CardController cardController = new CardController();
+		int exchangeInCard = cardController.exchangeCards(player);
 		int reinforcementArmies = assignReinforcedArmies(player, playerContinent);
-		player.setNoOfArmies((reinforcementArmies));
+		player.setNoOfArmies((reinforcementArmies + exchangeInCard));
 
 		while (player.getNoOfArmies() > 0) {
 			System.out.println(" Player Name :" + player.getPlayerName());
@@ -841,10 +843,10 @@ public class Player {
 			else
 			{
 				userCommand="attack -noattack";
-				
+
 			}
-			
-	
+
+
 			if (checkUserValidation(userCommand)) {
 				String[] attackDetails = userCommand.split(" ");
 				String attackCountry = attackDetails[1];
@@ -893,7 +895,10 @@ public class Player {
 						if (attackerDices > 0 && defenderDices > 0) {
 							attackingStarted(attackerDices, defenderDices, attackCountryObject, defenderCountryObject);
 							if (isAttackerWon(defenderCountryObject)) {
-								
+								System.out.println("Card Phase");
+								CardController cardController = new CardController();
+								cardController.setDeckOfCards();
+								cardController.allocateCardToPlayer(player);
 								if (isPlayerWinner(player, mapDetails)) {
 									System.out.println(player.getPlayerName() + " won the Game!");
 									System.exit(0);
@@ -901,7 +906,7 @@ public class Player {
 								String removePlayerName=defenderCountryObject.getPlayer();
 								moveArmyToConquredCountry(playersList, player, attackCountryObject,
 										defenderCountryObject);
-								
+
 								removePlayer(playersList,mapDetails,removePlayerName);
 								break;
 							}
@@ -921,7 +926,10 @@ public class Player {
 								attackingStarted(attackerDices, defenderDices, attackCountryObject,
 										defenderCountryObject);
 								if (isAttackerWon(defenderCountryObject)) {
-									
+									System.out.println("Card Phase");
+									CardController cardController = new CardController();
+									cardController.setDeckOfCards();
+									cardController.allocateCardToPlayer(player);
 									if (isPlayerWinner(player, mapDetails)) {
 										System.out.println(player.getPlayerName() + " won the Game!");
 										System.exit(0);
@@ -967,7 +975,7 @@ public class Player {
 			{
 				continueAttacking ="No";
 			}
-			
+
 			if (continueAttacking.equalsIgnoreCase("Yes")) {
 				gameContinue = true;
 			} else {
@@ -1111,12 +1119,12 @@ public class Player {
 		}
 		return false;
 	}
-	
-	
-	
+
+
+
 	public void removePlayer(ArrayList<GamePlayer> playersList,GameMap mapDetails,String playerName)
 	{
-		
+
 	for(int i=0;i<playersList.size();i++)
 	{
 		if(playersList.get(i).getPlayerName().equalsIgnoreCase(playerName))
@@ -1128,7 +1136,7 @@ public class Player {
 			}
 		}
 	}
-	
+
 	for(int i=0;i<mapDetails.getPlayers().size();i++)
 	{
 		if(mapDetails.getPlayers().get(i).getPlayerName().equalsIgnoreCase(playerName))
@@ -1140,10 +1148,10 @@ public class Player {
 			}
 		}
 	}
-		
+
 	}
-	
-	
+
+
 
 	/**
 	 *
@@ -1896,11 +1904,11 @@ public class Player {
 
 	public void attackPhaseControl(GameMap gameMap, Object attackercountry, Country toCountry) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	public boolean isAttackPossible(GamePlayer player)
 	{
-		
+
 		for(int i=0;i<player.getPlayerCountries().size();i++)
 		{
 			Country currentCountryObject=player.getPlayerCountries().get(i);
@@ -1918,7 +1926,7 @@ public class Player {
 
 		}
 		return false;
-		
-		
+
+
 	}
 }

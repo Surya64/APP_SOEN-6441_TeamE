@@ -1,6 +1,7 @@
 package com.appriskgame.model;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 
 /**
@@ -16,6 +17,15 @@ public class GamePlayer extends Observable {
 	private String playerName;
 	private ArrayList<Country> playerCountries = new ArrayList<Country>();
 	private int noOfArmies = 0;
+	private List<Card> cardList = new ArrayList<>();
+
+	public List<Card> getCardList() {
+		return cardList;
+	}
+
+	public void setCardList(List<Card> cardList) {
+		this.cardList = cardList;
+	}
 
 	/**
 	 * Get the Player name.
