@@ -33,6 +33,7 @@ public class MapOperations {
 	String workingDir = System.getProperty("user.dir");
 	String mapLocation = workingDir + "/resources/maps/";
 	GameMap gameMap = new GameMap();
+	static int connectableCountries = 0;
 
 	/**
 	 * This Method is to check whether the Map File exists.
@@ -66,6 +67,8 @@ public class MapOperations {
 	public GameMap readGameMap(String inputGameMapName) throws IOException {
 		HashMap<String, Country> countrySet = new HashMap<>();
 		MapValidation validate = new MapValidation();
+		gameMap = new GameMap();
+		connectableCountries = 0;
 		String GameMapName = inputGameMapName;
 		boolean uploadSuccessful = false;
 		String data = "";
@@ -88,11 +91,12 @@ public class MapOperations {
 			});
 			boolean res = isConnected(gameMap);
 			if (res == true) {
-				System.out.println("Graph connected");
+				return gameMap;
 			} else {
 				System.out.println("Graph Not connected");
+				gameMap = null;
+				return new GameMap();
 			}
-			return gameMap;
 		} else {
 			System.out.println(MapValidation.getError());
 			System.out.println("\nPlease rectify all the above mentioned issues.");
@@ -1185,8 +1189,6 @@ public class MapOperations {
 
 		return true;
 	}
-
-	static int connectableCountries = 0;
 
 	/**
 	 * This method is used to depth first search of a graph.
