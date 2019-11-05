@@ -1,6 +1,8 @@
 package com.appriskgame.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +28,7 @@ import com.appriskgame.model.GamePlayer;
 public class PlayerTest {
 	private GamePlayer player1, player2;
 	private Country country1, country2, country3, country4, country5, country6, country7, country8, country9, country10,
-			country11, country12, country13, country14;
+			country11, country12, country13, country14, country15;
 	private Continent continent;
 
 	private Country country, toCountry, fromCountry, toCountry1, countryStart;
@@ -35,6 +37,9 @@ public class PlayerTest {
 	Player player;
 	GameMap gameMap;
 	HashMap<String, Country> countrySet;
+	ArrayList<Country> listOfCountries;
+	ArrayList<GamePlayer> listOfPlayers;
+	ArrayList<Country> listOfNeighbours;
 
 	/**
 	 * This is the setup method for the pre-requisite values before the test cases
@@ -46,8 +51,18 @@ public class PlayerTest {
 		player1 = new GamePlayer();
 		player2 = new GamePlayer();
 
+		listOfCountries = new ArrayList<Country>();
+		listOfPlayers = new ArrayList<GamePlayer>();
+		listOfNeighbours = new ArrayList<Country>();
+
 		country1 = new Country();
 		country1.setCountryName("Egypt");
+
+		country1.setPlayer("player1");
+		player1.setPlayerName("player1");
+		country15 = new Country();
+		country15.setCountryName("ZZZ");
+
 		player1.getPlayerCountries().add(country1);
 		player2.getPlayerCountries().add(country1);
 		continent.getListOfCountries().add(country1);
@@ -102,10 +117,22 @@ public class PlayerTest {
 		player.getPlayerList().add(player1);
 		player.getPlayerList().add(player2);
 		countryStart = new Country();
+
 		countryStart.setCountryName("China");
 		countryStart.setCountryName("India");
 		countrySet.put(countryStart.getCountryName(), countryStart);
 		gameMap.setCountrySet(countrySet);
+
+		country1.setNeighbourCountries(NeighbourCountries);
+		listOfCountries.add(country);
+		listOfCountries.add(country1);
+		listOfCountries.add(country);
+		listOfPlayers.add(player1);
+		listOfNeighbours.add(country);
+		gameMap.setPlayers(listOfPlayers);
+		gameMap.setCountries(listOfCountries);
+		country1.setNoOfArmies(5);
+
 	}
 
 	/**
@@ -188,6 +215,104 @@ public class PlayerTest {
 	public void testIntialArmyAllocation() {
 		player.initialArmyAllocation(gameMap);
 		assertEquals(1, countryStart.getNoOfArmies());
+	}
+
+	/**
+	 * This method is used to check if the player country is present in the game
+	 * map.
+	 */
+	@Test
+	public void testisCountryPresent() {
+		assertTrue(player.isCountryPresent("China", gameMap));
+
+	}
+
+	/**
+	 * This method is used to check if the player country is present in the game
+	 * map.
+	 */
+	@Test
+	public void testisCountryNotPresent() {
+		assertFalse(player.isCountryPresent("Morocco", gameMap));
+	}
+
+	/**
+	 * This method is used to check if the player attack country is present in the
+	 * game map.
+	 */
+	@Test
+	public void testisCountryAttackPresent() {
+		assertTrue(player.isCountryAttackPresent(player1, "Egypt", gameMap));
+	}
+
+	/**
+	 * This method is used to check if the player attack country is not present in
+	 * the game map.
+	 */
+	@Test
+	public void testisCountryAttackNotPresent() {
+		assertFalse(player.isCountryAttackPresent(player1, "India", gameMap));
+	}
+
+	/**
+	 * This method is used to check if the attacker country is adjacent to Defender
+	 * country
+	 * 
+	 */
+	@Test
+	public void testisCountryAdjacent() {
+		assertTrue(player.isCountryAdjacent(country1, "India", gameMap));
+	}
+
+	/**
+	 * This method is used to check if the attacker country is not adjacent to
+	 * Defender country
+	 */
+	@Test
+	public void testisCountryNotAdjacent() {
+		assertFalse(player.isCountryAdjacent(country1, "Pakistan", gameMap));
+	}
+
+	/**
+	 * This method is used to check if the player has won all the countries in the
+	 * map
+	 */
+	@Test
+	public void testisPlayerWinner() {
+		System.out.println("Player 1 has won " + player1.getPlayerCountries().size() + "countries");
+		System.out.println();
+		System.out.println("Total Countries in the Map are " + gameMap.getCountries().size() + " countries");
+		assertTrue(player.isPlayerWinner(player1, gameMap));
+	}
+
+	/**
+	 * This method is used to check if the player has not won all the countries in
+	 * the map
+	 */
+	@Test
+	public void testisPlayerNotWinner() {
+		System.out.println("Player 2 has won " + player2.getPlayerCountries().size() + " countries");
+		System.out.println();
+		System.out.println("Total Countries in the Map are " + gameMap.getCountries().size() + " countries");
+		assertFalse(player.isPlayerWinner(player2, gameMap));
+	}
+
+	/**
+	 * This method is used to check if the player is able to move army if number of
+	 * armies are zero or less than zero
+	 */
+	@Test
+	public void testableToMoveArmy() {
+		assertTrue(player.ableToMoveArmy(country1, 1));
+	}
+
+	/**
+	 * This method is used to check if the player is able to move army if number of
+	 * armies are zero or less than zero
+	 */
+	@Test
+	public void testNotableToMoveArmy() {
+		assertFalse(player.ableToMoveArmy(country1, 0));
 	}
 
 }
