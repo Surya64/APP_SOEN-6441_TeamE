@@ -1,10 +1,11 @@
 package com.appriskgame.controller;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,10 +36,11 @@ public class CardController {
 
 		HashMap<String, Integer> cardCount = new HashMap<>();
 		int armiesInExchange = 0;
-		Scanner input = new Scanner(System.in);
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int cardTypes = 0;
 		boolean cardExchangePossible = false;
 		String cardAppearingMoreThanThrice = null;
+		boolean cardExchangeNone = false;
 
 		if (player.getCardList().size() > 0) {
 			for (Card card : player.getCardList()) {
@@ -52,8 +54,6 @@ public class CardController {
 				}
 				System.out.println(card.getType());
 			}
-		} else {
-			System.out.println("Not enough cards to exchange ,continuing with the reinforcement phase");
 		}
 
 		if (cardTypes == 3) {
@@ -69,89 +69,114 @@ public class CardController {
 
 		if (cardExchangePossible) {
 			if (player.getCardList().size() < 5) {
-				int i = 0;
 				System.out.println("Available Cards to the player are");
 				for (int k = 0; k < player.getCardList().size(); k++) {
 					System.out.print(k + 1 + "." + player.getCardList().get(k).getType());
 				}
 				System.out.println(
 						"Enter the numbers of card you want to exchange in the format exchangecards num num num");
-				String[] cardsList = input.nextLine().split(" ");
+				String[] cardsList = br.readLine().split(" ");
+				if (cardsList.length == 4) {
+					Pattern namePattern2 = Pattern.compile("exchangecards");
+					Matcher match1 = namePattern2.matcher(cardsList[0]);
+
+					Pattern numberPattern = Pattern.compile("[0-9]+");
+					Matcher match2 = numberPattern.matcher(cardsList[1]);
+					Matcher match3 = numberPattern.matcher(cardsList[2]);
+					Matcher match4 = numberPattern.matcher(cardsList[3]);
+
+					while (!match1.matches() || !match2.matches() || !match3.matches() || !match4.matches()) {
+						System.out.println(
+								"Enter the numbers of card you want to exchange in the format exchangecards num num num");
+						cardsList = br.readLine().split(" ");
+						match1 = namePattern2.matcher(cardsList[0]);
+						match2 = numberPattern.matcher(cardsList[1]);
+						match3 = numberPattern.matcher(cardsList[2]);
+						match4 = numberPattern.matcher(cardsList[3]);
+					}
+				}
+				if (cardsList.length == 2) {
+					Pattern namePattern2 = Pattern.compile("exchangecards");
+					Matcher match1 = namePattern2.matcher(cardsList[0]);
+
+					Pattern namePattern = Pattern.compile("-none");
+					Matcher match2 = namePattern.matcher(cardsList[0]);
+					while (!match1.matches() || !match2.matches()) {
+						System.out.println("To not to exchange, Please enter the command as : exchangecards -none");
+						cardsList = br.readLine().split(" ");
+						match1 = namePattern2.matcher(cardsList[0]);
+						match2 = namePattern.matcher(cardsList[1]);
+					}
+					if (cardsList[1] == "-none") {
+						System.out.println("Exiting card exchange..");
+						cardExchangeNone = true;
+					}
+				}
+				List<Card> exchangeCards = new ArrayList<>();
+				List<Integer> cardNumbers = new ArrayList<>();
+
+				if (!cardExchangeNone) {
+					for (int k = 1; k < cardsList.length; k++) {
+						cardNumbers.add(Integer.parseInt(cardsList[k]));
+					}
+
+					for (int c : cardNumbers) {
+						exchangeCards.add(player.getCardList().get(c - 1));
+					}
+
+					if (!checkDiffTypesOfCards(exchangeCards, cardTypes)
+							&& !checkCardSameType(exchangeCards, cardAppearingMoreThanThrice)) {
+						System.out.println(
+								"Please enter numbers of same cards appearing thrice or three cards which are different.");
+						throw new Exception();
+					}
+					int count = GameMap.getCardExchangeCountinTheGame();
+					armiesInExchange = (count + 1) * 5;
+					GameMap.cardExchangeCountinTheGame = GameMap.getCardExchangeCountinTheGame() + 1;
+					for (int c : cardNumbers) {
+						player.getCardList().remove(c - 1);
+					}
+				}
+			}
+
+			if (player.getCardList().size() >= 5) {
+				System.out.println("Available Cards to the player are");
+				for (int k = 0; k < player.getCardList().size(); k++) {
+					System.out.print(k + 1 + "." + player.getCardList().get(k).getType());
+				}
+
+				System.out.println(
+						"Enter the numbers of card you want to exchange in the format exchangecards num num num");
+				String[] cardsList = br.readLine().split(" ");
 
 				Pattern namePattern2 = Pattern.compile("exchangecards");
 				Matcher match1 = namePattern2.matcher(cardsList[0]);
 
-				Pattern numberPattern = Pattern.compile("[0-9]+");
-				Matcher match2 = numberPattern.matcher(cardsList[1]);
-				Matcher match3 = numberPattern.matcher(cardsList[2]);
-				Matcher match4 = numberPattern.matcher(cardsList[3]);
-				while (!match1.matches() || !match2.matches() || !match3.matches() || !match4.matches()) {
+				if (cardsList.length == 4) {
+					Pattern numberPattern = Pattern.compile("[0-9]+");
+					Matcher match2 = numberPattern.matcher(cardsList[1]);
+					Matcher match3 = numberPattern.matcher(cardsList[2]);
+					Matcher match4 = numberPattern.matcher(cardsList[3]);
+					while (cardsList.length < 4 || !match1.matches() || !match2.matches() || !match3.matches()
+							|| !match4.matches()) {
+						System.out.println(
+								"Enter atleast 3 cards you want to exchange in the format exchangecards num num num");
+						cardsList = br.readLine().split(" ");
+						match1 = namePattern2.matcher(cardsList[0]);
+						match2 = numberPattern.matcher(cardsList[1]);
+						match3 = numberPattern.matcher(cardsList[2]);
+						match4 = numberPattern.matcher(cardsList[3]);
+					}
+				} else {
 					System.out.println(
-							"Enter the numbers of card you want to exchange in the format exchangecards num num num");
-					cardsList = input.nextLine().split(" ");
-					match1 = namePattern2.matcher(cardsList[0]);
-					match2 = numberPattern.matcher(cardsList[1]);
-					match3 = numberPattern.matcher(cardsList[2]);
-					match4 = numberPattern.matcher(cardsList[3]);
+							"Enter atleast 3 cards you want to exchange in the format exchangecards num num num");
+					cardsList = br.readLine().split(" ");
 				}
 				List<Card> exchangeCards = new ArrayList<>();
 				List<Integer> cardNumbers = new ArrayList<>();
 
 				for (int k = 1; k < cardsList.length; k++) {
 					cardNumbers.add(Integer.parseInt(cardsList[k]));
-				}
-
-				for (int c : cardNumbers) {
-					exchangeCards.add(player.getCardList().get(c - 1));
-				}
-
-				if (!checkDiffTypesOfCards(exchangeCards, cardTypes)
-						&& !checkCardSameType(exchangeCards, cardAppearingMoreThanThrice)) {
-					System.out.println(
-							"Please enter numbers of same cards appearing thrice or three cards which are different.");
-					throw new Exception();
-				}
-				int count = GameMap.getCardExchangeCountinTheGame();
-				armiesInExchange = (count + 1) * 5;
-				GameMap.cardExchangeCountinTheGame = GameMap.getCardExchangeCountinTheGame() + 1;
-				for (int c : cardNumbers) {
-					player.getCardList().remove(c - 1);
-				}
-			}
-
-			if (player.getCardList().size() >= 5) {
-				int i = 0;
-				System.out.println("Available Cards to the player are");
-				for (int k = 0; k < player.getCardList().size(); k++) {
-					System.out.print(k + 1 + "." + player.getCardList().get(k).getType());
-				}
-
-				System.out.println(
-						"Enter the numbers of card you want to exchange in the format exchangecards num num num");
-				String[] cardsList = input.nextLine().split(" ");
-
-				Pattern namePattern2 = Pattern.compile("exchangecards");
-				Matcher match1 = namePattern2.matcher(cardsList[0]);
-
-				Pattern numberPattern = Pattern.compile("[0-9]+");
-				Matcher match2 = numberPattern.matcher(cardsList[1]);
-				Matcher match3 = numberPattern.matcher(cardsList[2]);
-				Matcher match4 = numberPattern.matcher(cardsList[3]);
-				while (cardsList.length < 4 || !match1.matches() || !match2.matches() || !match3.matches()
-						|| !match4.matches()) {
-					System.out.println(
-							"Enter atleast 3 cards you want to exchange in the format exchangecards num num num");
-					cardsList = input.nextLine().split(" ");
-					match1 = namePattern2.matcher(cardsList[0]);
-					match2 = numberPattern.matcher(cardsList[1]);
-					match3 = numberPattern.matcher(cardsList[2]);
-					match4 = numberPattern.matcher(cardsList[3]);
-				}
-				List<Card> exchangeCards = new ArrayList<>();
-				List<Integer> cardNumbers = new ArrayList<>();
-
-				for (int k = 1; k < cardsList.length; k++) {
-					cardNumbers.add(Integer.parseInt(cardsList[i]));
 				}
 
 				for (int c : cardNumbers) {
