@@ -831,8 +831,20 @@ public class Player {
 			String errorDetails = "";
 			gameContinue = false;
 			showMap(mapDetails);
-			System.out.println("Enter the Attacker command?" + player.getPlayerName());
-			String userCommand = br.readLine().trim();
+			boolean isAttackPossible=isAttackPossible(player);
+			String userCommand="";
+			if(isAttackPossible)
+			{
+				System.out.println("Enter the Attacker command?" + player.getPlayerName());
+				 userCommand = br.readLine().trim();
+			}
+			else
+			{
+				userCommand="attack -noattack";
+				
+			}
+			
+	
 			if (checkUserValidation(userCommand)) {
 				String[] attackDetails = userCommand.split(" ");
 				String attackCountry = attackDetails[1];
@@ -937,15 +949,25 @@ public class Player {
 			} else {
 				System.out.println("Please enter the attack Command in any one of the below correct Format\n"
 						+ "Format 1:attack countrynamefrom countynameto numdice[numdice>0]\n"
-						+ "Format 2:attack countrynamefrom countynameto  �allout\n" + "Format 3:attack -noattack\n");
+						+ "Format 2:attack countrynamefrom countynameto  allout\n" + "Format 3:attack -noattack\n");
 			}
-			System.out.println("Do you want to attack again? Yes/No");
-			String continueAttacking = br.readLine().trim();
-			while (!(continueAttacking.equalsIgnoreCase("Yes") || continueAttacking.equalsIgnoreCase("No")
-					|| continueAttacking == null)) {
-				System.err.println("\nPlease enter the choice as either Yes or No:");
-				continueAttacking = br.readLine().trim();
+			boolean isAttackPossibleAfter=isAttackPossible(player);
+			String continueAttacking="";
+			if(isAttackPossibleAfter)
+			{
+				System.out.println("Do you want to attack again? Yes/No");
+				 continueAttacking= br.readLine().trim();
+				while (!(continueAttacking.equalsIgnoreCase("Yes") || continueAttacking.equalsIgnoreCase("No")
+						|| continueAttacking == null)) {
+					System.err.println("\nPlease enter the choice as either Yes or No:");
+					continueAttacking = br.readLine().trim();
+				}
 			}
+			else
+			{
+				continueAttacking ="No";
+			}
+			
 			if (continueAttacking.equalsIgnoreCase("Yes")) {
 				gameContinue = true;
 			} else {
@@ -1874,6 +1896,29 @@ public class Player {
 
 	public void attackPhaseControl(GameMap gameMap, Object attackercountry, Country toCountry) {
 		// TODO Auto-generated method stub
+		
+	}
+	public boolean isAttackPossible(GamePlayer player)
+	{
+		
+		for(int i=0;i<player.getPlayerCountries().size();i++)
+		{
+			Country currentCountryObject=player.getPlayerCountries().get(i);
+			if(currentCountryObject.getNoOfArmies()>1)
+			{
+				for(int j=0;j<currentCountryObject.getNeighbourCountriesToAdd().size();j++)
+				{
+					Country defenderCountryObject=currentCountryObject.getNeighbourCountriesToAdd().get(j);
+							if (!defenderCountryObject.getPlayer().equalsIgnoreCase(player.getPlayerName()))
+									{
+								return true;
+									}
+				}
+			}
+
+		}
+		return false;
+		
 		
 	}
 }
