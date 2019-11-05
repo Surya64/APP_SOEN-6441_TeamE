@@ -30,7 +30,6 @@ public class PlayerTest {
 	private Country country1, country2, country3, country4, country5, country6, country7, country8, country9, country10,
 			country11, country12, country13, country14, country15;
 	private Continent continent;
-
 	private Country country, toCountry, fromCountry, toCountry1, countryStart;
 	private ArrayList<String> NeighbourCountries;
 
@@ -50,18 +49,14 @@ public class PlayerTest {
 		continent = new Continent();
 		player1 = new GamePlayer();
 		player2 = new GamePlayer();
-
 		listOfCountries = new ArrayList<Country>();
 		listOfPlayers = new ArrayList<GamePlayer>();
 		listOfNeighbours = new ArrayList<Country>();
 
 		country1 = new Country();
 		country1.setCountryName("Egypt");
-
 		country1.setPlayer("player1");
 		player1.setPlayerName("player1");
-		country15 = new Country();
-		country15.setCountryName("ZZZ");
 
 		player1.getPlayerCountries().add(country1);
 		player2.getPlayerCountries().add(country1);
@@ -77,7 +72,6 @@ public class PlayerTest {
 		country3.setCountryName("Morocco");
 		player1.getPlayerCountries().add(country3);
 		continent.getListOfCountries().add(country3);
-
 		continent.setContinentName("Northern Africa");
 		continent.setContinentControlValue(4);
 
@@ -279,7 +273,7 @@ public class PlayerTest {
 	 */
 	@Test
 	public void testisPlayerWinner() {
-		System.out.println("Player 1 has won " + player1.getPlayerCountries().size() + "countries");
+		System.out.println("Player 1 has won " + player1.getPlayerCountries().size() + " countries");
 		System.out.println();
 		System.out.println("Total Countries in the Map are " + gameMap.getCountries().size() + " countries");
 		assertTrue(player.isPlayerWinner(player1, gameMap));

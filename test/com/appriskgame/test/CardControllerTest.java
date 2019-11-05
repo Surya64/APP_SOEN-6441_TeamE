@@ -44,7 +44,7 @@ public class CardControllerTest {
 	}
 
 	/**
-	 * Check randomly allocating cards to player
+	 * Check if card is allocated randomly to player
 	 *
 	 */
 	@Test
