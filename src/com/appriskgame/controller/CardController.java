@@ -15,8 +15,18 @@ import com.appriskgame.model.Deck;
 import com.appriskgame.model.GameMap;
 import com.appriskgame.model.GamePlayer;
 
+/**
+ * This class is used for Card allocation and exchange of cards for armies. It
+ * also contains methods to check invalid cards and card types.
+ * 
+ * @author shruthi
+ *
+ */
 public class CardController {
 
+	/**
+	 * This method is used to get an instance of deck of cards.
+	 */
 	public void setDeckOfCards() {
 		Deck.getInstance().setDeckOfCards();
 	}
@@ -33,6 +43,13 @@ public class CardController {
 		System.out.println(player.getPlayerName() + " " + "has got the card" + " " + card.getType());
 	}
 
+	/**
+	 * This method is called when the player exchange the cards for armies.
+	 * 
+	 * @param player Current player
+	 * @return Number of calculated armies.
+	 * @throws Exception
+	 */
 	public int exchangeCards(GamePlayer player) throws Exception {
 
 		HashMap<String, Integer> cardCount = new HashMap<>();
@@ -187,7 +204,6 @@ public class CardController {
 		}
 		if (!types.get(0).equals(types.get(1)) && !types.get(1).equals(types.get(2))
 				&& !types.get(2).equals(types.get(0))) {
-//			player.setNumOfTypeCardsExchanged(3);
 			return true;
 		}
 		return false;
