@@ -741,11 +741,11 @@ public class Player {
 
 	/**
 	 *
-	 * This method has attack phase control.
+	 * This method is called when the user attacks.
 	 *
-	 * @param playersList
-	 * @param player
-	 * @param mapDetails
+	 * @param playersList List of players
+	 * @param player      Current player
+	 * @param mapDetails  Game map details
 	 * @throws IOException
 	 */
 	public void attackPhaseControl(ArrayList<GamePlayer> playersList, GamePlayer player, GameMap mapDetails)
@@ -910,11 +910,11 @@ public class Player {
 
 	/**
 	 *
-	 * This method checks that player is winner or not.
+	 * This method checks whether the player is winner or not.
 	 *
-	 * @param player
-	 * @param mapDetails
-	 * @return
+	 * @param player     Current player
+	 * @param mapDetails Map details
+	 * @return boolean true if the player is winner else false.
 	 */
 	public boolean isPlayerWinner(GamePlayer player, GameMap mapDetails) {
 
@@ -928,9 +928,9 @@ public class Player {
 	 *
 	 * This method checks whether this country is present or not.
 	 *
-	 * @param currentCountry
-	 * @param mapDetails
-	 * @return
+	 * @param currentCountry Current country name
+	 * @param mapDetails     Game map details.
+	 * @return boolean true if the country is present else false.
 	 */
 	public boolean isCountryPresent(String currentCountry, GameMap mapDetails) {
 		for (int i = 0; i < mapDetails.getCountries().size(); i++) {
@@ -946,9 +946,9 @@ public class Player {
 	 * This method checks whether the country which is being attacked is present or
 	 * not.
 	 *
-	 * @param player
-	 * @param currentCountry
-	 * @param mapDetails
+	 * @param player         Current player
+	 * @param currentCountry Current country name
+	 * @param mapDetails     Game map details
 	 * @return
 	 */
 	public boolean isCountryAttackPresent(GamePlayer player, String currentCountry, GameMap mapDetails) {
@@ -966,10 +966,10 @@ public class Player {
 	 *
 	 * This method checks whether the country is adjacent or not.
 	 *
-	 * @param attackCountryObject
-	 * @param defenderCountry
-	 * @param mapDetails
-	 * @return
+	 * @param attackCountryObject Attack country object
+	 * @param defenderCountry     Defend country object
+	 * @param mapDetails          Game map details
+	 * @return true if attacker country is adjacent to defender country else false
 	 */
 	public boolean isCountryAdjacent(Country attackCountryObject, String defenderCountry, GameMap mapDetails) {
 		ArrayList<String> neighbourCountires = attackCountryObject.getNeighbourCountries();
@@ -985,9 +985,9 @@ public class Player {
 	 *
 	 * This method checks whether the defender dice is possible or not.
 	 *
-	 * @param DefenderArmies
-	 * @param defenderDices
-	 * @return
+	 * @param DefenderArmies Number of defender armies
+	 * @param defenderDices  Number of defender dices
+	 * @return true if defender dice is possible else false
 	 */
 	public boolean isDefenderDicePossible(int DefenderArmies, int defenderDices) {
 		if (defenderDices <= 2 && defenderDices <= DefenderArmies) {
@@ -1000,9 +1000,9 @@ public class Player {
 	 *
 	 * This method checks whether the attacker dice is possible or not.
 	 *
-	 * @param AttackerArmies
-	 * @param attackDices
-	 * @return
+	 * @param AttackerArmies Number of attacker armies
+	 * @param attackDices    Number of attacker dices
+	 * @return true if attacker dice is possible else false
 	 */
 	public boolean isAttackerDicePossible(int AttackerArmies, int attackDices) {
 
@@ -1016,9 +1016,9 @@ public class Player {
 	 *
 	 * This method checks that it is able to move country.
 	 *
-	 * @param attackCountryObject
-	 * @param moveNumberOfArmies
-	 * @return
+	 * @param attackCountryObject Attacker country
+	 * @param moveNumberOfArmies  Number of armies to move
+	 * @return true if able to move else false
 	 */
 	public boolean ableToMoveArmy(Country attackCountryObject, int moveNumberOfArmies) {
 		if (moveNumberOfArmies <= 0) {
@@ -1033,8 +1033,8 @@ public class Player {
 	 *
 	 * This method checks that whether the attacker is winning or not.
 	 *
-	 * @param defenderCountryObject
-	 * @return
+	 * @param defenderCountryObject Defender country
+	 * @return true if attacker wins else false
 	 */
 	public boolean isAttackerWon(Country defenderCountryObject) {
 		if (defenderCountryObject.getNoOfArmies() == 0) {
@@ -1043,14 +1043,14 @@ public class Player {
 		return false;
 	}
 
+	/**
+	 * This method removes the player from Game map details
+	 * 
+	 * @param playersList List of players
+	 * @param mapDetails  Game map object
+	 * @param playerName  Defender player name
+	 */
 	public void removePlayer(ArrayList<GamePlayer> playersList, GameMap mapDetails, String playerName) {
-
-		/*
-		 * for (int i = 0; i < playersList.size(); i++) { if
-		 * (playersList.get(i).getPlayerName().equalsIgnoreCase(playerName)) { if
-		 * ((playersList.get(i).getPlayerCountries().size() == 0)) {
-		 * playersList.remove(i); break; } } }
-		 */
 
 		for (int i = 0; i < mapDetails.getPlayers().size(); i++) {
 			if (mapDetails.getPlayers().get(i).getPlayerName().equalsIgnoreCase(playerName)) {
@@ -1067,9 +1067,9 @@ public class Player {
 	 *
 	 * This method gets the country object.
 	 *
-	 * @param currentCountry
-	 * @param mapDetails
-	 * @return
+	 * @param currentCountry Current country name
+	 * @param mapDetails     Game map object
+	 * @return Country object
 	 */
 	public Country getCountryObject(String currentCountry, GameMap mapDetails) {
 		Country attackCountryObject = null;
@@ -1085,8 +1085,8 @@ public class Player {
 	 *
 	 * This method gives the outcome of dices.
 	 *
-	 * @param noOfDices
-	 * @return
+	 * @param noOfDices Number of dices
+	 * @return Result of dices
 	 */
 	public List<Integer> outComesOfDices(int noOfDices) {
 		List<Integer> outComes = new ArrayList<Integer>();
@@ -1102,9 +1102,9 @@ public class Player {
 	 *
 	 * This method gives the minimum battles.
 	 *
-	 * @param attackerDices
-	 * @param defenderDices
-	 * @return
+	 * @param attackerDices Attacker dices
+	 * @param defenderDices Defender dices
+	 * @return Number of battles
 	 */
 	public int minimumBattles(int attackerDices, int defenderDices) {
 		if (attackerDices < defenderDices) {
@@ -1120,8 +1120,8 @@ public class Player {
 	 *
 	 * This method gives the reason for failed attacks.
 	 *
-	 * @param attackerArmies
-	 * @param attackerDices
+	 * @param attackerArmies Number of attacker armies
+	 * @param attackerDices  Number of attacker dices
 	 */
 	public void reasonForFailedAttack(int attackerArmies, int attackerDices) {
 		if (attackerArmies == 1) {
@@ -1138,8 +1138,8 @@ public class Player {
 	 *
 	 * This method gives the reason for failed defender.
 	 *
-	 * @param defenderArmies
-	 * @param defenderDices
+	 * @param defenderArmies Number of defender armies
+	 * @param defenderDices  Number of defender dices
 	 */
 	public void reasonForFailedDefender(int defenderArmies, int defenderDices) {
 		if (defenderArmies == 0) {
@@ -1154,10 +1154,10 @@ public class Player {
 
 	/**
 	 *
-	 * This method gives maximum allowable attcker dice.
+	 * This method gives maximum allowable attacker dice.
 	 *
-	 * @param attackerArmies
-	 * @return
+	 * @param attackerArmies Number of attacker armies
+	 * @return Maximum allowable attacker dice
 	 */
 	public int maxAllowableAttackerDice(int attackerArmies) {
 		if (attackerArmies >= 3) {
@@ -1171,8 +1171,8 @@ public class Player {
 	 *
 	 * This method gives the maximum allowable defender dice.
 	 *
-	 * @param DefenderArmies
-	 * @return
+	 * @param DefenderArmies Number of defender armies
+	 * @return Maximum allowable defender dice
 	 */
 	public int maxAllowableDefenderDice(int DefenderArmies) {
 		if (DefenderArmies >= 2) {
@@ -1186,10 +1186,10 @@ public class Player {
 	 *
 	 * This method starts the attack.
 	 *
-	 * @param attackerDices
-	 * @param defenderDices
-	 * @param attackCountryObject
-	 * @param defenderCountryObject
+	 * @param attackerDices         Number of attacker dices
+	 * @param defenderDices         Number of defender dices
+	 * @param attackCountryObject   Attacker country
+	 * @param defenderCountryObject Defender country
 	 */
 	public void attackingStarted(int attackerDices, int defenderDices, Country attackCountryObject,
 			Country defenderCountryObject) {
@@ -1218,10 +1218,10 @@ public class Player {
 	 *
 	 * This method checks that army is moved to conquered country or not.
 	 *
-	 * @param playersList
-	 * @param player
-	 * @param attackCountryObject
-	 * @param defenderCountryObject
+	 * @param playersList           List of players
+	 * @param player                Current player
+	 * @param attackCountryObject   Attacker country
+	 * @param defenderCountryObject Defender country
 	 * @throws IOException
 	 */
 	public void moveArmyToConquredCountry(ArrayList<GamePlayer> playersList, GamePlayer player,
@@ -1273,8 +1273,13 @@ public class Player {
 		} while (choice.equalsIgnoreCase("Yes"));
 	}
 
-	// Fifth End//
-
+	/**
+	 * This method checks for allOut.
+	 * 
+	 * @param attackCountryObject   Attacker country
+	 * @param defenderCountryObject Defender country
+	 * @return true if all out else false
+	 */
 	public boolean isAllOut(Country attackCountryObject, Country defenderCountryObject) {
 		return true;
 	}
@@ -1283,8 +1288,8 @@ public class Player {
 	 *
 	 * This method checks user validation.
 	 *
-	 * @param userCommand
-	 * @return
+	 * @param userCommand User input command
+	 * @return true if validated successfully else false
 	 */
 	public boolean checkUserValidation(String userCommand) {
 		String[] attackDetails = userCommand.split(" ");
@@ -1306,10 +1311,10 @@ public class Player {
 
 	/**
 	 *
-	 * This method checks that it is not attack command.
+	 * This method checks that it is no attack command.
 	 *
-	 * @param attackDetails
-	 * @return
+	 * @param attackDetails Attacker input
+	 * @return true if no attack command else false
 	 */
 	public boolean checkNoAttackCommand(String[] attackDetails) {
 		String firstString = attackDetails[0];
@@ -1325,8 +1330,8 @@ public class Player {
 	 *
 	 * This method checks that all out command.
 	 *
-	 * @param attackDetails
-	 * @return
+	 * @param attackDetails Attacker input
+	 * @return true if command is all out else false
 	 */
 	public boolean checkAllOutCommand(String[] attackDetails) {
 		String firstString = attackDetails[0];
@@ -1342,8 +1347,8 @@ public class Player {
 	 *
 	 * This method checks single attack commands.
 	 *
-	 * @param attackDetails
-	 * @return
+	 * @param attackDetails Attacker input
+	 * @return true if it is single attack command else false
 	 */
 	public boolean checkSingleAttackCommand(String[] attackDetails) {
 		try {
@@ -1359,9 +1364,11 @@ public class Player {
 		}
 	}
 
-	/*
-	 * This method checks the attack command.
-	 *
+	/**
+	 * This method checks the attack command
+	 * 
+	 * @param attackDetails Attacker input
+	 * @return true if attack commands else false
 	 */
 	public boolean checkAttackCommand(String[] attackDetails) {
 		String thridString = attackDetails[3];
@@ -1376,10 +1383,10 @@ public class Player {
 
 	/**
 	 *
-	 * This method checks whether the defender validation is validated or not.
+	 * This method checks whether the defender command is valid or not.
 	 *
-	 * @param userCommand User gives command.
-	 * @return
+	 * @param userCommand Defender input command.
+	 * @return true if command is valid else false.
 	 */
 	public boolean checkUserDefenderValidation(String userCommand) {
 		String[] defenderDetails = userCommand.split(" ");
@@ -1400,8 +1407,8 @@ public class Player {
 	 *
 	 * This method checks defenders' commands.
 	 *
-	 * @param defenderDetails
-	 * @return
+	 * @param defenderDetails defender command details
+	 * @return true if command valid else false
 	 */
 	public boolean checkDefenderCommand(String[] defenderDetails) {
 		try {
@@ -1421,8 +1428,8 @@ public class Player {
 	 *
 	 * This method checks whether the move is validated or not.
 	 *
-	 * @param userCommand
-	 * @return
+	 * @param userCommand Attack move command 
+	 * @return true if it is valid or else false
 	 */
 	public boolean checkUserAttackMoveValidation(String userCommand) {
 		String[] attackMoverDetails = userCommand.split(" ");
@@ -1442,8 +1449,8 @@ public class Player {
 	/**
 	 * This method checks whether any move has taken place or not.
 	 *
-	 * @param attackMoverDetails Gives the details for attack mover.
-	 * @return
+	 * @param attackMoverDetails Attack move command
+	 * @return true if attack move command is valid else false
 	 */
 	public boolean checkAttackMoveCommand(String[] attackMoverDetails) {
 		try {
@@ -1462,9 +1469,9 @@ public class Player {
 	/**
 	 * This method adds new owner and removes old owner.
 	 *
-	 * @param playersList
-	 * @param player
-	 * @param countryName
+	 * @param playersList List of players
+	 * @param player Current player
+	 * @param countryName Country name
 	 */
 	public void removeOwnerAddNewOwner(ArrayList<GamePlayer> playersList, GamePlayer player, String countryName) {
 		// 1 Country owner list is removed with the lost country
@@ -1704,6 +1711,12 @@ public class Player {
 		}
 	}
 
+	/**
+	 * This method checks whether attack is possible or not
+	 * 
+	 * @param player Current player
+	 * @return true if attack is possible else false
+	 */
 	public boolean isAttackPossible(GamePlayer player) {
 		for (int i = 0; i < player.getPlayerCountries().size(); i++) {
 			Country currentCountryObject = player.getPlayerCountries().get(i);

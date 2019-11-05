@@ -96,6 +96,8 @@ public class GameMap extends Observable {
 	/**
 	 * This method sets the message for observer of domination and knows them when
 	 * it is changed.
+	 * 
+	 * @param gameMap Game map object
 	 */
 	public void setDomination(GameMap gameMap) {
 		this.gameMap = gameMap;
@@ -151,6 +153,7 @@ public class GameMap extends Observable {
 		setChanged();
 		notifyObservers();
 	}
+
 	/**
 	 * Gets the current action message
 	 * 
