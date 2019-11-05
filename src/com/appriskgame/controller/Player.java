@@ -556,6 +556,7 @@ public class Player {
 			}
 		}
 		CardController cardController = new CardController();
+		player.setCurrentPlayer(player);
 		int exchangeInCard = cardController.exchangeCards(player);
 		int reinforcementArmies = assignReinforcedArmies(player, playerContinent);
 		player.setNoOfArmies((reinforcementArmies + exchangeInCard));
