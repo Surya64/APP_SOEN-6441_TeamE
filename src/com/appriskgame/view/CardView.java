@@ -2,6 +2,8 @@ package com.appriskgame.view;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import com.appriskgame.model.GamePlayer;
@@ -9,6 +11,8 @@ import com.appriskgame.model.GamePlayer;
 import java.awt.TextArea;
 import java.util.Observable;
 import java.util.Observer;
+import java.awt.ScrollPane;
+import javax.swing.JTextPane;
 
 /**
  * This Class is to check how many cards does player own to exchange and
@@ -25,6 +29,7 @@ public class CardView implements Observer {
 	int numOfArtillery = 0;
 	String player = "";
 	JTextField textField;
+	JTextPane textPane;
 	JLabel lblAvailableCardsFor = new JLabel("Available Cards for Players");
 	JLabel lblNewLabel_1 = new JLabel("Infantry");
 	JLabel lblNewLabel_2 = new JLabel("Cavalry");
@@ -32,8 +37,7 @@ public class CardView implements Observer {
 	JTextField textField_1 = new JTextField();
 	JTextField textField_2 = new JTextField();
 	JTextField textField_3 = new JTextField();
-	TextArea textArea;
-
+	String info = "Cards in Player Hand";
 	/**
 	 * Method to initialize the frame.
 	 * 
@@ -86,10 +90,13 @@ public class CardView implements Observer {
 
 		frmPlayerCardView.getContentPane().add(textField_3);
 		textField_3.setText(String.valueOf(numOfArtillery));
-
-		textArea = new TextArea();
-		textArea.setBounds(36, 245, 324, 149);
-		frmPlayerCardView.getContentPane().add(textArea);
+		
+		textPane = new JTextPane();
+		textPane.setEditable(false);
+		textPane.setBounds(42, 250, 371, 173);
+		textPane.setText(info);
+		frmPlayerCardView.getContentPane().add(textPane);
+		
 
 		frmPlayerCardView.setVisible(true);
 	}
@@ -101,7 +108,7 @@ public class CardView implements Observer {
 		numOfArtillery = 0;
 		GamePlayer gamePlayer = (GamePlayer) o;
 		GamePlayer currentPlayer = gamePlayer.current;
-		String info = "";
+		info = "Cards in Player Hand";
 
 		if (!frmPlayerCardView.isVisible()) {
 			initialize();
@@ -130,7 +137,7 @@ public class CardView implements Observer {
 
 		player = currentPlayer.getPlayerName();
 		textField.setText(player);
-		textArea.setText(info);
+		textPane.setText(info);
 		frmPlayerCardView.revalidate();
 		frmPlayerCardView.repaint();
 

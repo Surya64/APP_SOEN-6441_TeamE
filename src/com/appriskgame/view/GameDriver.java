@@ -119,7 +119,12 @@ public class GameDriver {
 							if (loadGameMap.isMapExists(cmdDetails[1])) {
 								Player start = new Player();
 								createMapGraph = loadGameMap.readGameMap(inputGameMapName);
-								start.gamePlay(createMapGraph);
+								if (!createMapGraph.getContinents().isEmpty()) {
+									start.gamePlay(createMapGraph);
+								} else {
+									System.out.println("Incorrect File");
+									loadFlag = true;
+								}
 							} else {
 								System.out.println("File Doesn't Exist");
 								loadFlag = true;

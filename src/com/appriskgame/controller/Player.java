@@ -761,7 +761,7 @@ public class Player {
 			String userCommand = "";
 			if (isAttackPossible) {
 				mapDetails.setActionMsg("Player Entering Attack Commands");
-				System.out.println("Enter the Attacker command?" + player.getPlayerName());
+				System.out.println("Enter the Attacker command?\n" + "Player Name : " + player.getPlayerName());
 				userCommand = br.readLine().trim();
 			} else {
 				userCommand = "attack -noattack";
@@ -1428,7 +1428,7 @@ public class Player {
 	 *
 	 * This method checks whether the move is validated or not.
 	 *
-	 * @param userCommand Attack move command 
+	 * @param userCommand Attack move command
 	 * @return true if it is valid or else false
 	 */
 	public boolean checkUserAttackMoveValidation(String userCommand) {
@@ -1470,7 +1470,7 @@ public class Player {
 	 * This method adds new owner and removes old owner.
 	 *
 	 * @param playersList List of players
-	 * @param player Current player
+	 * @param player      Current player
 	 * @param countryName Country name
 	 */
 	public void removeOwnerAddNewOwner(ArrayList<GamePlayer> playersList, GamePlayer player, String countryName) {
