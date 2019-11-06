@@ -237,9 +237,10 @@ public class Player {
 
 					String playerName = gameplayer.getPlayerName();
 					gameMap.setCurrentPlayer(playerName);
-					gameMap.setGamePhase("Reinforcement Phase");
+					gameMap.setGamePhase("Reinforcement Phase", "phase");
 					gameMap.setActionMsg(
-							"** Reinforcement Phase Begins for Player: " + gameplayer.getPlayerName() + " **");
+							"** Reinforcement Phase Begins for Player: " + gameplayer.getPlayerName() + " **",
+							"action");
 					System.out
 							.println("** Reinforcement Phase Begins for Player: " + gameplayer.getPlayerName() + " **");
 					System.out.println(gameplayer.getPlayerCountries());
@@ -251,24 +252,27 @@ public class Player {
 						startReinforcement(gameplayer, gameMap);
 					}
 					gameMap.setActionMsg(
-							"** Reinforcement Phase Ends for Player: " + gameplayer.getPlayerName() + " **");
+							"** Reinforcement Phase Ends for Player: " + gameplayer.getPlayerName() + " **", "action");
 					System.out.println("** Reinforcement Phase Ends for Player: " + gameplayer.getPlayerName() + " **");
 					System.out.println("Attack Begin");
-					gameMap.setGamePhase("Attack Phase");
-					gameMap.setActionMsg("** Attack Phase Begins for Player: " + gameplayer.getPlayerName() + " **");
+					gameMap.setGamePhase("Attack Phase", "phase");
+					gameMap.setActionMsg("** Attack Phase Begins for Player: " + gameplayer.getPlayerName() + " **",
+							"action");
 					attackPhaseControl(playersList, gameplayer, gameMap);
-					gameMap.setActionMsg("** Attack Phase Ends for Player: " + gameplayer.getPlayerName() + " **");
+					gameMap.setActionMsg("** Attack Phase Ends for Player: " + gameplayer.getPlayerName() + " **",
+							"action");
 					System.out.println("Attack Ends");
 					gameMap.setDomination(gameMap);
 					System.out
 							.println("** Fortification Phase Begins for Player: " + gameplayer.getPlayerName() + " **");
-					gameMap.setGamePhase("Fortification Phase");
+					gameMap.setGamePhase("Fortification Phase", "phase");
 					gameMap.setActionMsg(
-							"** Fortification Phase Begins for Player: " + gameplayer.getPlayerName() + " **");
+							"** Fortification Phase Begins for Player: " + gameplayer.getPlayerName() + " **",
+							"action");
 					startGameFortification(gameplayer, gameMap);
 					System.out.println("** Fortification Phase Ends for Player: " + gameplayer.getPlayerName() + " **");
 					gameMap.setActionMsg(
-							"** Fortification Phase Ends for Player: " + gameplayer.getPlayerName() + " **");
+							"** Fortification Phase Ends for Player: " + gameplayer.getPlayerName() + " **", "action");
 				}
 			}
 			gameContinue = true;
@@ -563,7 +567,7 @@ public class Player {
 
 		while (player.getNoOfArmies() > 0) {
 			System.out.println(" Player Name :" + player.getPlayerName());
-			mapDetails.setActionMsg("Armies available for Reinforcement: " + player.getNoOfArmies());
+			mapDetails.setActionMsg("Armies available for Reinforcement: " + player.getNoOfArmies(), "action");
 			System.out.println("Armies available for Reinforcement: " + player.getNoOfArmies());
 			System.out.println(
 					"Please enter the country and number of armies to reinforcein the format: reinforce countryname num");
@@ -760,7 +764,7 @@ public class Player {
 			boolean isAttackPossible = isAttackPossible(player);
 			String userCommand = "";
 			if (isAttackPossible) {
-				mapDetails.setActionMsg("Player Entering Attack Commands");
+				mapDetails.setActionMsg("Player Entering Attack Commands", "action");
 				System.out.println("Enter the Attacker command?\n" + "Player Name : " + player.getPlayerName());
 				userCommand = br.readLine().trim();
 			} else {
@@ -782,10 +786,12 @@ public class Player {
 				Country defenderCountryObject = null;
 				if (!attackerCountryPresent) {
 					errorDetails = attackCountry + " is not owned by the current player" + "\n";
+					mapDetails.setActionMsg("Error : " + errorDetails, "action");
 					errorOccured = true;
 				}
 				if (!defenderCountryPresent) {
 					errorDetails = errorDetails + defenderCountry + "This is not in map" + "\n";
+					mapDetails.setActionMsg("Error : " + errorDetails, "action");
 					errorOccured = true;
 				}
 				boolean isAttackAndDefenderAdajacent = false;
@@ -799,6 +805,7 @@ public class Player {
 					if (defenderCountryObject != null) {
 						if (defenderCountryObject.getPlayer().equalsIgnoreCase(player.getPlayerName())) {
 							errorDetails = defenderCountry + " is  owned by the current player" + "\n";
+							mapDetails.setActionMsg("Error : " + errorDetails, "action");
 							errorOccured = true;
 						}
 					}
@@ -806,6 +813,7 @@ public class Player {
 				if (!isAttackAndDefenderAdajacent) {
 					if (attackerCountryPresent) {
 						errorDetails = errorDetails + attackCountry + " is not adjacent to the " + defenderCountry;
+						mapDetails.setActionMsg("Error : " + errorDetails, "action");
 						errorOccured = true;
 					}
 				}
@@ -827,7 +835,7 @@ public class Player {
 										defenderCountryObject);
 								removePlayer(playersList, mapDetails, removePlayerName);
 								if (isPlayerWinner(player, mapDetails)) {
-									mapDetails.setActionMsg(player.getPlayerName() + " won the Game!");
+									mapDetails.setActionMsg(player.getPlayerName() + " won the Game!", "action");
 									System.out.println(player.getPlayerName() + " won the Game!");
 									System.exit(0);
 								}
@@ -839,7 +847,7 @@ public class Player {
 					int attackerDices = Integer.parseInt(attackDetails[3]);
 					int attackerArmies = attackCountryObject.getNoOfArmies();
 					if (isAttackerDicePossible(attackerArmies, attackerDices)) {
-						mapDetails.setActionMsg("Defender Entering Defender Commands");
+						mapDetails.setActionMsg("Defender Entering Defender Commands", "action");
 						System.out.println("Enter the Defender command?");
 						String defenderUserCommand = br.readLine().trim();
 						if (checkUserDefenderValidation(defenderUserCommand)) {
@@ -854,12 +862,13 @@ public class Player {
 									CardController cardController = new CardController();
 									cardController.setDeckOfCards();
 									cardController.allocateCardToPlayer(player);
-
+									mapDetails.setActionMsg("Player got a Card", "action");
 									String removePlayerName = defenderCountryObject.getPlayer();
 									moveArmyToConquredCountry(playersList, player, attackCountryObject,
 											defenderCountryObject);
 									removePlayer(playersList, mapDetails, removePlayerName);
 									if (isPlayerWinner(player, mapDetails)) {
+										mapDetails.setActionMsg(player.getPlayerName() + " won the Game!", "action");
 										System.out.println(player.getPlayerName() + " won the Game!");
 										System.exit(0);
 									}
@@ -893,6 +902,7 @@ public class Player {
 						|| continueAttacking == null)) {
 					System.err.println("\nPlease enter the choice as either Yes or No:");
 					continueAttacking = br.readLine().trim();
+					mapDetails.setActionMsg("Player Attacking again", "action");
 				}
 			} else {
 				continueAttacking = "No";
@@ -1522,7 +1532,7 @@ public class Player {
 				do {
 					doFortification = false;
 					doFortificationNone = false;
-					gameMap.setActionMsg("Displaying List of Countries");
+					gameMap.setActionMsg("Displaying List of Countries", "action");
 					System.out.println("\nPlayer has the following list of countries with armies: \n");
 					for (Country country : player.getPlayerCountries()) {
 						System.out.println("* " + country.getCountryName() + ":" + country.getNoOfArmies() + "\n");
@@ -1535,7 +1545,7 @@ public class Player {
 						String none = playersCommandList.get(1);
 						cmd = playersCommandList.get(0);
 						if (none.equalsIgnoreCase("none") && cmd.equalsIgnoreCase("fortify")) {
-							gameMap.setActionMsg("No Move in Forification Phase");
+							gameMap.setActionMsg("No Move in Forification Phase", "action");
 							System.out.println("No Move in Forification Phase");
 							doFortificationNone = true;
 							doFortification = true;
@@ -1615,7 +1625,8 @@ public class Player {
 								&& player.getPlayerCountries().contains(receivingCountry)) {
 							doFortification = false;
 						} else {
-							gameMap.setActionMsg("Entered countries doesn't exist in player's owned country list");
+							gameMap.setActionMsg("Entered countries doesn't exist in player's owned country list",
+									"action");
 							System.out.println(
 									"Entered countries doesn't exist in player's owned country list, please enter country names again\n");
 							doFortification = true;
@@ -1641,7 +1652,7 @@ public class Player {
 						moveArmies(givingCountry, receivingCountry, countOfArmies);
 					} else {
 						doFortification = true;
-						gameMap.setActionMsg("None of the players' countries are adjacent");
+						gameMap.setActionMsg("None of the players' countries are adjacent", "action");
 						System.out
 								.println("None of the players' countries are adjacent\n Fortification phase ends..!!");
 					}
@@ -1650,7 +1661,7 @@ public class Player {
 			}
 
 		} else {
-			gameMap.setActionMsg("Sorry, Fortification is not possible");
+			gameMap.setActionMsg("Sorry, Fortification is not possible", "action");
 			System.out.println("Sorry, Fortification is not possible if the country owned is less than 2");
 		}
 	}
