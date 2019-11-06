@@ -621,6 +621,7 @@ public class MapOperations {
 		listContinent.addAll(gameMap.getContinents());
 		listCountries.addAll(gameMap.getCountries());
 		String adjError = connect.checkCountryAdjacency(listCountries, listContinent);
+		connectableCountries = 0;
 		boolean res = isConnected(gameMap);
 		if (!res) {
 			adjError = adjError + "Map is not connected";
