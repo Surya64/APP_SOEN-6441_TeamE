@@ -38,7 +38,6 @@ public class CardView implements Observer {
 	/**
 	 * Method to initialize the frame.
 	 * 
-	 * @wbp.parser.entryPoint
 	 */
 	public void initialize() {
 		textField_3.setEditable(false);

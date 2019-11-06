@@ -29,7 +29,6 @@ public class WorldDominationView implements Observer {
 	/**
 	 * Method to initialize the frame.
 	 * 
-	 * @wbp.parser.entryPoint
 	 */
 	public void initialize() {
 		frame.getContentPane().add(info);

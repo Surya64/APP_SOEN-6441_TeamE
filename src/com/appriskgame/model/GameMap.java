@@ -128,6 +128,7 @@ public class GameMap extends Observable {
 	 * Sets the current game phase
 	 * 
 	 * @param gamePhase - the phase of the game
+	 * @param message   action message
 	 */
 	public void setGamePhase(String gamePhase, String message) {
 		this.gamePhaseName = gamePhase;
@@ -168,7 +169,8 @@ public class GameMap extends Observable {
 	/**
 	 * Sets the current action
 	 * 
-	 * @param gamePhase - the phase of the game
+	 * @param actionMsg - the phase of the game
+	 * @param message   action message
 	 */
 	public void setActionMsg(String actionMsg, String message) {
 		this.actionMsg = actionMsg;

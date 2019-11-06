@@ -654,7 +654,6 @@ public class MapOperations {
 	 *
 	 * @param fullCommand input command with multiple add and remove
 	 * @return single command in arrayList
-	 * @throws IOException IO
 	 */
 
 	public ArrayList<String> multipleCommands(String fullCommand) {

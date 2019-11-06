@@ -48,7 +48,7 @@ public class CardController {
 	 *
 	 * @param player Current player
 	 * @return Number of calculated armies.
-	 * @throws Exception
+	 * @throws Exception IOException
 	 */
 	public int exchangeCards(GamePlayer player) throws Exception {
 
@@ -238,9 +238,9 @@ public class CardController {
 	/**
 	 * This method is to check the user input format for cards less than 5
 	 *
-	 * @param str
-	 * @return
-	 * @throws IOException
+	 * @param str User Input command
+	 * @return List of Cards
+	 * @throws Exception IOException
 	 */
 	public static String[] returnInput(String str) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -300,9 +300,9 @@ public class CardController {
 	/**
 	 * This method is to check the user input format for cards more than 5
 	 *
-	 * @param str
-	 * @return
-	 * @throws IOException
+	 * @param str User Input Command
+	 * @return List of Cards
+	 * @throws IOException Input output Exception
 	 */
 	public static String[] returnInputForMoreThanFive(String str) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));

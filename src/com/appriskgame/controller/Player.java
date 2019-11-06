@@ -64,8 +64,8 @@ public class Player {
 
 	/**
 	 * This method sets the list of cards player has
-	 *
-	 * @return cardList list of cards
+	 * 
+	 * @param cardList Card List
 	 */
 	public void setCardList(List<Card> cardList) {
 		this.cardList = cardList;
@@ -750,7 +750,7 @@ public class Player {
 	 * @param playersList List of players
 	 * @param player      Current player
 	 * @param mapDetails  Game map details
-	 * @throws IOException
+	 * @throws IOException input output exception
 	 */
 	public void attackPhaseControl(ArrayList<GamePlayer> playersList, GamePlayer player, GameMap mapDetails)
 			throws IOException {
@@ -959,7 +959,7 @@ public class Player {
 	 * @param player         Current player
 	 * @param currentCountry Current country name
 	 * @param mapDetails     Game map details
-	 * @return
+	 * @return true if Attack country is present else false
 	 */
 	public boolean isCountryAttackPresent(GamePlayer player, String currentCountry, GameMap mapDetails) {
 		for (int i = 0; i < mapDetails.getCountries().size(); i++) {
@@ -1232,7 +1232,7 @@ public class Player {
 	 * @param player                Current player
 	 * @param attackCountryObject   Attacker country
 	 * @param defenderCountryObject Defender country
-	 * @throws IOException
+	 * @throws IOException Input output Exception
 	 */
 	public void moveArmyToConquredCountry(ArrayList<GamePlayer> playersList, GamePlayer player,
 			Country attackCountryObject, Country defenderCountryObject) throws IOException {

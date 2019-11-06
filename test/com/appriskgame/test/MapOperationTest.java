@@ -31,7 +31,7 @@ public class MapOperationTest {
 	/**
 	 * Initial setup for Map operations.
 	 * 
-	 * @throws IOException
+	 * @throws IOException Input output exception
 	 * 
 	 */
 	@Before
@@ -98,7 +98,7 @@ public class MapOperationTest {
 	/**
 	 * Test method to check whether map countries are connected inside continent
 	 * 
-	 * @throws IOException
+	 * @throws IOException Input output exception
 	 */
 	@Test
 	public void testConnectedGraph() throws IOException {
@@ -110,7 +110,7 @@ public class MapOperationTest {
 	/**
 	 * Test method to check whether map countries are connected inside continent
 	 * 
-	 * @throws IOException
+	 * @throws IOException Input output exception
 	 */
 	@Test
 	public void testDisConnectedGraph() throws IOException {
