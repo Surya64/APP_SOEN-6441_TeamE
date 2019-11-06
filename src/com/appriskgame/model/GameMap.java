@@ -100,8 +100,9 @@ public class GameMap extends Observable {
 	 * 
 	 * @param gameMap Game map object
 	 */
-	public void setDomination(GameMap gameMap) {
+	public void setDomination(GameMap gameMap, String message) {
 		this.gameMap = gameMap;
+		this.message = message;
 		setChanged();
 		notifyObservers();
 	}

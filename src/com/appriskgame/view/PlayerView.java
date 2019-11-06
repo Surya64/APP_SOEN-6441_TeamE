@@ -108,13 +108,15 @@ public class PlayerView implements Observer {
 			textGamePhase.setText(phaseName);
 			String appendLog = "";
 			textArea.setText(appendLog);
-
+			textInfo.setText(mapinfo);
 		}
 
 		playerName = gameMap.getCurrentPlayer();
 		textPlayerName.setText(playerName.toUpperCase());
 
-		textInfo.setText(mapinfo);
+		if ("domination".equals(gameMap.message)) {
+			textInfo.setText(mapinfo);
+		}
 
 		if ("action".equals(gameMap.message)) {
 			if (CurrentPhase.equals(gameMap.getGamePhase())) {
@@ -122,9 +124,11 @@ public class PlayerView implements Observer {
 				String currentTxt = textArea.getText();
 				String appendLog = newLog + "\n" + currentTxt;
 				textArea.setText(appendLog);
+				textInfo.setText(mapinfo);
 			} else {
 				String appendLog = gameMap.getActionMsg();
 				textArea.setText(appendLog);
+				textInfo.setText(mapinfo);
 			}
 		}
 
