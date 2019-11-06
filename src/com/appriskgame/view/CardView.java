@@ -9,6 +9,7 @@ import com.appriskgame.model.GamePlayer;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.JTextPane;
+import javax.swing.SwingConstants;
 
 /**
  * This Class is to check how many cards does player own to exchange and
@@ -26,7 +27,7 @@ public class CardView implements Observer {
 	String player = "";
 	JTextField textField;
 	JTextPane textPane;
-	JLabel lblAvailableCardsFor = new JLabel("Available Cards for Players");
+	JLabel lblAvailableCardsFor = new JLabel("Available Cards for Players - ");
 	JLabel lblNewLabel_1 = new JLabel("Infantry");
 	JLabel lblNewLabel_2 = new JLabel("Cavalry");
 	JLabel lblNewLabel_3 = new JLabel("Artillery");
@@ -34,12 +35,17 @@ public class CardView implements Observer {
 	JTextField textField_2 = new JTextField();
 	JTextField textField_3 = new JTextField();
 	String info = "Cards in Player Hand";
+	JTextField textField_4 = new JTextField();
 
 	/**
 	 * Method to initialize the frame.
 	 * 
 	 */
 	public void initialize() {
+		textField_4.setHorizontalAlignment(SwingConstants.CENTER);
+		textField_4.setEditable(false);
+		textField_4.setBounds(42, 270, 318, 130);
+		textField_4.setColumns(10);
 		textField_3.setEditable(false);
 		textField_3.setBounds(116, 210, 25, 20);
 		textField_3.setColumns(10);
@@ -87,11 +93,13 @@ public class CardView implements Observer {
 		frmPlayerCardView.getContentPane().add(textField_3);
 		textField_3.setText(String.valueOf(numOfArtillery));
 
-		textPane = new JTextPane();
-		textPane.setEditable(false);
-		textPane.setBounds(42, 250, 371, 173);
-		textPane.setText(info);
-		frmPlayerCardView.getContentPane().add(textPane);
+		frmPlayerCardView.getContentPane().add(textField_4);
+		textField_4.setText(info);
+		/*
+		 * textPane = new JTextPane(); textPane.setEditable(false);
+		 * textPane.setBounds(42, 250, 371, 173); textPane.setText(info);
+		 * frmPlayerCardView.getContentPane().add(textPane);
+		 */
 		frmPlayerCardView.setVisible(true);
 	}
 
@@ -102,7 +110,7 @@ public class CardView implements Observer {
 		numOfArtillery = 0;
 		GamePlayer gamePlayer = (GamePlayer) o;
 		GamePlayer currentPlayer = gamePlayer.current;
-		info = "Cards in Player Hand";
+		info = "Cards in Player Hand - ";
 
 		if (!frmPlayerCardView.isVisible()) {
 			initialize();
@@ -126,14 +134,13 @@ public class CardView implements Observer {
 		textField_3.setText(String.valueOf(numOfArtillery));
 
 		for (int k = 0; k < currentPlayer.getCardList().size(); k++) {
-			info = info + "\n" + (k + 1) + "." + currentPlayer.getCardList().get(k).getType();
+			info = info + "  " + (k + 1) + "." + currentPlayer.getCardList().get(k).getType();
 		}
 
 		player = currentPlayer.getPlayerName().toUpperCase();
 		textField.setText(player);
-		textPane.setText(info);
+		textField_4.setText(info);
 		frmPlayerCardView.revalidate();
 		frmPlayerCardView.repaint();
-
 	}
 }
