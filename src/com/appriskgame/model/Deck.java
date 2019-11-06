@@ -21,7 +21,6 @@ public class Deck {
 	 * Creates all cards, one for each territory. Each card has either a type of
 	 * Infantry, Cavalry, or Artillery.
 	 *
-	 * @param list list of country names
 	 */
 	public void setDeckOfCards() {
 

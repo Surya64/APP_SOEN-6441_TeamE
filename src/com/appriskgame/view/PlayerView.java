@@ -35,7 +35,6 @@ public class PlayerView implements Observer {
 	/**
 	 * Method to initialize the frame.
 	 * 
-	 * @wbp.parser.entryPoint
 	 */
 	public void initialize() {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
