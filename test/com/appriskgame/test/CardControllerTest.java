@@ -31,6 +31,7 @@ public class CardControllerTest {
 		cardcontroller = new CardController();
 		player = new GamePlayer();
 		cardcontroller.setDeckOfCards();
+		player.setPlayerName("Shruthi");
 	}
 
 	/**

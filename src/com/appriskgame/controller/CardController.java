@@ -18,7 +18,7 @@ import com.appriskgame.model.GamePlayer;
 /**
  * This class is used for Card allocation and exchange of cards for armies. It
  * also contains methods to check invalid cards and card types.
- * 
+ *
  * @author shruthi
  *
  */
@@ -45,7 +45,7 @@ public class CardController {
 
 	/**
 	 * This method is called when the player exchange the cards for armies.
-	 * 
+	 *
 	 * @param player Current player
 	 * @return Number of calculated armies.
 	 * @throws Exception
@@ -114,6 +114,7 @@ public class CardController {
 					}
 					int count = GameMap.getCardExchangeCountinTheGame();
 					armiesInExchange = (count + 1) * 5;
+					System.out.println("Succesfully exchanged the card");
 					GameMap.cardExchangeCountinTheGame = GameMap.getCardExchangeCountinTheGame() + 1;
 					for (int i = 0; i < exchangeCards.size(); i++) {
 						int count1 = 0;
@@ -161,6 +162,7 @@ public class CardController {
 					}
 					int count = GameMap.getCardExchangeCountinTheGame();
 					armiesInExchange = (count + 1) * 5;
+					System.out.println("Succesfully exchanged the card");
 					GameMap.cardExchangeCountinTheGame = GameMap.getCardExchangeCountinTheGame() + 1;
 					for (int i = 0; i < exchangeCards.size(); i++) {
 						int count1 = 0;
