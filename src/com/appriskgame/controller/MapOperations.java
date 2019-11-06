@@ -408,10 +408,6 @@ public class MapOperations {
 		if (gameMap.getContinents().get(continentNumberIndex).getListOfCountries().size() >= 1) {
 			gameMap.getContinents().get(continentNumberIndex).getListOfCountries()
 					.remove(removeCountryIndexInContinentList);
-			int newCurrentContinentControlValue = gameMap.getContinents().get(continentNumberIndex)
-					.getContinentControlValue() - 1;
-			gameMap.getContinents().get(continentNumberIndex).setContinentControlValue(newCurrentContinentControlValue);
-
 		}
 
 		// 2.Remove Country from neighbor Country List
@@ -625,6 +621,10 @@ public class MapOperations {
 		listContinent.addAll(gameMap.getContinents());
 		listCountries.addAll(gameMap.getCountries());
 		String adjError = connect.checkCountryAdjacency(listCountries, listContinent);
+		boolean res = isConnected(gameMap);
+		if (!res) {
+			adjError = adjError + "Map is not connected";
+		}
 		if (validate.validateContinents(continentsData) == true && validate.validateCountries(countriesData) == true
 				&& validate.validateBoundaries(boundariesData) == true && adjError.isEmpty()) {
 			return true;
@@ -999,19 +999,18 @@ public class MapOperations {
 						System.out.println("File Not found Exception");
 					}
 
-					if (isContinentCountrySatisfied()) {
-
-					} else {
+					boolean res = isConnected(gameMap);
+					if (!res) {
 						uploadSuccessful = false;
+						System.out.println("Map is not connected");
 					}
 					if (uploadSuccessful) {
 						System.out.println("Successfully Saved");
 					} else {
 						File file = new File(ouputGameMapName);
 						file.delete();
-						System.out.print(isContinentCountrySatisfiedError());
 						System.out.println(MapValidation.getError());
-						System.out.println("\nPlease rectify all the above mentioned issues");
+						System.out.println("File is not saved and exited from edit operation.");
 						flag = true;
 					}
 				} else {
@@ -1122,45 +1121,6 @@ public class MapOperations {
 			}
 		}
 		return gameMap;
-	}
-
-	/**
-	 * This Method is used check number of countries based on continent Value
-	 * 
-	 * @return true if satisfied or else false
-	 */
-
-	public boolean isContinentCountrySatisfied() {
-		for (int i = 0; i < gameMap.getContinents().size(); i++) {
-			int continentValue = gameMap.getContinents().get(i).getContinentControlValue();
-			int countriesList = gameMap.getContinents().get(i).getListOfCountries().size();
-			if (continentValue == countriesList) {
-			} else {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	/**
-	 * This Method is used check number of countries based on continent Value and
-	 * display error message with continent name.
-	 * 
-	 * @return error message with continent name
-	 */
-
-	public String isContinentCountrySatisfiedError() {
-		String error = "";
-		for (int i = 0; i < gameMap.getContinents().size(); i++) {
-			int continentValue = gameMap.getContinents().get(i).getContinentControlValue();
-			int countriesList = gameMap.getContinents().get(i).getListOfCountries().size();
-			String continentName = gameMap.getContinents().get(i).getContinentName();
-			if (continentValue == countriesList) {
-			} else {
-				error = error + continentName + " Should have " + continentValue + "." + "\n";
-			}
-		}
-		return error;
 	}
 
 	/**

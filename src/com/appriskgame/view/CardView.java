@@ -93,7 +93,6 @@ public class CardView implements Observer {
 		textPane.setBounds(42, 250, 371, 173);
 		textPane.setText(info);
 		frmPlayerCardView.getContentPane().add(textPane);
-
 		frmPlayerCardView.setVisible(true);
 	}
 
