@@ -69,7 +69,6 @@ public class CardController {
 					c++;
 					cardCount.put(card.getType(), c);
 				}
-				System.out.println(card.getType());
 			}
 		}
 

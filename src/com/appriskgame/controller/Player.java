@@ -247,7 +247,7 @@ public class Player {
 					Continent playerContinent = gameplayer.getPlayerCountries().get(0).getPartOfContinent();
 					int reInforceAmries = assignReinforcedArmies(gameplayer, playerContinent);
 					gameplayer.setNoOfArmies(reInforceAmries);
-					gameMap.setDomination(gameMap);
+					gameMap.setDomination(gameMap, "domination");
 					while (gameplayer.getNoOfArmies() > 0) {
 						startReinforcement(gameplayer, gameMap);
 					}
@@ -262,7 +262,7 @@ public class Player {
 					gameMap.setActionMsg("** Attack Phase Ends for Player: " + gameplayer.getPlayerName() + " **",
 							"action");
 					System.out.println("Attack Ends");
-					gameMap.setDomination(gameMap);
+					gameMap.setDomination(gameMap, "domination");
 					System.out
 							.println("** Fortification Phase Begins for Player: " + gameplayer.getPlayerName() + " **");
 					gameMap.setGamePhase("Fortification Phase", "phase");
@@ -829,7 +829,7 @@ public class Player {
 								CardController cardController = new CardController();
 								cardController.setDeckOfCards();
 								cardController.allocateCardToPlayer(player);
-
+								mapDetails.setActionMsg("Player got a Card", "action");
 								String removePlayerName = defenderCountryObject.getPlayer();
 								moveArmyToConquredCountry(playersList, player, attackCountryObject,
 										defenderCountryObject);
@@ -898,6 +898,7 @@ public class Player {
 			if (isAttackPossibleAfter) {
 				System.out.println("Do you want to attack again? Yes/No");
 				continueAttacking = br.readLine().trim();
+				mapDetails.setActionMsg("Player Attacking again", "action");
 				while (!(continueAttacking.equalsIgnoreCase("Yes") || continueAttacking.equalsIgnoreCase("No")
 						|| continueAttacking == null)) {
 					System.err.println("\nPlease enter the choice as either Yes or No:");
