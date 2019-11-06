@@ -2,16 +2,12 @@ package com.appriskgame.view;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import com.appriskgame.model.GamePlayer;
 
-import java.awt.TextArea;
 import java.util.Observable;
 import java.util.Observer;
-import java.awt.ScrollPane;
 import javax.swing.JTextPane;
 
 /**
@@ -38,6 +34,7 @@ public class CardView implements Observer {
 	JTextField textField_2 = new JTextField();
 	JTextField textField_3 = new JTextField();
 	String info = "Cards in Player Hand";
+
 	/**
 	 * Method to initialize the frame.
 	 * 
@@ -90,14 +87,12 @@ public class CardView implements Observer {
 
 		frmPlayerCardView.getContentPane().add(textField_3);
 		textField_3.setText(String.valueOf(numOfArtillery));
-		
+
 		textPane = new JTextPane();
 		textPane.setEditable(false);
 		textPane.setBounds(42, 250, 371, 173);
 		textPane.setText(info);
 		frmPlayerCardView.getContentPane().add(textPane);
-		
-
 		frmPlayerCardView.setVisible(true);
 	}
 
@@ -135,7 +130,7 @@ public class CardView implements Observer {
 			info = info + "\n" + (k + 1) + "." + currentPlayer.getCardList().get(k).getType();
 		}
 
-		player = currentPlayer.getPlayerName();
+		player = currentPlayer.getPlayerName().toUpperCase();
 		textField.setText(player);
 		textPane.setText(info);
 		frmPlayerCardView.revalidate();

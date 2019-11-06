@@ -23,7 +23,6 @@ import java.util.HashMap;
  */
 public class MapOperationTest {
 
-
 	private MapOperations mapOperations = new MapOperations();
 	private MapOperations mapOperationsDemo = new MapOperations();
 	GameMap gameMap = new GameMap();
@@ -38,12 +37,11 @@ public class MapOperationTest {
 	@Before
 	public void intialize() throws IOException {
 		String workingDir = System.getProperty("user.dir");
-		String mapLocation = workingDir + "/resources/maps/"+"/ameroki.map";
-		
+		String mapLocation = workingDir + "/resources/maps/" + "/ameroki.map";
+
 		HashMap<String, Country> countrySet = new HashMap<>();
-		
-		String data = new String(
-				Files.readAllBytes(Paths.get(mapLocation)));
+
+		String data = new String(Files.readAllBytes(Paths.get(mapLocation)));
 		String[] requiredData = data.split("name");
 		data = requiredData[1];
 		String[] formattedData = data.split("\\r\\n\\r\\n");
@@ -55,11 +53,9 @@ public class MapOperationTest {
 			gameMap.setCountrySet(countrySet);
 		});
 
-		
-		String mapLocationDemo = workingDir + "/resources/maps/"+"/demofinaltest.map";
+		String mapLocationDemo = workingDir + "/resources/maps/" + "/demofinaltest.map";
 		HashMap<String, Country> countrySetdemo = new HashMap<>();
-		String datademo = new String(
-				Files.readAllBytes(Paths.get(mapLocationDemo)));
+		String datademo = new String(Files.readAllBytes(Paths.get(mapLocationDemo)));
 		String[] requiredDatademo = datademo.split("name");
 		datademo = requiredDatademo[1];
 		String[] formattedDatademo = datademo.split("\\r\\n\\r\\n");
@@ -99,6 +95,11 @@ public class MapOperationTest {
 		assertTrue(mapOperations.doesCountryExit("india"));
 	}
 
+	/**
+	 * Test method to check whether map countries are connected inside continent
+	 * 
+	 * @throws IOException
+	 */
 	@Test
 	public void testConnectedGraph() throws IOException {
 
@@ -106,6 +107,11 @@ public class MapOperationTest {
 
 	}
 
+	/**
+	 * Test method to check whether map countries are connected inside continent
+	 * 
+	 * @throws IOException
+	 */
 	@Test
 	public void testDisConnectedGraph() throws IOException {
 

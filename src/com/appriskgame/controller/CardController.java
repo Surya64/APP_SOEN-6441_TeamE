@@ -88,10 +88,10 @@ public class CardController {
 			if (player.getCardList().size() < 5) {
 				System.out.println("Available Cards to the player are");
 				for (int k = 0; k < player.getCardList().size(); k++) {
-					System.out.print(k + 1 + "." + player.getCardList().get(k).getType());
+					System.out.print(k + 1 + "." + player.getCardList().get(k).getType() + "\n");
 				}
 				System.out.println("\n"
-						+ "Enter the numbers of card you want to exchange in the format exchangecards num num num");
+						+ "Enter the numbers of card you want to exchange in the format exchangecards num num num \n");
 				String[] cardsList = returnInput(br.readLine());
 
 				if (cardsList.length == 4) {
@@ -135,11 +135,11 @@ public class CardController {
 			if (player.getCardList().size() >= 5) {
 				System.out.println("Available Cards to the player are");
 				for (int k = 0; k < player.getCardList().size(); k++) {
-					System.out.print(k + 1 + "." + player.getCardList().get(k).getType());
+					System.out.print(k + 1 + "." + player.getCardList().get(k).getType() + "\n");
 				}
 
 				System.out.println("You must have to exchange atleast 3 cards out of 5." + "\n"
-						+ "Input in the format exchangecards num num num");
+						+ "Input in the format exchangecards num num num \n");
 				String[] cardsList = returnInputForMoreThanFive(br.readLine());
 
 				if (cardsList.length == 4) {
@@ -157,7 +157,7 @@ public class CardController {
 					if (!checkDiffTypesOfCards(exchangeCards, cardTypes)
 							&& !checkCardSameType(exchangeCards, cardAppearingMoreThanThrice)) {
 						System.out.println(
-								"Please enter numbers of same cards appearing thrice or three cards which are different.");
+								"Please enter numbers of same cards appearing thrice or three cards which are different.\n");
 						throw new Exception();
 					}
 					int count = GameMap.getCardExchangeCountinTheGame();

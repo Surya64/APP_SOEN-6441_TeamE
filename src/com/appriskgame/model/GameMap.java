@@ -23,6 +23,7 @@ public class GameMap extends Observable {
 	public String gamePhaseName;
 	public String currentPlayer;
 	public String actionMsg;
+	public String message;
 	public static int cardExchangeCountinTheGame = 0;
 
 	public static int getCardExchangeCountinTheGame() {
@@ -128,8 +129,9 @@ public class GameMap extends Observable {
 	 * 
 	 * @param gamePhase - the phase of the game
 	 */
-	public void setGamePhase(String gamePhase) {
+	public void setGamePhase(String gamePhase, String message) {
 		this.gamePhaseName = gamePhase;
+		this.message = message;
 		setChanged();
 		notifyObservers();
 	}
@@ -168,8 +170,9 @@ public class GameMap extends Observable {
 	 * 
 	 * @param gamePhase - the phase of the game
 	 */
-	public void setActionMsg(String actionMsg) {
+	public void setActionMsg(String actionMsg, String message) {
 		this.actionMsg = actionMsg;
+		this.message = message;
 		setChanged();
 		notifyObservers();
 	}
