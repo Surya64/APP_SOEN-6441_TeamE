@@ -1211,7 +1211,7 @@ public class Player {
 		Collections.reverse(defenderOutcomes);
 		int battles = minimumBattles(attackerDices, defenderDices);
 		for (int i = 0; i < battles; i++) {
-			System.out.println("Battle : " + i + 1);
+			System.out.println("Battle : " + (i + 1));
 			System.out.println("Attacker value is: " + attackerOutcomes.get(i));
 			System.out.println("Defender value is: " + defenderOutcomes.get(i));
 			if (attackerOutcomes.get(i) > defenderOutcomes.get(i)) {
