@@ -1,5 +1,6 @@
 package com.appriskgame.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Observable;
@@ -14,7 +15,7 @@ import com.appriskgame.view.WorldDominationView;
  * @author Surya
  * @author Sahana
  */
-public class GameMap extends Observable {
+public class GameMap extends Observable implements Serializable{
 	private ArrayList<Country> countries = new ArrayList<Country>();
 	private ArrayList<Continent> continents = new ArrayList<Continent>();
 	private ArrayList<GamePlayer> players = new ArrayList<GamePlayer>();
