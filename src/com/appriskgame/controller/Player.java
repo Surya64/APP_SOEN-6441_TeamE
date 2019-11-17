@@ -1,13 +1,20 @@
 package com.appriskgame.controller;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,12 +37,12 @@ import com.appriskgame.model.GamePlayer;
  * @author Sai
  */
 public class Player {
-	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	ArrayList<GamePlayer> playersList = new ArrayList<GamePlayer>();
-	ArrayList<String> playerNames;
-	RoundRobinAllocator roundRobin;
-	MapOperations mapOperations = new MapOperations();
-	GamePlayer gameplayer = new GamePlayer();
+	public BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	public ArrayList<GamePlayer> playersList = new ArrayList<GamePlayer>();
+	public ArrayList<String> playerNames;
+	public RoundRobinAllocator roundRobin;
+	public MapOperations mapOperations = new MapOperations();
+	public GamePlayer gameplayer = new GamePlayer();
 	static int TWOPLAYERARMYCOUNT = 40;
 	static int THREEPLAYERARMYCOUNT = 35;
 	static int FOURPLAYERARMYCOUNT = 30;
@@ -263,6 +270,7 @@ public class Player {
 							"action");
 					System.out.println("Attack Ends");
 					gameMap.setDomination(gameMap, "domination");
+
 					System.out
 							.println("** Fortification Phase Begins for Player: " + gameplayer.getPlayerName() + " **");
 					gameMap.setGamePhase("Fortification Phase", "phase");
@@ -273,6 +281,29 @@ public class Player {
 					System.out.println("** Fortification Phase Ends for Player: " + gameplayer.getPlayerName() + " **");
 					gameMap.setActionMsg(
 							"** Fortification Phase Ends for Player: " + gameplayer.getPlayerName() + " **", "action");
+
+					System.out.println("Enter 1 to save Game");
+					int save = Integer.parseInt(br.readLine().trim());
+
+					if (save == 1) {
+						// Checking the map
+						do {
+							System.out.println("Enter the Command to display Map");
+							String mapCommand = "showmap";
+							if (mapCommand.equalsIgnoreCase("showmap")) {
+								showMap(gameMap);
+								mapFlag = false;
+							} else {
+								System.out.println("Incorrect Command");
+								mapFlag = true;
+							}
+						} while (mapFlag);
+						saveGame(gameMap);
+
+					} else {
+
+					}
+
 				}
 			}
 			gameContinue = true;
@@ -1742,5 +1773,195 @@ public class Player {
 			}
 		}
 		return false;
+	}
+
+	public ArrayList<String> setplayList(ArrayList<GamePlayer> players) {
+		ArrayList<String> playerNames = new ArrayList<String>();
+		for (int i = 0; i < players.size(); i++) {
+			playerNames.add(players.get(i).getPlayerName());
+		}
+		return playerNames;
+	}
+
+	public void continueGame(GameMap gameMap) throws Exception {
+
+//		boolean proceed = false, populateFlag = false, mapFlag = true;
+		playerNames = new ArrayList<String>();
+
+		playerNames = setplayList(gameMap.getPlayers());
+		playersList = gameMap.getPlayers();
+		for (String player : playerNames) {
+			GamePlayer gamePlayers = new GamePlayer();
+			gamePlayers.setPlayerName(player);
+			playersList.add(gamePlayers);
+		}
+		gameMap.setPlayers(playersList);
+
+//		do {
+//			System.out.println("Enter the Command to display Map");
+//			String mapCommand = br.readLine().trim();
+//			if (mapCommand.equalsIgnoreCase("showmap")) {
+//				showMap(gameMap);
+//				mapFlag = false;
+//			} else {
+//				System.out.println("Incorrect Command");
+//				mapFlag = true;
+//			}
+//		} while (mapFlag);
+
+		roundRobin = new RoundRobinAllocator(playersList);
+
+		boolean gameContinue;
+
+		for (String player : playerNames) {
+			GamePlayer gamePlayers = new GamePlayer();
+			gamePlayers.setPlayerName(player);
+			playersList.add(gamePlayers);
+		}
+		gameMap.setPlayers(playersList);
+		do {
+			for (int round = 0; round < playersList.size(); round++) {
+				gameplayer = playersList.get(round);
+
+				if (gameplayer.getPlayerCountries().size() > 0) {
+
+					String playerName = gameplayer.getPlayerName();
+					gameMap.setCurrentPlayer(playerName);
+					gameMap.setGamePhase("Reinforcement Phase", "phase");
+					gameMap.setActionMsg(
+							"** Reinforcement Phase Begins for Player: " + gameplayer.getPlayerName() + " **",
+							"action");
+					System.out
+							.println("** Reinforcement Phase Begins for Player: " + gameplayer.getPlayerName() + " **");
+					System.out.println(gameplayer.getPlayerCountries());
+					Continent playerContinent = gameplayer.getPlayerCountries().get(0).getPartOfContinent();
+					int reInforceAmries = assignReinforcedArmies(gameplayer, playerContinent);
+					gameplayer.setNoOfArmies(reInforceAmries);
+					gameMap.setDomination(gameMap, "domination");
+					while (gameplayer.getNoOfArmies() > 0) {
+						startReinforcement(gameplayer, gameMap);
+					}
+					gameMap.setActionMsg(
+							"** Reinforcement Phase Ends for Player: " + gameplayer.getPlayerName() + " **", "action");
+					System.out.println("** Reinforcement Phase Ends for Player: " + gameplayer.getPlayerName() + " **");
+					System.out.println("Attack Begin");
+					gameMap.setGamePhase("Attack Phase", "phase");
+					gameMap.setActionMsg("** Attack Phase Begins for Player: " + gameplayer.getPlayerName() + " **",
+							"action");
+					attackPhaseControl(playersList, gameplayer, gameMap);
+					gameMap.setActionMsg("** Attack Phase Ends for Player: " + gameplayer.getPlayerName() + " **",
+							"action");
+					System.out.println("Attack Ends");
+					gameMap.setDomination(gameMap, "domination");
+					System.out
+							.println("** Fortification Phase Begins for Player: " + gameplayer.getPlayerName() + " **");
+					gameMap.setGamePhase("Fortification Phase", "phase");
+					gameMap.setActionMsg(
+							"** Fortification Phase Begins for Player: " + gameplayer.getPlayerName() + " **",
+							"action");
+					startGameFortification(gameplayer, gameMap);
+					System.out.println("** Fortification Phase Ends for Player: " + gameplayer.getPlayerName() + " **");
+					gameMap.setActionMsg(
+							"** Fortification Phase Ends for Player: " + gameplayer.getPlayerName() + " **", "action");
+				}
+			}
+			gameContinue = true;
+
+		} while (gameContinue);
+	}
+
+	public void saveGame(GameMap gameMap) throws IOException {
+
+//		System.out.println(gameMap.getCurrentPlayer());
+		ArrayList<GamePlayer> changedOrder = new ArrayList<GamePlayer>();
+		changedOrder = getCorrectPlayList(gameMap);
+		gameMap.setPlayers(changedOrder);
+		String workingDir = System.getProperty("user.dir");
+		String mapLocation = workingDir + "/resources/savedgames/";
+		FileOutputStream savefile = null;
+
+		String savedFilePath = mapLocation;
+		ObjectOutputStream objFile = null;
+		System.out.println("Please the enter the name of the saved Game?");
+		Scanner sc = new Scanner(System.in);
+
+		String fileName = sc.nextLine().trim();
+		String fullPath = savedFilePath + fileName + ".txt";
+
+		File savingFile = new File(fullPath);
+
+		savingFile.setReadable(true);
+		savingFile.setExecutable(true);
+		savingFile.setWritable(true);
+
+		savefile = new FileOutputStream(fullPath);
+		objFile = new ObjectOutputStream(savefile);
+
+		objFile.writeObject(gameMap);
+		objFile.close();
+		sc.close();
+
+	}
+
+	public void readGame() throws Exception {
+		System.out.println("Please the enter the name of the saved Game?");
+		String workingDir = System.getProperty("user.dir");
+		String mapLocation = workingDir + "/resources/savedgames/";
+
+		String savedFilePath = mapLocation;
+		Scanner sc = new Scanner(System.in);
+
+		String fileName = sc.nextLine().trim();
+		if (isSavedGameExists(savedFilePath, fileName)) {
+//			ObjectOutputStream objFile = null;
+			String fullPath = savedFilePath + fileName + ".txt";
+			FileInputStream getFile = new FileInputStream(fullPath);
+			ObjectInputStream backup = new ObjectInputStream(getFile);
+
+			GameMap gameMap = (GameMap) backup.readObject();
+			backup.close();
+//			sc.close();
+			continueGame(gameMap);
+		}
+
+		else {
+			System.out.println("File Name Doesnot exists!");
+//			sc.close();
+		}
+
+	}
+
+	public boolean isSavedGameExists(String filepath, String fileName) {
+		String mapFileNameWithExtention = fileName + ".txt";
+		File mapFolder = new File(filepath);
+		File[] listFiles = mapFolder.listFiles();
+		for (int i = 0; i < listFiles.length; i++) {
+			if (mapFileNameWithExtention.equals(listFiles[i].getName())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public ArrayList<GamePlayer> getCorrectPlayList(GameMap gameMap) {
+		ArrayList<GamePlayer> correctOrderPlayList = new ArrayList<GamePlayer>();
+		int currentIndex = 0;
+		for (int i = 0; i < gameMap.getPlayers().size(); i++) {
+			GamePlayer current = gameMap.getPlayers().get(i);
+			if (current.getPlayerName().toString().equalsIgnoreCase(gameMap.getCurrentPlayer())) {
+				currentIndex = i;
+
+				for (int j = currentIndex + 1; j < gameMap.getPlayers().size(); j++) {
+					GamePlayer nextGame = gameMap.getPlayers().get(j);
+					correctOrderPlayList.add(nextGame);
+				}
+			}
+		}
+
+		for (int i = 0; i <= currentIndex; i++) {
+			GamePlayer current = gameMap.getPlayers().get(i);
+			correctOrderPlayList.add(current);
+		}
+		return correctOrderPlayList;
 	}
 }
