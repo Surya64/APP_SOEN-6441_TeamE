@@ -3,7 +3,6 @@ package com.appriskgame.controller;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -71,7 +70,7 @@ public class Player {
 
 	/**
 	 * This method sets the list of cards player has
-	 * 
+	 *
 	 * @param cardList Card List
 	 */
 	public void setCardList(List<Card> cardList) {
@@ -1087,7 +1086,7 @@ public class Player {
 
 	/**
 	 * This method removes the player from Game map details
-	 * 
+	 *
 	 * @param playersList List of players
 	 * @param mapDetails  Game map object
 	 * @param playerName  Defender player name
@@ -1317,7 +1316,7 @@ public class Player {
 
 	/**
 	 * This method checks for allOut.
-	 * 
+	 *
 	 * @param attackCountryObject   Attacker country
 	 * @param defenderCountryObject Defender country
 	 * @return true if all out else false
@@ -1408,7 +1407,7 @@ public class Player {
 
 	/**
 	 * This method checks the attack command
-	 * 
+	 *
 	 * @param attackDetails Attacker input
 	 * @return true if attack commands else false
 	 */
@@ -1756,7 +1755,7 @@ public class Player {
 
 	/**
 	 * This method checks whether attack is possible or not
-	 * 
+	 *
 	 * @param player Current player
 	 * @return true if attack is possible else false
 	 */
@@ -1898,8 +1897,9 @@ public class Player {
 		objFile = new ObjectOutputStream(savefile);
 
 		objFile.writeObject(gameMap);
-		objFile.close();
-		sc.close();
+//		objFile.close();
+//		sc.close();
+		System.exit(0);
 
 	}
 
