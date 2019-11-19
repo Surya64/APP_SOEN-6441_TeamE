@@ -1,5 +1,6 @@
 package com.appriskgame.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -9,7 +10,7 @@ import java.util.Collections;
  * @author Shruthi
  *
  */
-public class Deck {
+public class Deck implements Serializable{
 
 	private static Deck deck;
 

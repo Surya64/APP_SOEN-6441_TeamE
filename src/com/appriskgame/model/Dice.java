@@ -1,7 +1,7 @@
 package com.appriskgame.model;
 
 import java.util.List;
-
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -12,7 +12,7 @@ import java.util.ArrayList;
  *
  */
 
-public class Dice {
+public class Dice implements Serializable{
 
 	private int totalDices;
 	private List<Integer> resultOfDices = new ArrayList<Integer>();
