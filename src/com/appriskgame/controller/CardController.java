@@ -23,6 +23,7 @@ import com.appriskgame.model.GamePlayer;
  *
  */
 public class CardController {
+	static int EXCHANGEARMY = 5;
 
 	/**
 	 * This method is used to get an instance of deck of cards.
@@ -112,7 +113,7 @@ public class CardController {
 						throw new Exception();
 					}
 					int count = GameMap.getCardExchangeCountinTheGame();
-					armiesInExchange = (count + 1) * 5;
+					armiesInExchange = (count + 1) * EXCHANGEARMY;
 					System.out.println("Succesfully exchanged the card");
 					GameMap.cardExchangeCountinTheGame = GameMap.getCardExchangeCountinTheGame() + 1;
 					for (int i = 0; i < exchangeCards.size(); i++) {
@@ -160,7 +161,7 @@ public class CardController {
 						throw new Exception();
 					}
 					int count = GameMap.getCardExchangeCountinTheGame();
-					armiesInExchange = (count + 1) * 5;
+					armiesInExchange = (count + 1) * EXCHANGEARMY;
 					System.out.println("Succesfully exchanged the card");
 					GameMap.cardExchangeCountinTheGame = GameMap.getCardExchangeCountinTheGame() + 1;
 					for (int i = 0; i < exchangeCards.size(); i++) {
