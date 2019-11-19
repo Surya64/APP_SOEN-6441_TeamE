@@ -190,7 +190,7 @@ public class Tournament {
 		loadGameMap = new MapOperations();
 		if (loadGameMap.isMapExists(mapName)) {
 			Player start = new Player();
-			createMapGraph = loadGameMap.readGameMapTournament(inputGameMapName);
+			//createMapGraph = loadGameMap.readGameMapTournament(inputGameMapName);
 			if (!createMapGraph.getContinents().isEmpty()) {
 
 				for (int i = 0; i < playerStrategies.size(); i++) {
