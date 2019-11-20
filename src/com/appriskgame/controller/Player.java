@@ -174,8 +174,29 @@ public class Player {
 										: (gameplayer.getPlayerType().equalsIgnoreCase("Random") ? new RandomPlayer()
 												: (gameplayer.getPlayerType().equalsIgnoreCase("Human") ? new Human()
 														: null))));
-				playerStrategy.placeArmies(gameMap, gameplayer);
+				boolean placeallflag = false;
+				if (gameplayer.getPlayerType().equalsIgnoreCase("Human")) {
+					System.out.println("As a Human Player, Do you want to place army individually?");
+					String choice = br.readLine().trim();
+					while (!(choice.equalsIgnoreCase("Yes") || choice.equalsIgnoreCase("No") || choice == null)) {
+						System.err.println("\nPlease enter the choice as either Yes or No:");
+						choice = br.readLine().trim();
+					}
+					if (choice.equalsIgnoreCase("Yes")) {
 
+					} else {
+						System.out.println("Enter Command for Place all Armies : ");
+						String command = br.readLine().trim();
+						if (command.equalsIgnoreCase("placeall")) {
+							placeallAmry();
+							placeallflag = true;
+							round = playersList.size();
+						}
+					}
+				}
+				if (!placeallflag) {
+					playerStrategy.placeArmies(gameMap, gameplayer);
+				}
 			}
 		}
 		boolean gameContinue;
@@ -209,7 +230,6 @@ public class Player {
 					gameMap.setDomination(gameMap, "domination");
 					while (gameplayer.getNoOfArmies() > 0) {
 						playerStrategy.reinforcementPhase(gameplayer, gameMap);
-						// startReinforcement(gameplayer, gameMap);
 					}
 					gameMap.setActionMsg(
 							"** Reinforcement Phase Ends for Player: " + gameplayer.getPlayerName() + " **", "action");
@@ -284,6 +304,7 @@ public class Player {
 					break;
 				} else {
 					System.out.println("All armies are placed.\n");
+					ownCountryFlag = true;
 				}
 			} else {
 				ownCountryFlag = false;

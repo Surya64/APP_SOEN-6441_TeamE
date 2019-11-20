@@ -28,6 +28,7 @@ public class Benevolent implements PlayerStrategy {
 		Country country = getWeakestCountry(gameMap, player);
 		int numOfarmies = player.getNoOfArmies();
 		playerController.userAssignedArmiesToCountries(country, numOfarmies, player);
+		System.out.println(country.getCountryName() + " reinforced with " + numOfarmies);
 	}
 
 	@Override
