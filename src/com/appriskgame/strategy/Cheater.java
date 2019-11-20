@@ -1,5 +1,6 @@
 package com.appriskgame.strategy;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import com.appriskgame.controller.Player;
@@ -22,8 +23,16 @@ public class Cheater implements PlayerStrategy {
 	}
 
 	@Override
-	public void reinforcementPhase(GamePlayer player, GameMap gameMap, Country country, int reinforceArmyCount) {
-		// TODO Auto-generated method stub
+	public void reinforcementPhase(GamePlayer player, GameMap gameMap) {
+		playerController = new Player();
+		ArrayList<Country> countryList = player.getPlayerCountries();
+		for(int i=0; i < countryList.size();i++) {
+			Country currentCountry = countryList.get(i);
+			int reinforcementArmies= currentCountry.getNoOfArmies() * 2;
+			currentCountry.setNoOfArmies(reinforcementArmies);
+			System.out.println(currentCountry.getCountryName()+" reinforced with "+reinforcementArmies);
+		}
+		player.setNoOfArmies(0);
 
 	}
 

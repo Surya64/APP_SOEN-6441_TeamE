@@ -59,8 +59,6 @@ public class Player {
 	public static ArrayList<Country> listOfContries = new ArrayList<Country>();
 	public static ArrayList<Country> listOfCountriesOfPlayersContinent = new ArrayList<Country>();
 	public static ArrayList<Continent> listOfPlayerContinents = new ArrayList<Continent>();
-	public static String playersChoice;
-	public static List<String> playersChoiceList = new ArrayList<String>();
 
 	public boolean doFortification = false;
 	private List<Card> cardList = new ArrayList<>();
@@ -185,6 +183,13 @@ public class Player {
 		do {
 			for (int round = 0; round < playersList.size(); round++) {
 				gameplayer = playersList.get(round);
+				PlayerStrategy playerStrategy = null;
+				playerStrategy = gameplayer.getPlayerType().equalsIgnoreCase("Aggressive") ? new Aggressive()
+						: (gameplayer.getPlayerType().equalsIgnoreCase("Benevolent") ? new Benevolent()
+								: (gameplayer.getPlayerType().equalsIgnoreCase("Cheater") ? new Cheater()
+										: (gameplayer.getPlayerType().equalsIgnoreCase("Random") ? new RandomPlayer()
+												: (gameplayer.getPlayerType().equalsIgnoreCase("Human") ? new Human()
+														: null))));
 				if (gameplayer.getPlayerCountries().size() > 0) {
 
 					String playerName = gameplayer.getPlayerName();
@@ -196,12 +201,15 @@ public class Player {
 					System.out
 							.println("** Reinforcement Phase Begins for Player: " + gameplayer.getPlayerName() + " **");
 					System.out.println(gameplayer.getPlayerCountries());
+
 					Continent playerContinent = gameplayer.getPlayerCountries().get(0).getPartOfContinent();
 					int reInforceAmries = assignReinforcedArmies(gameplayer, playerContinent);
 					gameplayer.setNoOfArmies(reInforceAmries);
+
 					gameMap.setDomination(gameMap, "domination");
 					while (gameplayer.getNoOfArmies() > 0) {
-						startReinforcement(gameplayer, gameMap);
+						playerStrategy.reinforcementPhase(gameplayer, gameMap);
+						// startReinforcement(gameplayer, gameMap);
 					}
 					gameMap.setActionMsg(
 							"** Reinforcement Phase Ends for Player: " + gameplayer.getPlayerName() + " **", "action");
@@ -576,7 +584,7 @@ public class Player {
 		for (int i = 0; i < listOfPlayerContinents.size(); i++) {
 			listOfCountriesOfPlayersContinent.addAll(listOfPlayerContinents.get(i).getListOfCountries());
 		}
-		Country countryNameObject = new Country();
+
 		ArrayList<Country> numOfcontries = mapDetails.getCountries();
 		for (int i = 0; i < numOfcontries.size(); i++) {
 			Country country = numOfcontries.get(i);
@@ -589,119 +597,6 @@ public class Player {
 		int exchangeInCard = cardController.exchangeCards(player);
 		int reinforcementArmies = assignReinforcedArmies(player, playerContinent);
 		player.setNoOfArmies((reinforcementArmies + exchangeInCard));
-
-		while (player.getNoOfArmies() > 0) {
-			System.out.println(" Player Name :" + player.getPlayerName());
-			mapDetails.setActionMsg("Armies available for Reinforcement: " + player.getNoOfArmies(), "action");
-			System.out.println("Armies available for Reinforcement: " + player.getNoOfArmies());
-			System.out.println(
-					"Please enter the country and number of armies to reinforcein the format: reinforce countryname num");
-			playersChoice = br.readLine().trim();
-			playersChoiceList = Arrays.asList(playersChoice.split(" "));
-			if (!(playersChoiceList.size() == 3)) {
-				System.out.println("Please enter the right format like : reinforce countryname num");
-				playersChoice = br.readLine().trim();
-				playersChoiceList = Arrays.asList(playersChoice.split(" "));
-			}
-			String strreinforce = playersChoiceList.get(0);
-			String countryName = playersChoiceList.get(1);
-			String armyCount = playersChoiceList.get(2);
-
-			// Saving the players country in an object, so that all the country details will
-			// be taken further
-			for (Country country : player.getPlayerCountries()) {
-				if (country.getCountryName().equalsIgnoreCase(countryName)) {
-					countryNameObject = country;
-				}
-			}
-			Pattern namePattern2 = Pattern.compile("reinforce");
-			Matcher match2 = namePattern2.matcher(strreinforce);
-			Pattern namePattern1 = Pattern.compile("[a-zA-Z-\\s]+");
-			Matcher match1 = namePattern1.matcher(countryName);
-			Pattern numberPattern = Pattern.compile("[0-9]+");
-			Matcher match = numberPattern.matcher(armyCount);
-
-			while (!match.matches() || armyCount.isEmpty() || !player.getPlayerCountries().contains(countryNameObject)
-					|| !match1.matches() || !match2.matches()) {
-				if (!player.getPlayerCountries().contains(countryNameObject) || !match1.matches()) {
-					System.out.println("Please enter the country that you own in right format");
-					playersChoice = br.readLine().trim();
-					playersChoiceList = Arrays.asList(playersChoice.split(" "));
-					if (!(playersChoiceList.size() == 3)) {
-						System.out.println("Please enter the right format like : reinforce countryname num");
-						playersChoice = br.readLine().trim();
-						playersChoiceList = Arrays.asList(playersChoice.split(" "));
-					}
-					strreinforce = playersChoiceList.get(0);
-					countryName = playersChoiceList.get(1);
-					armyCount = playersChoiceList.get(2);
-					for (Country country : player.getPlayerCountries()) {
-						if (country.getCountryName().equalsIgnoreCase(countryName)) {
-							countryNameObject = country;
-						}
-					}
-
-					match1 = namePattern1.matcher(countryName);
-					match2 = namePattern2.matcher(strreinforce);
-					match = numberPattern.matcher(armyCount);
-				}
-
-				if (!match.matches() || armyCount.isEmpty()) {
-					System.out.println("\nPlease enter the correct army count in right format");
-					playersChoice = br.readLine().trim();
-					playersChoiceList = Arrays.asList(playersChoice.split(" "));
-					if (!(playersChoiceList.size() == 3)) {
-						System.out.println("Please enter the right format like : reinforce countryname num");
-						playersChoice = br.readLine().trim();
-						playersChoiceList = Arrays.asList(playersChoice.split(" "));
-					}
-
-					countryName = playersChoiceList.get(1);
-					armyCount = playersChoiceList.get(2);
-					match = numberPattern.matcher(armyCount);
-					for (Country country : player.getPlayerCountries()) {
-						if (country.getCountryName().equalsIgnoreCase(countryName)) {
-							countryNameObject = country;
-						}
-					}
-
-					match1 = namePattern1.matcher(countryName);
-					match2 = namePattern2.matcher(strreinforce);
-					match = numberPattern.matcher(armyCount);
-				}
-				if (!match2.matches()) {
-					System.out.println("\nPlease enter the right format like : reinforce countryname num");
-					playersChoice = br.readLine().trim();
-					playersChoiceList = Arrays.asList(playersChoice.split(" "));
-					if (!(playersChoiceList.size() == 3)) {
-						System.out.println("Please enter the right format like : reinforce countryname num");
-						playersChoice = br.readLine().trim();
-						playersChoiceList = Arrays.asList(playersChoice.split(" "));
-					}
-					strreinforce = playersChoiceList.get(0);
-					countryName = playersChoiceList.get(1);
-					armyCount = playersChoiceList.get(2);
-
-					for (Country country : player.getPlayerCountries()) {
-
-						if (country.getCountryName().equalsIgnoreCase(countryName)) {
-							countryNameObject = country;
-						}
-
-					}
-					match1 = namePattern1.matcher(countryName);
-					match2 = namePattern2.matcher(strreinforce);
-					match = numberPattern.matcher(armyCount);
-				}
-			}
-
-			int numOfarmies = Integer.parseInt(armyCount);
-			for (Country country : player.getPlayerCountries()) {
-				if (country.getCountryName().equalsIgnoreCase(countryName)) {
-					userAssignedArmiesToCountries(country, numOfarmies, player);
-				}
-			}
-		}
 	}
 
 	/**
@@ -1958,5 +1853,41 @@ public class Player {
 			correctOrderPlayList.add(current);
 		}
 		return correctOrderPlayList;
+	}
+
+	/**
+	 * This method gets the adjacent country object for the entered country
+	 * 
+	 * @param mapGraph           - The GameMap object
+	 * @param attackerAdjCountry - the adjacent country of the attacker
+	 * @return Country object
+	 */
+	public Country getAdjacentCountry(GameMap mapGraph, String attackerAdjCountry) {
+		for (GamePlayer player : mapGraph.getPlayers()) {
+			for (Country country : player.getPlayerCountries()) {
+				if (country.getCountryName().equalsIgnoreCase(attackerAdjCountry)) {
+					return country;
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * This method returns the player who owns the given country
+	 * 
+	 * @param mapGraph    - The GameMap object
+	 * @param countryName - The country whose owner is to searched
+	 * @return -the player object
+	 */
+	public GamePlayer getPlayerForCountry(GameMap mapGraph, String countryName) {
+		for (GamePlayer player : mapGraph.getPlayers()) {
+			for (Country country : player.getPlayerCountries()) {
+				if (country.getCountryName().equalsIgnoreCase(countryName)) {
+					return player;
+				}
+			}
+		}
+		return null;
 	}
 }
