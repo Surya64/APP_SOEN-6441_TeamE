@@ -1,5 +1,6 @@
 package com.appriskgame.strategy;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -39,8 +40,49 @@ public class Aggressive implements PlayerStrategy {
 	}
 
 	@Override
-	public void fortificationPhase(GameMap gameMap, GamePlayer player, Country fromCountry, Country toCountry,
-			int armiesCount) {
+	public void fortificationPhase(GameMap gameMap, GamePlayer player) throws IOException {
+		playerController = new Player();
+		Country fromCountry = null;
+		int armiesCount = 0;
+		if (playerController.startGameFortification(player, gameMap)) {
+			int numberOfArmies = 0;
+			Country strongestCountry = getStrongestCountryWithAdjCountry(gameMap, player);
+			Country strongestPlayerCountry = getStrongestCountry(gameMap, player);
+			if (strongestCountry.getCountryName().equalsIgnoreCase(strongestPlayerCountry.getCountryName())) {
+				numberOfArmies = strongestCountry.getNoOfArmies();
+
+				for (Country country : player.getPlayerCountries()) {
+					if (country.getNoOfArmies() <= numberOfArmies && country.getNoOfArmies() > 1
+							&& !country.getCountryName().equalsIgnoreCase(strongestCountry.getCountryName())) {
+						numberOfArmies = country.getNoOfArmies();
+						fromCountry = country;
+						armiesCount = fromCountry.getNoOfArmies() - 1;
+					}
+				}
+			} else {
+				numberOfArmies = strongestCountry.getNoOfArmies();
+				fromCountry = strongestPlayerCountry;
+				armiesCount = (fromCountry.getNoOfArmies() - 1) / 2;
+			}
+			boolean fortify = false;
+			for (Country country : player.getPlayerCountries()) {
+				for (String temp : country.getNeighbourCountries()) {
+					if (temp.equalsIgnoreCase(fromCountry.getCountryName())
+							|| temp.equalsIgnoreCase(strongestCountry.getCountryName())) {
+						fortify = true;
+					}
+				}
+			}
+			if (fortify) {
+				if (fromCountry != null && strongestCountry != null) {
+					playerController.moveArmies(fromCountry, strongestCountry, armiesCount);
+				}
+			} else {
+				gameMap.setActionMsg("None of the players' countries are adjacent", "action");
+				System.out.println("None of the players' countries are adjacent\n Fortification phase ends..!!");
+			}
+		}
+		System.out.println("Aggressive fortification complete");
 
 	}
 
@@ -93,7 +135,6 @@ public class Aggressive implements PlayerStrategy {
 				strongestCountry = country;
 			}
 		}
-
 		if (strongestCountry == null) {
 			strongestCountry = getStrongestCountry(mapGraph, player);
 		}

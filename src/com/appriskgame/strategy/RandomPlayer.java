@@ -1,5 +1,6 @@
 package com.appriskgame.strategy;
 
+import java.io.IOException;
 import java.util.Random;
 
 import com.appriskgame.controller.Player;
@@ -38,10 +39,24 @@ public class RandomPlayer implements PlayerStrategy {
 	}
 
 	@Override
-	public void fortificationPhase(GameMap gameMap, GamePlayer player, Country fromCountry, Country toCountry,
-			int armiesCount) {
-		// TODO Auto-generated method stub
-
+	public void fortificationPhase(GameMap gameMap, GamePlayer player) throws IOException {
+		playerController = new Player();
+		if (playerController.startGameFortification(player, gameMap)) {
+			boolean countryFound = false;
+			do {
+				Country fromCountry = getRandomCountry(gameMap, player);
+				Country toCountry = getRandomCountry(gameMap, player);
+				if (!fromCountry.getCountryName().equalsIgnoreCase(toCountry.getCountryName())) {
+					countryFound = true;
+				}
+				if (countryFound) {
+					int armiesCount = new Random().nextInt(fromCountry.getNoOfArmies()) + 1;
+					if (armiesCount > 1 && (fromCountry.getNoOfArmies() - armiesCount) >= 1) {
+						playerController.moveArmies(fromCountry, toCountry, armiesCount);
+					}
+				}
+			} while (!countryFound);
+		}
 	}
 
 	/**

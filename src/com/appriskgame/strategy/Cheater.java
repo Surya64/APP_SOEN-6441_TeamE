@@ -1,5 +1,6 @@
 package com.appriskgame.strategy;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -43,9 +44,20 @@ public class Cheater implements PlayerStrategy {
 	}
 
 	@Override
-	public void fortificationPhase(GameMap gameMap, GamePlayer player, Country fromCountry, Country toCountry,
-			int armiesCount) {
-		// TODO Auto-generated method stub
+	public void fortificationPhase(GameMap gameMap, GamePlayer player) throws IOException {
+		playerController = new Player();
+		if (playerController.startGameFortification(player, gameMap)) {
+			for (Country country : player.getPlayerCountries()) {
+				for (String adjCountry : country.getNeighbourCountries()) {
+					GamePlayer adjPlayer = playerController.getPlayerForCountry(gameMap, adjCountry);
+					if (!player.getPlayerName().equalsIgnoreCase(adjPlayer.getPlayerName())) {
+						country.setNoOfArmies(country.getNoOfArmies() * 2);
+						break;
+					}
+				}
+			}
+			System.out.println("Cheater fortification complete");
+		}
 
 	}
 

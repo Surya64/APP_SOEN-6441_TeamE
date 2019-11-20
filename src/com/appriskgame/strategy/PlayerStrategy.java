@@ -14,6 +14,5 @@ public interface PlayerStrategy {
 
 	public void attackPhase(GameMap gameMap, GamePlayer player, Country attackerCountry, Country defenderCountry);
 
-	public void fortificationPhase(GameMap gameMap, GamePlayer player, Country fromCountry, Country toCountry,
-			int armiesCount);
+	public void fortificationPhase(GameMap gameMap, GamePlayer player) throws IOException;
 }

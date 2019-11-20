@@ -1,5 +1,6 @@
 package com.appriskgame.strategy;
 
+import java.io.IOException;
 import java.util.Random;
 
 import com.appriskgame.controller.Player;
@@ -38,16 +39,36 @@ public class Benevolent implements PlayerStrategy {
 	}
 
 	@Override
-	public void fortificationPhase(GameMap gameMap, GamePlayer player, Country fromCountry, Country toCountry,
-			int armiesCount) {
-		// TODO Auto-generated method stub
+	public void fortificationPhase(GameMap gameMap, GamePlayer player) throws IOException {
+		playerController = new Player();
+		if (playerController.startGameFortification(player, gameMap)) {
+			Country weakestCountry = getWeakestCountry(gameMap, player);
+			Country strongestNeighCountryToFortify = null;
+			int armycount = 0;
+			for (String neighbourCountryName : weakestCountry.getNeighbourCountries()) {
+				for (Country country : player.getPlayerCountries()) {
+					if (country.getCountryName().equalsIgnoreCase(neighbourCountryName)) {
+						if (country.getNoOfArmies() > armycount) {
+							strongestNeighCountryToFortify = country;
+							armycount = country.getNoOfArmies();
+						}
+					}
+				}
+			}
+			if (strongestNeighCountryToFortify != null) {
+				int fortifyArmiesToWeakestCountry = (strongestNeighCountryToFortify.getNoOfArmies()) / 2;
+				playerController.moveArmies(strongestNeighCountryToFortify, weakestCountry,
+						fortifyArmiesToWeakestCountry);
+			}
+		}
+		System.out.println("Benevolent fortification complete");
 
 	}
 
 	/**
 	 * this method gets the weakest country owned by the benevolent player
 	 * 
-	 * @param mapGraph - The object of the GameMapGraph
+	 * @param mapGraph - The object of the GameMap
 	 * @param player   - The object of the player
 	 * @return weakest country
 	 */
@@ -62,6 +83,25 @@ public class Benevolent implements PlayerStrategy {
 			}
 		}
 		return weakestCountry;
+	}
+
+	/**
+	 * this method gets the strongest country owned by the benevolent player
+	 * 
+	 * @param mapGraph - The object of the GameMap
+	 * @param player   - The object of the player
+	 * @return strongest country
+	 */
+	public Country getStrongestCountry(GameMap mapGraph, GamePlayer player) {
+		int numberOfArmies = 0;
+		Country strongestCountry = null;
+		for (Country country : player.getPlayerCountries()) {
+			if (country.getNoOfArmies() >= numberOfArmies) {
+				numberOfArmies = country.getNoOfArmies();
+				strongestCountry = country;
+			}
+		}
+		return strongestCountry;
 	}
 
 }
