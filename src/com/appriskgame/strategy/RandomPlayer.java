@@ -22,9 +22,12 @@ public class RandomPlayer implements PlayerStrategy {
 	}
 
 	@Override
-	public void reinforcementPhase(GamePlayer player, GameMap gameMap, Country country, int reinforceArmyCount) {
-		// TODO Auto-generated method stub
-
+	public void reinforcementPhase(GamePlayer player, GameMap gameMap) throws Exception {
+		playerController = new Player();
+		playerController.startReinforcement(player, gameMap);
+		Country country = getRandomCountry(gameMap, player);
+		int numOfarmies = player.getNoOfArmies();
+		playerController.userAssignedArmiesToCountries(country, numOfarmies, player);
 	}
 
 	@Override
@@ -38,6 +41,18 @@ public class RandomPlayer implements PlayerStrategy {
 			int armiesCount) {
 		// TODO Auto-generated method stub
 
+	}
+
+	/**
+	 * this method gets a random country owned by the Random player
+	 * 
+	 * @param mapGraph - The object of the GameMap
+	 * @param player   - The object of the player
+	 * @return randomCountry
+	 */
+	public Country getRandomCountry(GameMap mapGraph, GamePlayer player) {
+		int countryIndexAssignment = new Random().nextInt(player.getPlayerCountries().size());
+		return player.getPlayerCountries().get(countryIndexAssignment);
 	}
 
 }

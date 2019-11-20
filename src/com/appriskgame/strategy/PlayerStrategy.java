@@ -10,7 +10,7 @@ public interface PlayerStrategy {
 
 	public void placeArmies(GameMap gameMap, GamePlayer player) throws IOException;
 
-	public void reinforcementPhase(GamePlayer player, GameMap gameMap, Country country, int reinforceArmyCount);
+	public void reinforcementPhase(GamePlayer player, GameMap gameMap) throws Exception;
 
 	public void attackPhase(GameMap gameMap, GamePlayer player, Country attackerCountry, Country defenderCountry);
 

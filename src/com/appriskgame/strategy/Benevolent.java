@@ -22,9 +22,12 @@ public class Benevolent implements PlayerStrategy {
 	}
 
 	@Override
-	public void reinforcementPhase(GamePlayer player, GameMap gameMap, Country country, int reinforceArmyCount) {
-		// TODO Auto-generated method stub
-
+	public void reinforcementPhase(GamePlayer player, GameMap gameMap) throws Exception {
+		playerController = new Player();
+		playerController.startReinforcement(player, gameMap);
+		Country country = getWeakestCountry(gameMap, player);
+		int numOfarmies = player.getNoOfArmies();
+		playerController.userAssignedArmiesToCountries(country, numOfarmies, player);
 	}
 
 	@Override
@@ -38,6 +41,26 @@ public class Benevolent implements PlayerStrategy {
 			int armiesCount) {
 		// TODO Auto-generated method stub
 
+	}
+
+	/**
+	 * this method gets the weakest country owned by the benevolent player
+	 * 
+	 * @param mapGraph - The object of the GameMapGraph
+	 * @param player   - The object of the player
+	 * @return weakest country
+	 */
+	public Country getWeakestCountry(GameMap mapGraph, GamePlayer player) {
+		int numberOfArmies = 0;
+		Country weakestCountry = null;
+		numberOfArmies = player.getPlayerCountries().get(0).getNoOfArmies();
+		for (Country country : player.getPlayerCountries()) {
+			if (country.getNoOfArmies() <= numberOfArmies) {
+				numberOfArmies = country.getNoOfArmies();
+				weakestCountry = country;
+			}
+		}
+		return weakestCountry;
 	}
 
 }
