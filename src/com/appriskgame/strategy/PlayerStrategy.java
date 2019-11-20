@@ -1,12 +1,14 @@
 package com.appriskgame.strategy;
 
+import java.io.IOException;
+
 import com.appriskgame.model.Country;
 import com.appriskgame.model.GameMap;
 import com.appriskgame.model.GamePlayer;
 
 public interface PlayerStrategy {
 
-	public void placeArmies(GameMap gameMap, GamePlayer player, Country country);
+	public void placeArmies(GameMap gameMap, GamePlayer player) throws IOException;
 
 	public void reinforcementPhase(GamePlayer player, GameMap gameMap, Country country, int reinforceArmyCount);
 

@@ -1,6 +1,5 @@
 package com.appriskgame.model;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -15,13 +14,14 @@ import com.appriskgame.view.CardView;
  * @author Dolly
  * @author Sahana
  */
-public class GamePlayer extends Observable implements Serializable{
+public class GamePlayer extends Observable{
 
 	private String playerName;
 	private ArrayList<Country> playerCountries = new ArrayList<Country>();
 	private int noOfArmies = 0;
 	private List<Card> cardList = new ArrayList<>();
 	public GamePlayer current;
+	private String playerType = "";
 
 	/**
 	 * This method gets the card list
@@ -130,6 +130,22 @@ public class GamePlayer extends Observable implements Serializable{
 		this.current = current;
 		setChanged();
 		notifyObservers();
+	}
+	
+	/**
+	 * Method to get player type
+	 * @return playerType - type of player
+	 */
+	public String getPlayerType() {
+		return playerType;
+	}
+
+	/**
+	 * Method to set the player type
+	 * @param playerType - type of player
+	 */
+	public void setPlayerType(String playerType) {
+		this.playerType = playerType;
 	}
 
 	@Override
