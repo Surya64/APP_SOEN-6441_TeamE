@@ -22,6 +22,12 @@ import com.appriskgame.model.Continent;
 import com.appriskgame.model.Country;
 import com.appriskgame.model.GameMap;
 import com.appriskgame.model.GamePlayer;
+import com.appriskgame.strategy.Aggressive;
+import com.appriskgame.strategy.Benevolent;
+import com.appriskgame.strategy.Cheater;
+import com.appriskgame.strategy.Human;
+import com.appriskgame.strategy.PlayerStrategy;
+import com.appriskgame.strategy.RandomPlayer;
 
 /**
  * This class contains methods which will take the input to add or remove
@@ -118,8 +124,10 @@ public class Player {
 		} while (proceed);
 
 		for (String player : playerNames) {
+			String[] data = player.split("-");
 			GamePlayer gamePlayers = new GamePlayer();
 			gamePlayers.setPlayerName(player);
+			gamePlayers.setPlayerType(data[1]);
 			playersList.add(gamePlayers);
 		}
 		gameMap.setPlayers(playersList);
@@ -155,84 +163,22 @@ public class Player {
 		} while (mapFlag);
 
 		roundRobin = new RoundRobinAllocator(playersList);
-		System.out.println("Do you want to place army Individually? Yes/No");
-		String choice = br.readLine().trim();
-		while (!(choice.equalsIgnoreCase("Yes") || choice.equalsIgnoreCase("No") || choice == null)) {
-			System.err.println("\nPlease enter the choice as either Yes or No:");
-			choice = br.readLine().trim();
-		}
+		System.out.println("Place army Individually");
+		while (playersList.get(playersList.size() - 1).getNoOfArmies() > 0) {
+			for (int round = 1; round <= playersList.size(); round++) {
+				gameplayer = roundRobin.nextTurn();
+				System.out.println("Name: " + gameplayer.getPlayerName());
+				System.out.println("No of Armies remaining: " + gameplayer.getNoOfArmies());
+				PlayerStrategy playerStrategy = null;
+				playerStrategy = gameplayer.getPlayerType().equalsIgnoreCase("Aggressive") ? new Aggressive()
+						: (gameplayer.getPlayerType().equalsIgnoreCase("Benevolent") ? new Benevolent()
+								: (gameplayer.getPlayerType().equalsIgnoreCase("Cheater") ? new Cheater()
+										: (gameplayer.getPlayerType().equalsIgnoreCase("Random") ? new RandomPlayer()
+												: (gameplayer.getPlayerType().equalsIgnoreCase("Human") ? new Human()
+														: null))));
+				playerStrategy.placeArmies(gameMap, gameplayer);
 
-		if (choice.equalsIgnoreCase("Yes")) {
-			while (playersList.get(0).getNoOfArmies() > 0) {
-				for (int round = 1; round <= playersList.size(); round++) {
-					gameplayer = roundRobin.nextTurn();
-					boolean placeArmyFlag = true;
-					System.out.println("Name: " + gameplayer.getPlayerName());
-					System.out.println("No of Armies remaining: " + gameplayer.getNoOfArmies());
-					do {
-						placeArmyFlag = false;
-						boolean middlePlace = false;
-						System.out.println("Enter Command to place Army to Country");
-						String input = br.readLine().trim();
-						if (input.equalsIgnoreCase("placeall")) {
-							placeallAmry();
-							middlePlace = true;
-							placeArmyFlag = false;
-							round = playerNames.size();
-						}
-						if (!middlePlace) {
-							String[] data = input.split(" ");
-							Pattern commandName = Pattern.compile("placearmy");
-							Matcher commandMatch = commandName.matcher(data[0]);
-							if (!commandMatch.matches() || input.isEmpty()) {
-								System.out.println("\nIncorrect Command");
-								placeArmyFlag = true;
-							}
-							if (!placeArmyFlag) {
-								boolean ownCountryFlag = false;
-								ArrayList<Country> playerCountries = gameplayer.getPlayerCountries();
-								for (int i = 0; i < playerCountries.size(); i++) {
-									if (playerCountries.get(i).getCountryName().equalsIgnoreCase(data[1])) {
-										if (gameplayer.getNoOfArmies() > 0) {
-											playerCountries.get(i)
-													.setNoOfArmies(playerCountries.get(i).getNoOfArmies() + 1);
-											gameplayer.setNoOfArmies(gameplayer.getNoOfArmies() - 1);
-											System.out.println(
-													"One Army is placed in " + playerCountries.get(i).getCountryName());
-											ownCountryFlag = true;
-										} else {
-											System.out.println("All armies are placed.\n");
-											ownCountryFlag = true;
-											placeArmyFlag = false;
-										}
-									}
-								}
-								if (!ownCountryFlag) {
-									System.out.println("Please enter the Country that you Own");
-									placeArmyFlag = true;
-								}
-							}
-						}
-
-					} while (placeArmyFlag);
-				}
 			}
-		} else {
-			boolean placeAllArmyFlag = true;
-			do {
-				placeAllArmyFlag = false;
-				System.out.println("Enter Command to place all remaining armies");
-				String input = br.readLine().trim();
-				Pattern commandName = Pattern.compile("placeall");
-				Matcher commandMatch = commandName.matcher(input);
-				if (!commandMatch.matches() || input.isEmpty()) {
-					System.out.println("\nIncorrect Command");
-					placeAllArmyFlag = true;
-				}
-				if (!placeAllArmyFlag) {
-					placeallAmry();
-				}
-			} while (placeAllArmyFlag);
 		}
 		boolean gameContinue;
 
@@ -311,6 +257,37 @@ public class Player {
 	}
 
 	/**
+	 * This method is used to place army individually to player's country
+	 * 
+	 * @param gameplayer  Current Player
+	 * @param countryName Country Name
+	 * @return true if successfully placed else false
+	 */
+	public boolean placearmyassigned(GamePlayer gameplayer, String countryName) {
+		boolean ownCountryFlag = true;
+		ArrayList<Country> playerCountries = gameplayer.getPlayerCountries();
+		for (int i = 0; i < playerCountries.size(); i++) {
+			if (playerCountries.get(i).getCountryName().equalsIgnoreCase(countryName)) {
+				if (gameplayer.getNoOfArmies() > 0) {
+					playerCountries.get(i).setNoOfArmies(playerCountries.get(i).getNoOfArmies() + 1);
+					gameplayer.setNoOfArmies(gameplayer.getNoOfArmies() - 1);
+					System.out.println("One Army is placed in " + playerCountries.get(i).getCountryName());
+					ownCountryFlag = true;
+					break;
+				} else {
+					System.out.println("All armies are placed.\n");
+				}
+			} else {
+				ownCountryFlag = false;
+			}
+		}
+		if (!ownCountryFlag) {
+			System.out.println("Please enter the Country that you Own");
+		}
+		return ownCountryFlag;
+	}
+
+	/**
 	 * This method is used show the details of the countries and continents, armies
 	 * on each country, ownership of each country.
 	 *
@@ -350,7 +327,7 @@ public class Player {
 				ArrayList<String> multiCommand = multipleCommands(input);
 				for (int p = 0; p < multiCommand.size(); p++) {
 					String data = multiCommand.get(p);
-					Pattern commandPattern = Pattern.compile("[a-zA-z]+ -[a-zA-z\\s-]*");
+					Pattern commandPattern = Pattern.compile("[a-zA-z]+ -[a-zA-z0-9\\s-]*");
 					Pattern commandName = Pattern.compile("gameplayer");
 					Matcher commandMatch = commandPattern.matcher(data);
 					String[] command = data.split("-");
@@ -363,14 +340,22 @@ public class Player {
 						if (data.contains("-add")) {
 							String[] addData = data.split("-add ");
 							for (int i = 1; i < addData.length; i++) {
-								String name = addData[i].trim();
+								String[] splitData = addData[i].split(" ");
+								String name = splitData[0].trim();
+								String strategyType = splitData[1].trim();
+								String[] validstrategyType = { "human", "aggressive", "benevolent", "cheater",
+										"random" };
+								List<String> validstrategyTypeList = Arrays.asList(validstrategyType);
 								Pattern namePattern = Pattern.compile("[a-zA-z0-9]+");
 								Matcher match = namePattern.matcher(name);
-								if (!match.matches() || name.isEmpty()) {
-									System.out.println("\nPlease enter the correct player name");
+								if (!match.matches() || name.isEmpty()
+										|| !validstrategyTypeList.contains(strategyType)) {
+									System.out.println("\nPlease enter the correct player name and Strategy Type");
 									flag = true;
 								}
-								playerNames.add(name);
+								if (!flag) {
+									playerNames.add(name + "-" + strategyType);
+								}
 							}
 						} else if (data.contains("-remove")) {
 							String[] removeData = data.split("-remove ");
@@ -382,11 +367,19 @@ public class Player {
 									System.out.println("\nPlease enter the correct player name");
 									flag = true;
 								}
-								if (playerNames.contains(name)) {
-									playerNames.remove(name);
-								} else {
+								int check = 0;
+								for (String player : playerNames) {
+									String[] split = player.split("-");
+									if (split[0].equals(name)) {
+										playerNames.remove(player);
+										check++;
+										break;
+									}
+								}
+								if (check == 0) {
 									System.out.println(name + "doesn't exist");
 								}
+
 							}
 						}
 
@@ -508,7 +501,7 @@ public class Player {
 		ArrayList<String> splitCommands = new ArrayList<String>();
 
 		for (int i = 1; i < commandArrays.length && suspend == false; i = i + 1) {
-			String[] cmdDetails = new String[3];
+			String[] cmdDetails = new String[4];
 			String decider = commandArrays[i];
 
 			switch (decider) {
@@ -517,6 +510,8 @@ public class Player {
 				cmdDetails[1] = "-add";
 				i = i + 1;
 				cmdDetails[2] = commandArrays[i];
+				i = i + 1;
+				cmdDetails[3] = commandArrays[i];
 				String addCoammand = mapOperations.singleCommandOperation(cmdDetails);
 				splitCommands.add(addCoammand);
 				suspend = false;
