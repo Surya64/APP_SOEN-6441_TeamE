@@ -45,7 +45,7 @@ public class RandomPlayer implements PlayerStrategy {
 			boolean countryFound = false;
 			do {
 				Country fromCountry = getRandomCountry(gameMap, player);
-				Country toCountry = getRandomCountry(gameMap, player);
+				Country toCountry = getRandomNeighbourCountry(fromCountry, gameMap);
 				if (!fromCountry.getCountryName().equalsIgnoreCase(toCountry.getCountryName())) {
 					countryFound = true;
 				}
@@ -69,6 +69,26 @@ public class RandomPlayer implements PlayerStrategy {
 	public Country getRandomCountry(GameMap mapGraph, GamePlayer player) {
 		int countryIndexAssignment = new Random().nextInt(player.getPlayerCountries().size());
 		return player.getPlayerCountries().get(countryIndexAssignment);
+	}
+
+	/**
+	 * this method gets a random neighbor country owned by the Random player
+	 * 
+	 * @param gamemap     - object of the GameMap
+	 * @param fromcountry - Country Object
+	 * @return random neighbor Country
+	 */
+	public Country getRandomNeighbourCountry(Country fromcountry, GameMap gamemap) {
+		Country neighbourCountry = null;
+		int neighbourIndex = new Random().nextInt(fromcountry.getNeighbourCountries().size());
+		String countryName = fromcountry.getNeighbourCountries().get(neighbourIndex);
+		for (Country country : gamemap.getCountries()) {
+			if (country.getCountryName().equalsIgnoreCase(countryName)) {
+				neighbourCountry = country;
+				break;
+			}
+		}
+		return neighbourCountry;
 	}
 
 }

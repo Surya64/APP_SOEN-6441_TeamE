@@ -45,25 +45,21 @@ public class Aggressive implements PlayerStrategy {
 		Country fromCountry = null;
 		int armiesCount = 0;
 		if (playerController.startGameFortification(player, gameMap)) {
-			int numberOfArmies = 0;
 			Country strongestCountry = getStrongestCountryWithAdjCountry(gameMap, player);
-			Country strongestPlayerCountry = getStrongestCountry(gameMap, player);
-			if (strongestCountry.getCountryName().equalsIgnoreCase(strongestPlayerCountry.getCountryName())) {
-				numberOfArmies = strongestCountry.getNoOfArmies();
-
+			Country strongestNeighCountryToFortify = null;
+			int armycount = 0;
+			for (String neighbourCountryName : strongestCountry.getNeighbourCountries()) {
 				for (Country country : player.getPlayerCountries()) {
-					if (country.getNoOfArmies() <= numberOfArmies && country.getNoOfArmies() > 1
-							&& !country.getCountryName().equalsIgnoreCase(strongestCountry.getCountryName())) {
-						numberOfArmies = country.getNoOfArmies();
-						fromCountry = country;
-						armiesCount = fromCountry.getNoOfArmies() - 1;
+					if (country.getCountryName().equalsIgnoreCase(neighbourCountryName)) {
+						if (country.getNoOfArmies() > armycount) {
+							strongestNeighCountryToFortify = country;
+							armycount = country.getNoOfArmies();
+						}
 					}
 				}
-			} else {
-				numberOfArmies = strongestCountry.getNoOfArmies();
-				fromCountry = strongestPlayerCountry;
-				armiesCount = (fromCountry.getNoOfArmies() - 1) / 2;
 			}
+			fromCountry = strongestNeighCountryToFortify;
+			armiesCount = (armycount - 1) / 2;
 			boolean fortify = false;
 			for (Country country : player.getPlayerCountries()) {
 				for (String temp : country.getNeighbourCountries()) {
