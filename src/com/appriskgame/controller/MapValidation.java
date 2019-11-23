@@ -19,7 +19,7 @@ import com.appriskgame.model.GameMap;
  * This class is used to check the format of List of continents, List of
  * countries, adjacency between countries which are present in the uploaded file
  * and validate the map.
- * 
+ *
  * @author Surya
  * @author Sai
  */
@@ -31,7 +31,7 @@ public class MapValidation {
 
 	/**
 	 * This Method used to get the error message.
-	 * 
+	 *
 	 * @return errorMessage
 	 */
 	public static String getError() {
@@ -40,7 +40,7 @@ public class MapValidation {
 
 	/**
 	 * This Method used to get the Game Map.
-	 * 
+	 *
 	 * @return gameMap
 	 */
 	public GameMap getMapGraph() {
@@ -50,7 +50,7 @@ public class MapValidation {
 	/**
 	 * This method is used to validate the list of continents which are present in
 	 * the uploaded file and check the correct format.
-	 * 
+	 *
 	 * @param tagData Value of the continent tag
 	 * @return flag to check if entered continents are valid
 	 */
@@ -104,7 +104,7 @@ public class MapValidation {
 	/**
 	 * This method is used to validate the list of countries which are present in
 	 * the uploaded file and check the correct format.
-	 * 
+	 *
 	 * @param tagData Value of the country tag
 	 * @return flag to check if entered countries are valid
 	 */
@@ -175,7 +175,7 @@ public class MapValidation {
 	/**
 	 * This method is used to validate the list of boundary countries which are
 	 * present in the uploaded file and check the correct format.
-	 * 
+	 *
 	 * @param tagData Value of the boundary countries tag
 	 * @return flag to check if entered boundary countries are valid
 	 */
@@ -244,15 +244,125 @@ public class MapValidation {
 	}
 
 	/**
-	 * 
+	 *
 	 * This method validates the map which is loaded and stores the details of valid
 	 * data in the form of GameMap object.
-	 * 
+	 *
 	 * @param fileName - Name of file which will be loaded.
 	 * @return flag - To check if file content is valid.
 	 * @throws IOException -throws for input output
 	 */
 	public boolean validateMap(String fileName) throws IOException {
+		BufferedReader read = null;
+		try {
+			read = new BufferedReader(new FileReader(fileName));
+		} catch (FileNotFoundException e) {
+			System.out.println("Error File Not found Exception");
+		}
+		String fileData = "";
+		String tagerror = new String();
+		try {
+			fileData = new String(Files.readAllBytes(Paths.get(fileName)));
+		} catch (IOException e) {
+			System.out.println("Error Message : " + e.getMessage());
+		}
+		String[] requiredData = fileData.split("files");
+		fileData = "[files" + requiredData[1];
+		errorMessage = new String();
+
+		if (!fileData.trim().isEmpty()) {
+			gameMap = new GameMap();
+			Pattern p = Pattern.compile("\\r\\n\\r\\n");
+			String[] result = p.split(fileData);
+			ArrayList<String> visitedtag = new ArrayList<String>();
+			boolean invalidtag = true, validatecontinentdata = true, validatecountrydata = true,
+					validateboundarydata = true, validatefilesdata = true;
+
+			for (String tagdetails : result) {
+				String tag = tagdetails.split("\\r\\n")[0].trim();
+				if (tag.equalsIgnoreCase("[continents]") || tag.equalsIgnoreCase("[countries]")
+						|| tag.equalsIgnoreCase("[borders]") || tag.equalsIgnoreCase("[files]")) {
+					if (tag.equalsIgnoreCase("[files]")) {
+						if (!visitedtag.contains(tag)) {
+						} else {
+							errorMessage = errorMessage.concat("Duplicate Entry for [files] Tag Found.\n");
+							validatefilesdata = false;
+						}
+					}
+					if (tag.equalsIgnoreCase("[continents]")) {
+						if (!visitedtag.contains(tag)) {
+							if (validateContinents(tagdetails)) {
+								visitedtag.add(tag);
+							} else
+								validatecontinentdata = false;
+						} else {
+							errorMessage = errorMessage.concat("Duplicate Entry for [continents] Tag Found.\n");
+							validatecontinentdata = false;
+						}
+					} else if (tag.equalsIgnoreCase("[countries]")) {
+						if (!visitedtag.contains(tag)) {
+
+							if (validateCountries(tagdetails)) {
+								visitedtag.add(tag);
+							} else
+								validatecountrydata = false;
+						} else {
+							errorMessage = errorMessage.concat("Duplicate Entry for [countries] Tag Found.\n");
+							validatecountrydata = false;
+						}
+					} else if (tag.equalsIgnoreCase("[borders]")) {
+						if (!visitedtag.contains(tag)) {
+							if (validateBoundaries(tagdetails)) {
+								visitedtag.add(tag);
+							} else
+								validateboundarydata = false;
+						} else {
+							errorMessage = errorMessage.concat("Duplicate Entry for [borders] Tag Found.\n");
+							validatecountrydata = false;
+						}
+					}
+				} else {
+					tagerror = tagerror.concat("Invalid " + tag + " found.\n");
+					invalidtag = false;
+				}
+			}
+			if (invalidtag == true && validatefilesdata == true && validatecontinentdata == true
+					&& validatecountrydata == true && validateboundarydata == true) {
+				ConnectedGraph connect = new ConnectedGraph();
+				adjancencyError = connect.checkCountryAdjacency(listOfCountries, listOfContinent);
+				if (adjancencyError.isEmpty()) {
+					read.close();
+					return true;
+				} else {
+					errorMessage = "Map have below error.\n";
+					errorMessage = errorMessage.concat(adjancencyError);
+					read.close();
+					return false;
+				}
+			} else {
+				errorMessage = tagerror.concat(errorMessage);
+				errorMessage = "Map have below error\n" + errorMessage;
+				read.close();
+				return false;
+			}
+		} else {
+			errorMessage = "File is Empty.\n";
+			read.close();
+			return false;
+		}
+
+	}
+
+	/**
+	 *
+	 * This method validates the map which is loaded and stores the details of valid
+	 * data in the form of GameMap object.
+	 *
+	 * @param fileName - Name of file which will be loaded.
+	 * @return flag - To check if file content is valid.
+	 * @throws IOException -throws for input output
+	 */
+	public boolean validateMapDomination(String fileName) throws IOException {
 		BufferedReader read = null;
 		try {
 			read = new BufferedReader(new FileReader(fileName));
