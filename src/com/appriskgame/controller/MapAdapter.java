@@ -31,7 +31,7 @@ public class MapAdapter implements MapReadAndWrite {
 	}
 
 	@Override
-	public void writeGameMap(String ouputGameMapName, String mapFileName, GameMap gameMap, String format) {
+	public void writeGameMap(String ouputGameMapName, String mapFileName, GameMap gameMap, String format) throws IOException {
 
 		if (format.equalsIgnoreCase("Domination")) {
 			readAndWrite.writeGameMap(ouputGameMapName, mapFileName, gameMap);
