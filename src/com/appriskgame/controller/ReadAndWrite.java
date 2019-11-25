@@ -7,5 +7,5 @@ import com.appriskgame.model.GameMap;
 public interface ReadAndWrite {
 	public GameMap readGameMap(String inputGameMapName) throws IOException;
 
-	public void writeGameMap(String ouputGameMapName, String mapFileName, GameMap gameMap);
+	public void writeGameMap(String ouputGameMapName, String mapFileName, GameMap gameMap) throws IOException;
 }
