@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.appriskgame.controller.CardController;
 import com.appriskgame.controller.Player;
 import com.appriskgame.model.Country;
 import com.appriskgame.model.GameMap;
@@ -164,8 +165,171 @@ public class Human implements PlayerStrategy {
 	}
 
 	@Override
-	public void attackPhase(GameMap gameMap, GamePlayer player, Country attackerCountry, Country defenderCountry) {
-		// TODO Auto-generated method stub
+	public void attackPhase(GameMap mapDetails, GamePlayer player, ArrayList<GamePlayer> playersList)
+			throws IOException {
+		playerController = new Player();
+		boolean gameContinue;
+
+		do {
+			boolean errorOccured = false;
+			String errorDetails = "";
+			gameContinue = false;
+			playerController.showMap(mapDetails);
+			boolean isAttackPossible = playerController.isAttackPossible(player);
+			String userCommand = "";
+			if (isAttackPossible) {
+				mapDetails.setActionMsg("Player Entering Attack Commands", "action");
+				System.out.println("Enter the Attacker command?\n" + "Player Name : " + player.getPlayerName());
+				userCommand = br.readLine().trim();
+			} else {
+				userCommand = "attack -noattack";
+
+			}
+
+			if (playerController.checkUserValidation(userCommand)) {
+				String[] attackDetails = userCommand.split(" ");
+				String attackCountry = attackDetails[1];
+				if (attackCountry.equalsIgnoreCase("-noattack")) {
+					break;
+				}
+				String defenderCountry = attackDetails[2];
+				String decision = attackDetails[3];
+				boolean attackerCountryPresent = playerController.isCountryAttackPresent(player, attackCountry, mapDetails);
+				boolean defenderCountryPresent = playerController.isCountryPresent(defenderCountry, mapDetails);
+				Country attackCountryObject = null;
+				Country defenderCountryObject = null;
+				if (!attackerCountryPresent) {
+					errorDetails = attackCountry + " is not owned by the current player" + "\n";
+					mapDetails.setActionMsg("Error : " + errorDetails, "action");
+					errorOccured = true;
+				}
+				if (!defenderCountryPresent) {
+					errorDetails = errorDetails + defenderCountry + "This is not in map" + "\n";
+					mapDetails.setActionMsg("Error : " + errorDetails, "action");
+					errorOccured = true;
+				}
+				boolean isAttackAndDefenderAdajacent = false;
+				if (attackerCountryPresent && defenderCountryPresent) {
+					attackCountryObject = playerController.getCountryObject(attackCountry, mapDetails);
+					defenderCountryObject = playerController.getCountryObject(defenderCountry, mapDetails);
+
+					isAttackAndDefenderAdajacent = playerController.isCountryAdjacent(attackCountryObject, defenderCountry, mapDetails);
+				}
+				if (defenderCountryPresent) {
+					if (defenderCountryObject != null) {
+						if (defenderCountryObject.getPlayer().equalsIgnoreCase(player.getPlayerName())) {
+							errorDetails = defenderCountry + " is  owned by the current player" + "\n";
+							mapDetails.setActionMsg("Error : " + errorDetails, "action");
+							errorOccured = true;
+						}
+					}
+				}
+				if (!isAttackAndDefenderAdajacent) {
+					if (attackerCountryPresent) {
+						errorDetails = errorDetails + attackCountry + " is not adjacent to the " + defenderCountry;
+						mapDetails.setActionMsg("Error : " + errorDetails, "action");
+						errorOccured = true;
+					}
+				}
+				if (decision.equalsIgnoreCase("-allout") && errorOccured == false) {
+					while (attackCountryObject.getNoOfArmies() > 1 && defenderCountryObject.getNoOfArmies() != 0) {
+						int attackerDices = playerController.maxAllowableAttackerDice(attackCountryObject.getNoOfArmies());
+						int defenderDices = playerController.maxAllowableDefenderDice(defenderCountryObject.getNoOfArmies());
+						if (attackerDices > 0 && defenderDices > 0) {
+							playerController.attackingStarted(attackerDices, defenderDices, attackCountryObject, defenderCountryObject);
+							if (playerController.isAttackerWon(defenderCountryObject)) {
+
+								System.out.println("Card Phase");
+								CardController cardController = new CardController();
+								cardController.setDeckOfCards();
+								cardController.allocateCardToPlayer(player);
+								mapDetails.setActionMsg("Player got a Card", "action");
+								String removePlayerName = defenderCountryObject.getPlayer();
+								playerController.moveArmyToConquredCountry(playersList, player, attackCountryObject,
+										defenderCountryObject);
+								playerController.removePlayer(playersList, mapDetails, removePlayerName);
+								if (playerController.isPlayerWinner(player, mapDetails)) {
+									mapDetails.setActionMsg(player.getPlayerName() + " won the Game!", "action");
+									System.out.println(player.getPlayerName() + " won the Game!");
+									System.exit(0);
+								}
+								break;
+							}
+						}
+					}
+				} else if (errorOccured == false) {
+					int attackerDices = Integer.parseInt(attackDetails[3]);
+					int attackerArmies = attackCountryObject.getNoOfArmies();
+					if (playerController.isAttackerDicePossible(attackerArmies, attackerDices)) {
+						mapDetails.setActionMsg("Defender Entering Defender Commands", "action");
+						System.out.println("Enter the Defender command?");
+						String defenderUserCommand = br.readLine().trim();
+						if (playerController.checkUserDefenderValidation(defenderUserCommand)) {
+							String[] defenderDetails = defenderUserCommand.split(" ");
+							int defenderDices = Integer.parseInt(defenderDetails[1]);
+							int defenderArmies = defenderCountryObject.getNoOfArmies();
+							if (playerController.isDefenderDicePossible(defenderArmies, defenderDices)) {
+								playerController.attackingStarted(attackerDices, defenderDices, attackCountryObject,
+										defenderCountryObject);
+								if (playerController.isAttackerWon(defenderCountryObject)) {
+									System.out.println("Card Phase");
+									CardController cardController = new CardController();
+									cardController.setDeckOfCards();
+									cardController.allocateCardToPlayer(player);
+									mapDetails.setActionMsg("Player got a Card", "action");
+									String removePlayerName = defenderCountryObject.getPlayer();
+									playerController.moveArmyToConquredCountry(playersList, player, attackCountryObject,
+											defenderCountryObject);
+									playerController.removePlayer(playersList, mapDetails, removePlayerName);
+									if (playerController.isPlayerWinner(player, mapDetails)) {
+										mapDetails.setActionMsg(player.getPlayerName() + " won the Game!", "action");
+										System.out.println(player.getPlayerName() + " won the Game!");
+										System.exit(0);
+									}
+								}
+							} else {
+								playerController.reasonForFailedDefender(defenderArmies, defenderDices);
+							}
+						} else {
+							System.out.println("Please enter the defender Command in the below correct Format\n"
+									+ "Format :defend numdice[numdice>0]\n");
+						}
+					} else {
+						playerController.reasonForFailedAttack(attackerArmies, attackerDices);
+					}
+				} else if (errorOccured == true) {
+					System.out.println(errorDetails);
+					errorDetails = "";
+					errorOccured = false;
+				}
+			} else {
+				System.out.println("Please enter the attack Command in any one of the below correct Format\n"
+						+ "Format 1:attack countrynamefrom countynameto numdice[numdice>0]\n"
+						+ "Format 2:attack countrynamefrom countynameto  allout\n" + "Format 3:attack -noattack\n");
+			}
+			boolean isAttackPossibleAfter = playerController.isAttackPossible(player);
+			String continueAttacking = "";
+			if (isAttackPossibleAfter) {
+				System.out.println("Do you want to attack again? Yes/No");
+				continueAttacking = br.readLine().trim();
+				mapDetails.setActionMsg("Player Attacking again", "action");
+				while (!(continueAttacking.equalsIgnoreCase("Yes") || continueAttacking.equalsIgnoreCase("No")
+						|| continueAttacking == null)) {
+					System.err.println("\nPlease enter the choice as either Yes or No:");
+					continueAttacking = br.readLine().trim();
+					mapDetails.setActionMsg("Player Attacking again", "action");
+				}
+			} else {
+				continueAttacking = "No";
+			}
+
+			if (continueAttacking.equalsIgnoreCase("Yes")) {
+				gameContinue = true;
+			} else {
+				gameContinue = false;
+				System.out.println("Attacking Phase is ended");
+			}
+		} while (gameContinue);
 
 	}
 
