@@ -14,7 +14,7 @@ import com.appriskgame.view.CardView;
  * @author Dolly
  * @author Sahana
  */
-public class GamePlayer extends Observable{
+public class GamePlayer extends Observable {
 
 	private String playerName;
 	private ArrayList<Country> playerCountries = new ArrayList<Country>();
@@ -131,9 +131,10 @@ public class GamePlayer extends Observable{
 		setChanged();
 		notifyObservers();
 	}
-	
+
 	/**
 	 * Method to get player type
+	 * 
 	 * @return playerType - type of player
 	 */
 	public String getPlayerType() {
@@ -142,10 +143,26 @@ public class GamePlayer extends Observable{
 
 	/**
 	 * Method to set the player type
+	 * 
 	 * @param playerType - type of player
 	 */
 	public void setPlayerType(String playerType) {
 		this.playerType = playerType;
+	}
+
+	/**
+	 * This method gets the selected country of the players
+	 * 
+	 * @param countryName - The country name
+	 * @return Country object
+	 */
+	public Country getSelectedCountry(String countryName) {
+		for (Country country : getPlayerCountries()) {
+			if (country.getCountryName().equalsIgnoreCase(countryName)) {
+				return country;
+			}
+		}
+		return null;
 	}
 
 	@Override

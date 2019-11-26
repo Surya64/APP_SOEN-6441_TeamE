@@ -17,8 +17,6 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.swing.JOptionPane;
-
 import com.appriskgame.model.Card;
 import com.appriskgame.model.Continent;
 import com.appriskgame.model.Country;
@@ -123,44 +121,56 @@ public class Player {
 			}
 		} while (proceed);
 
+		boolean humanOperator = false;
 		for (String player : playerNames) {
 			String[] data = player.split("-");
 			GamePlayer gamePlayers = new GamePlayer();
 			gamePlayers.setPlayerName(player);
 			gamePlayers.setPlayerType(data[1]);
+			if (data[1].equalsIgnoreCase("human")) {
+				humanOperator = true;
+			}
 			playersList.add(gamePlayers);
 		}
 		gameMap.setPlayers(playersList);
 
-		do {
-			populateFlag = false;
-			System.out.println("Enter Command to Populate Country to Players");
-			String input = br.readLine().trim();
-			Pattern commandName = Pattern.compile("populatecountries");
-			Matcher commandMatch = commandName.matcher(input);
-			if (!commandMatch.matches() || input.isEmpty()) {
-				System.out.println("\nIncorrect Command");
-				populateFlag = true;
-			}
-			if (!populateFlag) {
-				populateCountries(gameMap);
-			}
+		if (humanOperator) {
+			do {
+				populateFlag = false;
+				System.out.println("Human Player Present in Game");
+				System.out.println("Enter Command to Populate Country to Players");
+				String input = br.readLine().trim();
+				Pattern commandName = Pattern.compile("populatecountries");
+				Matcher commandMatch = commandName.matcher(input);
+				if (!commandMatch.matches() || input.isEmpty()) {
+					System.out.println("\nIncorrect Command");
+					populateFlag = true;
+				}
+				if (!populateFlag) {
+					populateCountries(gameMap);
+				}
 
-		} while (populateFlag);
-		defaultArmiesToPlayer();
-		initialArmyAllocation(gameMap);
+			} while (populateFlag);
+			defaultArmiesToPlayer();
+			initialArmyAllocation(gameMap);
 
-		do {
-			System.out.println("Enter the Command to display Map");
-			String mapCommand = br.readLine().trim();
-			if (mapCommand.equalsIgnoreCase("showmap")) {
-				showMap(gameMap);
-				mapFlag = false;
-			} else {
-				System.out.println("Incorrect Command");
-				mapFlag = true;
-			}
-		} while (mapFlag);
+			do {
+				System.out.println("Enter the Command to display Map");
+				String mapCommand = br.readLine().trim();
+				if (mapCommand.equalsIgnoreCase("showmap")) {
+					showMap(gameMap);
+					mapFlag = false;
+				} else {
+					System.out.println("Incorrect Command");
+					mapFlag = true;
+				}
+			} while (mapFlag);
+		} else {
+			populateCountries(gameMap);
+			defaultArmiesToPlayer();
+			initialArmyAllocation(gameMap);
+			showMap(gameMap);
+		}
 
 		roundRobin = new RoundRobinAllocator(playersList);
 		System.out.println("Place army Individually");
@@ -257,26 +267,29 @@ public class Player {
 					gameMap.setActionMsg(
 							"** Fortification Phase Ends for Player: " + gameplayer.getPlayerName() + " **", "action");
 
-					System.out.println("Enter 1 to save Game");
-					int save = Integer.parseInt(br.readLine().trim());
+					// Change later once integrated
+					if (humanOperator) {
+						System.out.println("Enter 1 to save Game");
+						int save = Integer.parseInt(br.readLine().trim());
 
-					if (save == 1) {
-						// Checking the map
-						do {
-							System.out.println("Enter the Command to display Map");
-							String mapCommand = "showmap";
-							if (mapCommand.equalsIgnoreCase("showmap")) {
-								showMap(gameMap);
-								mapFlag = false;
-							} else {
-								System.out.println("Incorrect Command");
-								mapFlag = true;
-							}
-						} while (mapFlag);
-						saveGame(gameMap);
+						if (save == 1) {
+							// Checking the map
+							do {
+								System.out.println("Enter the Command to display Map");
+								String mapCommand = "showmap";
+								if (mapCommand.equalsIgnoreCase("showmap")) {
+									showMap(gameMap);
+									mapFlag = false;
+								} else {
+									System.out.println("Incorrect Command");
+									mapFlag = true;
+								}
+							} while (mapFlag);
+							saveGame(gameMap);
 
-					} else {
+						} else {
 
+						}
 					}
 
 				}
@@ -1603,4 +1616,5 @@ public class Player {
 		}
 		return null;
 	}
+
 }

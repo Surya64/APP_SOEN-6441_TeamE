@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.appriskgame.controller.CardController;
 import com.appriskgame.controller.Player;
 import com.appriskgame.model.Country;
 import com.appriskgame.model.GameMap;
@@ -36,6 +37,55 @@ public class Aggressive implements PlayerStrategy {
 
 	@Override
 	public void attackPhase(GameMap gameMap, GamePlayer player, ArrayList<GamePlayer> playersList) {
+		playerController = new Player();
+		int numberOfArmies = 0;
+		Country defenderCountryObject = null;
+		Country attackCountryObject = getStrongestCountryWithAdjCountry(gameMap, player);
+		numberOfArmies = attackCountryObject.getNoOfArmies();
+		List<String> adjacentCountriesList = attackCountryObject.getNeighbourCountries();
+		for (String adjCountry : adjacentCountriesList) {
+			GamePlayer adjPlayer = playerController.getPlayerForCountry(gameMap, adjCountry);
+			Country adjPlayerCountry = adjPlayer.getSelectedCountry(adjCountry);
+			if (adjPlayerCountry.getNoOfArmies() <= numberOfArmies
+					&& !(player.getPlayerName().equalsIgnoreCase(adjPlayer.getPlayerName()))) {
+				numberOfArmies = adjPlayerCountry.getNoOfArmies();
+				defenderCountryObject = adjPlayerCountry;
+			}
+		}
+		if (defenderCountryObject != null) {
+			while (attackCountryObject.getNoOfArmies() > 1 && defenderCountryObject.getNoOfArmies() != 0) {
+				int attackerDices = playerController.maxAllowableAttackerDice(attackCountryObject.getNoOfArmies());
+				int defenderDices = playerController.maxAllowableDefenderDice(defenderCountryObject.getNoOfArmies());
+				if (attackerDices > 0 && defenderDices > 0) {
+					playerController.attackingStarted(attackerDices, defenderDices, attackCountryObject,
+							defenderCountryObject);
+					if (playerController.isAttackerWon(defenderCountryObject)) {
+						System.out.println("Card Phase");
+						CardController cardController = new CardController();
+						cardController.setDeckOfCards();
+						cardController.allocateCardToPlayer(player);
+						gameMap.setActionMsg("Player got a Card", "action");
+						String removePlayerName = defenderCountryObject.getPlayer();
+						int moveNumberOfArmies = attackCountryObject.getNoOfArmies() / 2;
+						if (playerController.ableToMoveArmy(attackCountryObject, moveNumberOfArmies)) {
+							playerController.removeOwnerAddNewOwner(playersList, player,
+									defenderCountryObject.getCountryName());
+
+							defenderCountryObject.setPlayer(attackCountryObject.getPlayer());
+							defenderCountryObject.setNoOfArmies(moveNumberOfArmies);
+							attackCountryObject.setNoOfArmies(attackCountryObject.getNoOfArmies() - moveNumberOfArmies);
+						}
+						playerController.removePlayer(playersList, gameMap, removePlayerName);
+						if (playerController.isPlayerWinner(player, gameMap)) {
+							gameMap.setActionMsg(player.getPlayerName() + " won the Game!", "action");
+							System.out.println(player.getPlayerName() + " won the Game!");
+							System.exit(0);
+						}
+						break;
+					}
+				}
+			}
+		}
 
 	}
 
@@ -60,23 +110,10 @@ public class Aggressive implements PlayerStrategy {
 			}
 			fromCountry = strongestNeighCountryToFortify;
 			armiesCount = (armycount - 1) / 2;
-			boolean fortify = false;
-			for (Country country : player.getPlayerCountries()) {
-				for (String temp : country.getNeighbourCountries()) {
-					if (temp.equalsIgnoreCase(fromCountry.getCountryName())
-							|| temp.equalsIgnoreCase(strongestCountry.getCountryName())) {
-						fortify = true;
-					}
-				}
+			if (fromCountry != null && strongestCountry != null) {
+				playerController.moveArmies(fromCountry, strongestCountry, armiesCount);
 			}
-			if (fortify) {
-				if (fromCountry != null && strongestCountry != null) {
-					playerController.moveArmies(fromCountry, strongestCountry, armiesCount);
-				}
-			} else {
-				gameMap.setActionMsg("None of the players' countries are adjacent", "action");
-				System.out.println("None of the players' countries are adjacent\n Fortification phase ends..!!");
-			}
+
 		}
 		System.out.println("Aggressive fortification complete");
 
