@@ -2,8 +2,10 @@ package com.appriskgame.strategy;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
+import com.appriskgame.controller.CardController;
 import com.appriskgame.controller.Player;
 import com.appriskgame.model.Country;
 import com.appriskgame.model.GameMap;
@@ -35,7 +37,63 @@ public class RandomPlayer implements PlayerStrategy {
 
 	@Override
 	public void attackPhase(GameMap gameMap, GamePlayer player, ArrayList<GamePlayer> playersList) {
-		// TODO Auto-generated method stub
+		playerController = new Player();
+		GamePlayer adjPlayer = null;
+		Country attackCountryObject = null, defenderCountryObject = null;
+		List<Country> countriesWithAdjCountries = new ArrayList<Country>();
+		countriesWithAdjCountries.addAll(getRandomCountryWithAdjCountry(gameMap, player));
+		if (countriesWithAdjCountries.size() > 1) {
+			int random = new Random().nextInt(countriesWithAdjCountries.size());
+			attackCountryObject = countriesWithAdjCountries.get(random);
+		} else if (countriesWithAdjCountries.size() > 0) {
+			attackCountryObject = countriesWithAdjCountries.get(0);
+		}
+		if (attackCountryObject != null) {
+			do {
+				int randomAdjCountry = new Random().nextInt(attackCountryObject.getNeighbourCountries().size());
+				defenderCountryObject = playerController.getAdjacentCountry(gameMap,
+						attackCountryObject.getNeighbourCountries().get(randomAdjCountry));
+				adjPlayer = playerController.getPlayerForCountry(gameMap, defenderCountryObject.getCountryName());
+
+			} while (player.getPlayerName().equalsIgnoreCase(adjPlayer.getPlayerName()));
+
+		}
+
+		if (defenderCountryObject != null) {
+			System.out.println(attackCountryObject.getCountryName() + " is attacking " + defenderCountryObject.getCountryName());
+			while (attackCountryObject.getNoOfArmies() > 1 && defenderCountryObject.getNoOfArmies() != 0) {
+				int attackerDices = playerController.maxAllowableAttackerDice(attackCountryObject.getNoOfArmies());
+				int defenderDices = playerController.maxAllowableDefenderDice(defenderCountryObject.getNoOfArmies());
+				if (attackerDices > 0 && defenderDices > 0) {
+					playerController.attackingStarted(attackerDices, defenderDices, attackCountryObject,
+							defenderCountryObject);
+					if (playerController.isAttackerWon(defenderCountryObject)) {
+						System.out.println("Card Phase");
+						CardController cardController = new CardController();
+						cardController.setDeckOfCards();
+						cardController.allocateCardToPlayer(player);
+						gameMap.setActionMsg("Player got a Card", "action");
+						String removePlayerName = defenderCountryObject.getPlayer();
+						int moveNumberOfArmies = attackCountryObject.getNoOfArmies() / 2;
+						if (playerController.ableToMoveArmy(attackCountryObject, moveNumberOfArmies)) {
+							playerController.removeOwnerAddNewOwner(playersList, player,
+									defenderCountryObject.getCountryName());
+
+							defenderCountryObject.setPlayer(attackCountryObject.getPlayer());
+							defenderCountryObject.setNoOfArmies(moveNumberOfArmies);
+							attackCountryObject.setNoOfArmies(attackCountryObject.getNoOfArmies() - moveNumberOfArmies);
+						}
+						playerController.removePlayer(playersList, gameMap, removePlayerName);
+						if (playerController.isPlayerWinner(player, gameMap)) {
+							gameMap.setActionMsg(player.getPlayerName() + " won the Game!", "action");
+							System.out.println(player.getPlayerName() + " won the Game!");
+							System.exit(0);
+						}
+						break;
+					}
+				}
+			}
+		}
 
 	}
 
@@ -90,6 +148,28 @@ public class RandomPlayer implements PlayerStrategy {
 			}
 		}
 		return neighbourCountry;
+	}
+
+	/**
+	 * this method gets a random country of player with adjacent country belonging
+	 * to a different player
+	 * 
+	 * @param mapGraph - The object of the GameMapGraph
+	 * @param player   - The player of the country
+	 * @return randomAdjacentCountry
+	 */
+	public List<Country> getRandomCountryWithAdjCountry(GameMap mapGraph, GamePlayer player) {
+		playerController = new Player();
+		List<Country> countriesWithAdjCountries = new ArrayList<Country>();
+		for (Country country : player.getPlayerCountries()) {
+			for (String adjCountry : country.getNeighbourCountries()) {
+				GamePlayer adjPlayer = playerController.getPlayerForCountry(mapGraph, adjCountry);
+				if (!player.getPlayerName().equalsIgnoreCase(adjPlayer.getPlayerName())) {
+					countriesWithAdjCountries.add(country);
+				}
+			}
+		}
+		return countriesWithAdjCountries;
 	}
 
 }
