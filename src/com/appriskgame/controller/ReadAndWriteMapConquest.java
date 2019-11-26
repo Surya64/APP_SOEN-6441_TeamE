@@ -41,7 +41,7 @@ public class ReadAndWriteMapConquest  implements ReadAndWrite{
 		String GameMapName = inputGameMapName;
 		boolean uploadSuccessful = false;
 		String data = "";
-		uploadSuccessful = validate.validateMapDomination(GameMapName);
+		uploadSuccessful = validate.validateMapConquest(GameMapName);
 //		uploadSuccessful = true;
 		String[] requiredData=null;
 		if (uploadSuccessful) {
