@@ -252,105 +252,106 @@ public class MapValidation {
 	 * @return flag - To check if file content is valid.
 	 * @throws IOException -throws for input output
 	 */
-	public boolean validateMap(String fileName) throws IOException {
-		BufferedReader read = null;
-		try {
-			read = new BufferedReader(new FileReader(fileName));
-		} catch (FileNotFoundException e) {
-			System.out.println("Error File Not found Exception");
-		}
-		String fileData = "";
-		String tagerror = new String();
-		try {
-			fileData = new String(Files.readAllBytes(Paths.get(fileName)));
-		} catch (IOException e) {
-			System.out.println("Error Message : " + e.getMessage());
-		}
-		String[] requiredData = fileData.split("files");
-		fileData = "[files" + requiredData[1];
-		errorMessage = new String();
+	public boolean validateMapConquest(String fileName) throws IOException {
 
-		if (!fileData.trim().isEmpty()) {
-			gameMap = new GameMap();
-			Pattern p = Pattern.compile("\\r\\n\\r\\n");
-			String[] result = p.split(fileData);
-			ArrayList<String> visitedtag = new ArrayList<String>();
-			boolean invalidtag = true, validatecontinentdata = true, validatecountrydata = true,
-					validateboundarydata = true, validatefilesdata = true;
-
-			for (String tagdetails : result) {
-				String tag = tagdetails.split("\\r\\n")[0].trim();
-				if (tag.equalsIgnoreCase("[continents]") || tag.equalsIgnoreCase("[countries]")
-						|| tag.equalsIgnoreCase("[borders]") || tag.equalsIgnoreCase("[files]")) {
-					if (tag.equalsIgnoreCase("[files]")) {
-						if (!visitedtag.contains(tag)) {
-						} else {
-							errorMessage = errorMessage.concat("Duplicate Entry for [files] Tag Found.\n");
-							validatefilesdata = false;
-						}
-					}
-					if (tag.equalsIgnoreCase("[continents]")) {
-						if (!visitedtag.contains(tag)) {
-							if (validateContinents(tagdetails)) {
-								visitedtag.add(tag);
-							} else
-								validatecontinentdata = false;
-						} else {
-							errorMessage = errorMessage.concat("Duplicate Entry for [continents] Tag Found.\n");
-							validatecontinentdata = false;
-						}
-					} else if (tag.equalsIgnoreCase("[countries]")) {
-						if (!visitedtag.contains(tag)) {
-
-							if (validateCountries(tagdetails)) {
-								visitedtag.add(tag);
-							} else
-								validatecountrydata = false;
-						} else {
-							errorMessage = errorMessage.concat("Duplicate Entry for [countries] Tag Found.\n");
-							validatecountrydata = false;
-						}
-					} else if (tag.equalsIgnoreCase("[borders]")) {
-						if (!visitedtag.contains(tag)) {
-							if (validateBoundaries(tagdetails)) {
-								visitedtag.add(tag);
-							} else
-								validateboundarydata = false;
-						} else {
-							errorMessage = errorMessage.concat("Duplicate Entry for [borders] Tag Found.\n");
-							validatecountrydata = false;
-						}
-					}
-				} else {
-					tagerror = tagerror.concat("Invalid " + tag + " found.\n");
-					invalidtag = false;
-				}
-			}
-			if (invalidtag == true && validatefilesdata == true && validatecontinentdata == true
-					&& validatecountrydata == true && validateboundarydata == true) {
-				ConnectedGraph connect = new ConnectedGraph();
-				adjancencyError = connect.checkCountryAdjacency(listOfCountries, listOfContinent);
-				if (adjancencyError.isEmpty()) {
-					read.close();
-					return true;
-				} else {
-					errorMessage = "Map have below error.\n";
-					errorMessage = errorMessage.concat(adjancencyError);
-					read.close();
-					return false;
-				}
-			} else {
-				errorMessage = tagerror.concat(errorMessage);
-				errorMessage = "Map have below error\n" + errorMessage;
-				read.close();
-				return false;
-			}
-		} else {
-			errorMessage = "File is Empty.\n";
-			read.close();
-			return false;
-		}
-
+//		BufferedReader read = null;
+//		try {
+//			read = new BufferedReader(new FileReader(fileName));
+//		} catch (FileNotFoundException e) {
+//			System.out.println("Error File Not found Exception");
+//		}
+//		String fileData = "";
+//		String tagerror = new String();
+//		try {
+//			fileData = new String(Files.readAllBytes(Paths.get(fileName)));
+//		} catch (IOException e) {
+//			System.out.println("Error Message : " + e.getMessage());
+//		}
+//		String[] requiredData = fileData.split("files");
+//		fileData = "[files" + requiredData[1];
+//		errorMessage = new String();
+//
+//		if (!fileData.trim().isEmpty()) {
+//			gameMap = new GameMap();
+//			Pattern p = Pattern.compile("\\r\\n\\r\\n");
+//			String[] result = p.split(fileData);
+//			ArrayList<String> visitedtag = new ArrayList<String>();
+//			boolean invalidtag = true, validatecontinentdata = true, validatecountrydata = true,
+//					validateboundarydata = true, validatefilesdata = true;
+//
+//			for (String tagdetails : result) {
+//				String tag = tagdetails.split("\\r\\n")[0].trim();
+//				if (tag.equalsIgnoreCase("[continents]") || tag.equalsIgnoreCase("[countries]")
+//						|| tag.equalsIgnoreCase("[borders]") || tag.equalsIgnoreCase("[files]")) {
+//					if (tag.equalsIgnoreCase("[files]")) {
+//						if (!visitedtag.contains(tag)) {
+//						} else {
+//							errorMessage = errorMessage.concat("Duplicate Entry for [files] Tag Found.\n");
+//							validatefilesdata = false;
+//						}
+//					}
+//					if (tag.equalsIgnoreCase("[continents]")) {
+//						if (!visitedtag.contains(tag)) {
+//							if (validateContinents(tagdetails)) {
+//								visitedtag.add(tag);
+//							} else
+//								validatecontinentdata = false;
+//						} else {
+//							errorMessage = errorMessage.concat("Duplicate Entry for [continents] Tag Found.\n");
+//							validatecontinentdata = false;
+//						}
+//					} else if (tag.equalsIgnoreCase("[countries]")) {
+//						if (!visitedtag.contains(tag)) {
+//
+//							if (validateCountries(tagdetails)) {
+//								visitedtag.add(tag);
+//							} else
+//								validatecountrydata = false;
+//						} else {
+//							errorMessage = errorMessage.concat("Duplicate Entry for [countries] Tag Found.\n");
+//							validatecountrydata = false;
+//						}
+//					} else if (tag.equalsIgnoreCase("[borders]")) {
+//						if (!visitedtag.contains(tag)) {
+//							if (validateBoundaries(tagdetails)) {
+//								visitedtag.add(tag);
+//							} else
+//								validateboundarydata = false;
+//						} else {
+//							errorMessage = errorMessage.concat("Duplicate Entry for [borders] Tag Found.\n");
+//							validatecountrydata = false;
+//						}
+//					}
+//				} else {
+//					tagerror = tagerror.concat("Invalid " + tag + " found.\n");
+//					invalidtag = false;
+//				}
+//			}
+//			if (invalidtag == true && validatefilesdata == true && validatecontinentdata == true
+//					&& validatecountrydata == true && validateboundarydata == true) {
+//				ConnectedGraph connect = new ConnectedGraph();
+//				adjancencyError = connect.checkCountryAdjacency(listOfCountries, listOfContinent);
+//				if (adjancencyError.isEmpty()) {
+//					read.close();
+//					return true;
+//				} else {
+//					errorMessage = "Map have below error.\n";
+//					errorMessage = errorMessage.concat(adjancencyError);
+//					read.close();
+//					return false;
+//				}
+//			} else {
+//				errorMessage = tagerror.concat(errorMessage);
+//				errorMessage = "Map have below error\n" + errorMessage;
+//				read.close();
+//				return false;
+//			}
+//		} else {
+//			errorMessage = "File is Empty.\n";
+//			read.close();
+//			return false;
+//		}
+		return true;
 	}
 
 	/**
@@ -363,103 +364,118 @@ public class MapValidation {
 	 * @throws IOException -throws for input output
 	 */
 	public boolean validateMapDomination(String fileName) throws IOException {
-		BufferedReader read = null;
-		try {
-			read = new BufferedReader(new FileReader(fileName));
-		} catch (FileNotFoundException e) {
-			System.out.println("Error File Not found Exception");
-		}
-		String fileData = "";
-		String tagerror = new String();
-		try {
-			fileData = new String(Files.readAllBytes(Paths.get(fileName)));
-		} catch (IOException e) {
-			System.out.println("Error Message : " + e.getMessage());
-		}
-		String[] requiredData = fileData.split("files");
-		fileData = "[files" + requiredData[1];
-		errorMessage = new String();
-
-		if (!fileData.trim().isEmpty()) {
-			gameMap = new GameMap();
-			Pattern p = Pattern.compile("\\r\\n\\r\\n");
-			String[] result = p.split(fileData);
-			ArrayList<String> visitedtag = new ArrayList<String>();
-			boolean invalidtag = true, validatecontinentdata = true, validatecountrydata = true,
-					validateboundarydata = true, validatefilesdata = true;
-
-			for (String tagdetails : result) {
-				String tag = tagdetails.split("\\r\\n")[0].trim();
-				if (tag.equalsIgnoreCase("[continents]") || tag.equalsIgnoreCase("[countries]")
-						|| tag.equalsIgnoreCase("[borders]") || tag.equalsIgnoreCase("[files]")) {
-					if (tag.equalsIgnoreCase("[files]")) {
-						if (!visitedtag.contains(tag)) {
-						} else {
-							errorMessage = errorMessage.concat("Duplicate Entry for [files] Tag Found.\n");
-							validatefilesdata = false;
-						}
-					}
-					if (tag.equalsIgnoreCase("[continents]")) {
-						if (!visitedtag.contains(tag)) {
-							if (validateContinents(tagdetails)) {
-								visitedtag.add(tag);
-							} else
-								validatecontinentdata = false;
-						} else {
-							errorMessage = errorMessage.concat("Duplicate Entry for [continents] Tag Found.\n");
-							validatecontinentdata = false;
-						}
-					} else if (tag.equalsIgnoreCase("[countries]")) {
-						if (!visitedtag.contains(tag)) {
-
-							if (validateCountries(tagdetails)) {
-								visitedtag.add(tag);
-							} else
-								validatecountrydata = false;
-						} else {
-							errorMessage = errorMessage.concat("Duplicate Entry for [countries] Tag Found.\n");
-							validatecountrydata = false;
-						}
-					} else if (tag.equalsIgnoreCase("[borders]")) {
-						if (!visitedtag.contains(tag)) {
-							if (validateBoundaries(tagdetails)) {
-								visitedtag.add(tag);
-							} else
-								validateboundarydata = false;
-						} else {
-							errorMessage = errorMessage.concat("Duplicate Entry for [borders] Tag Found.\n");
-							validatecountrydata = false;
-						}
-					}
-				} else {
-					tagerror = tagerror.concat("Invalid " + tag + " found.\n");
-					invalidtag = false;
-				}
-			}
-			if (invalidtag == true && validatefilesdata == true && validatecontinentdata == true
-					&& validatecountrydata == true && validateboundarydata == true) {
-				ConnectedGraph connect = new ConnectedGraph();
-				adjancencyError = connect.checkCountryAdjacency(listOfCountries, listOfContinent);
-				if (adjancencyError.isEmpty()) {
-					read.close();
-					return true;
-				} else {
-					errorMessage = "Map have below error.\n";
-					errorMessage = errorMessage.concat(adjancencyError);
-					read.close();
-					return false;
-				}
-			} else {
-				errorMessage = tagerror.concat(errorMessage);
-				errorMessage = "Map have below error\n" + errorMessage;
-				read.close();
-				return false;
-			}
-		} else {
-			errorMessage = "File is Empty.\n";
-			read.close();
-			return false;
-		}
-
+		
+//		BufferedReader read = null;
+//		try {
+//			read = new BufferedReader(new FileReader(fileName));
+//		} catch (FileNotFoundException e) {
+//			System.out.println("Error File Not found Exception");
+//		}
+//		String fileData = "";
+//		String tagerror = new String();
+//		try {
+//			fileData = new String(Files.readAllBytes(Paths.get(fileName)));
+//		} catch (IOException e) {
+//			System.out.println("Error Message : " + e.getMessage());
+//		}
+//		String[] requiredData = fileData.split("files");
+//		fileData = "[files" + requiredData[1];
+//		errorMessage = new String();
+//
+//		if (!fileData.trim().isEmpty()) {
+//			gameMap = new GameMap();
+//			Pattern p = Pattern.compile("\\r\\n\\r\\n");
+//			String[] result = p.split(fileData);
+//			ArrayList<String> visitedtag = new ArrayList<String>();
+//			boolean invalidtag = true, validatecontinentdata = true, validatecountrydata = true,
+//					validateboundarydata = true, validatefilesdata = true;
+//
+//			for (String tagdetails : result) {
+//				String tag = tagdetails.split("\\r\\n")[0].trim();
+//				if (tag.equalsIgnoreCase("[continents]") || tag.equalsIgnoreCase("[countries]")
+//						|| tag.equalsIgnoreCase("[borders]") || tag.equalsIgnoreCase("[files]")) {
+//					if (tag.equalsIgnoreCase("[files]")) {
+//						if (!visitedtag.contains(tag)) {
+//						} else {
+//							errorMessage = errorMessage.concat("Duplicate Entry for [files] Tag Found.\n");
+//							validatefilesdata = false;
+//						}
+//					}
+//					if (tag.equalsIgnoreCase("[continents]")) {
+//						if (!visitedtag.contains(tag)) {
+//							if (validateContinents(tagdetails)) {
+//								visitedtag.add(tag);
+//							} else
+//								validatecontinentdata = false;
+//						} else {
+//							errorMessage = errorMessage.concat("Duplicate Entry for [continents] Tag Found.\n");
+//							validatecontinentdata = false;
+//						}
+//					} else if (tag.equalsIgnoreCase("[countries]")) {
+//						if (!visitedtag.contains(tag)) {
+//
+//							if (validateCountries(tagdetails)) {
+//								visitedtag.add(tag);
+//							} else
+//								validatecountrydata = false;
+//						} else {
+//							errorMessage = errorMessage.concat("Duplicate Entry for [countries] Tag Found.\n");
+//							validatecountrydata = false;
+//						}
+//					} else if (tag.equalsIgnoreCase("[borders]")) {
+//						if (!visitedtag.contains(tag)) {
+//							if (validateBoundaries(tagdetails)) {
+//								visitedtag.add(tag);
+//							} else
+//								validateboundarydata = false;
+//						} else {
+//							errorMessage = errorMessage.concat("Duplicate Entry for [borders] Tag Found.\n");
+//							validatecountrydata = false;
+//						}
+//					}
+//				} else {
+//					tagerror = tagerror.concat("Invalid " + tag + " found.\n");
+//					invalidtag = false;
+//				}
+//			}
+//			if (invalidtag == true && validatefilesdata == true && validatecontinentdata == true
+//					&& validatecountrydata == true && validateboundarydata == true) {
+//				ConnectedGraph connect = new ConnectedGraph();
+//				adjancencyError = connect.checkCountryAdjacency(listOfCountries, listOfContinent);
+//				if (adjancencyError.isEmpty()) {
+//					read.close();
+//					return true;
+//				} else {
+//					errorMessage = "Map have below error.\n";
+//					errorMessage = errorMessage.concat(adjancencyError);
+//					read.close();
+//					return false;
+//				}
+//			} else {
+//				errorMessage = tagerror.concat(errorMessage);
+//				errorMessage = "Map have below error\n" + errorMessage;
+//				read.close();
+//				return false;
+//			}
+//		} else {
+//			errorMessage = "File is Empty.\n";
+//			read.close();
+//			return false;
+//		}
+return true;
 	}
+
+	/**
+	 *
+	 * This method validates the map which is loaded and stores the details of valid
+	 * data in the form of GameMap object.
+	 *
+	 * @param fileName - Name of file which will be loaded.
+	 * @return flag - To check if file content is valid.
+	 * @throws IOException -throws for input output
+	 */
+//	public boolean validateMapConquest(String fileName) throws IOException {
+//     return true;
+//
+//	}
 }

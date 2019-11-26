@@ -53,6 +53,28 @@ public class MapOperations {
 		}
 		return false;
 	}
+	
+	
+	
+	
+	public String getFileForamt(String mapFileName) throws IOException
+	{
+		String data = "";
+		String mapFormat = "";
+		data = new String(Files.readAllBytes(Paths.get(mapFileName)));
+		boolean isName = data.contains("name");
+//		data = requiredData[1];
+//		String[] formattedData = data.split("\\r\\n\\r\\n");
+		
+		if(isName)
+		{
+			mapFormat="Domination";
+		}
+		else {
+			mapFormat="Conquest";
+		}
+		return mapFormat;
+	}
 
 	/**
 	 * This Method is to load the contents of Continents, Countries and neighboring
@@ -64,44 +86,63 @@ public class MapOperations {
 	 */
 
 	public GameMap readGameMap(String inputGameMapName) throws IOException {
-		HashMap<String, Country> countrySet = new HashMap<>();
+
+		ReadAndWrite readAndWrite = null;
+		String mapFormat = getFileForamt(inputGameMapName);
+
 		MapValidation validate = new MapValidation();
-		gameMap = new GameMap();
-		connectableCountries = 0;
-		String GameMapName = inputGameMapName;
-		boolean uploadSuccessful = false;
-		String data = "";
-		uploadSuccessful = validate.validateMap(GameMapName);
-		if (uploadSuccessful) {
-			try {
-				data = new String(Files.readAllBytes(Paths.get(GameMapName)));
-				String[] requiredData = data.split("name");
-				data = requiredData[1];
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			String[] formattedData = data.split("\\r\\n\\r\\n");
-			fillContinentsInGameMap(formattedData[2]);
-			fillCountriesInGameMap(formattedData[3]);
-			fillNeighboringCountriesInGameMap(formattedData[4]);
-			gameMap.getCountries().forEach(country -> {
-				countrySet.put(country.getCountryName(), country);
-				gameMap.setCountrySet(countrySet);
-			});
-			boolean res = isConnected(gameMap);
-			if (res == true) {
-				return gameMap;
-			} else {
-				System.out.println("Graph Not connected");
-				gameMap = null;
-				return new GameMap();
-			}
-		} else {
-			System.out.println(MapValidation.getError());
-			System.out.println("\nPlease rectify all the above mentioned issues.");
+
+		if (mapFormat.equalsIgnoreCase("Domination")) {
+			readAndWrite = new ReadAndWriteDomination();
+		} else if (mapFormat.equalsIgnoreCase("Conquest")) {
+			readAndWrite = new ReadAndWriteMapConquest();
 		}
 
-		return new GameMap();
+		MapAdapter mapAdapter = new MapAdapter(mapFormat);
+
+		gameMap = mapAdapter.readGameMap(inputGameMapName, mapFormat);
+
+		boolean res = isConnected(gameMap);
+		if (res == true) {
+			return gameMap;
+		} else {
+			System.out.println("Graph Not connected");
+			gameMap = null;
+			return new GameMap();
+		}
+//	} else {
+//		System.out.println(MapValidation.getError());
+//		System.out.println("\nPlease rectify all the above mentioned issues.");
+//	}
+//
+//	return new GameMap();
+
+//		readAndWrite.writeGameMap(ouputGameMapName, fileName,gameMap);
+//		HashMap<String, Country> countrySet = new HashMap<>();
+//		MapValidation validate = new MapValidation();
+//		gameMap = new GameMap();
+//		connectableCountries = 0;
+//		String GameMapName = inputGameMapName;
+//		boolean uploadSuccessful = false;
+//		String data = "";
+//		uploadSuccessful = validate.validateMap(GameMapName);
+//		if (uploadSuccessful) {
+//			try {
+//				data = new String(Files.readAllBytes(Paths.get(GameMapName)));
+//				String[] requiredData = data.split("name");
+//				data = requiredData[1];
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//			String[] formattedData = data.split("\\r\\n\\r\\n");
+//			fillContinentsInGameMap(formattedData[2]);
+//			fillCountriesInGameMap(formattedData[3]);
+//			fillNeighboringCountriesInGameMap(formattedData[4]);
+//			gameMap.getCountries().forEach(country -> {
+//				countrySet.put(country.getCountryName(), country);
+//				gameMap.setCountrySet(countrySet);
+//			});
+
 	}
 
 	/**
@@ -230,6 +271,7 @@ public class MapOperations {
 			}
 		}
 	}
+	
 
 	/**
 	 * This Method is to write the Continents, Countries and boundaries details to
@@ -241,25 +283,50 @@ public class MapOperations {
 	 */
 
 	public void writeGameMap(String ouputGameMapName, String mapFileName) throws IOException {
-		File GameMapName = new File(ouputGameMapName);
-		FileWriter fw = new FileWriter(GameMapName);
-		BufferedWriter bw = new BufferedWriter(fw);
-		String fileData = getFileTags(mapFileName);
+
+		
+		String mapFormat ="Conquest"
+				+ "";
 		try {
-			bw.write(fileData);
-			bw.write("\r\n\r\n");
-			String continentsData = getContinents();
-			bw.write(continentsData);
-			bw.write("\r\n\r\n");
-			String countriesData = getCountries();
-			bw.write(countriesData);
-			bw.write("\r\n\r\n");
-			String boundariesData = getBoundaries();
-			bw.write(boundariesData);
-			bw.close();
-		} catch (IOException e) {
-			System.err.println("File not found exception");
+			ReadAndWrite readAndWrite = null;
+			
+			if (mapFormat.equalsIgnoreCase("Domination")) {
+				readAndWrite = new ReadAndWriteDomination();
+
+			}
+			if (mapFormat.equalsIgnoreCase("Conquest")) {
+				readAndWrite = new ReadAndWriteMapConquest();
+
+			}
+
+			readAndWrite.writeGameMap(ouputGameMapName, mapFileName, gameMap);
 		}
+	
+
+		 catch (IOException e) {
+				System.err.println("File not found exception");
+			}
+
+//		File GameMapName = new File(ouputGameMapName);
+//		FileWriter fw = new FileWriter(GameMapName);
+//		BufferedWriter bw = new BufferedWriter(fw);
+//		String fileData = getFileTags(mapFileName);
+//		try {
+//			bw.write(fileData);
+//			bw.write("\r\n\r\n");
+//			String continentsData = getContinents();
+//			bw.write(continentsData);
+//			bw.write("\r\n\r\n");
+//			String countriesData = getCountries();
+//			bw.write(countriesData);
+//			bw.write("\r\n\r\n");
+//			String boundariesData = getBoundaries();
+//			bw.write(boundariesData);
+//			bw.close();
+//		} catch (IOException e) {
+//			System.err.println("File not found exception");
+//		}
+
 	}
 
 	/**
@@ -994,7 +1061,7 @@ public class MapOperations {
 					MapValidation validate = new MapValidation();
 					boolean uploadSuccessful = false;
 					try {
-						uploadSuccessful = validate.validateMap(ouputGameMapName);
+						uploadSuccessful = validate.validateMapDomination(ouputGameMapName);
 					} catch (IOException e) {
 						System.out.println("File Not found Exception");
 					}
