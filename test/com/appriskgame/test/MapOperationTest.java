@@ -4,11 +4,16 @@ import org.junit.Test;
 import org.junit.Before;
 
 import com.appriskgame.controller.MapOperations;
-import com.appriskgame.model.Continent;
+import com.appriskgame.model.Country;
+import com.appriskgame.model.GameMap;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import java.util.ArrayList;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.HashMap;
 
 /**
  * Test class for MapOperation class
@@ -18,26 +23,51 @@ import java.util.ArrayList;
  */
 public class MapOperationTest {
 
-	private Continent continent1, continent2, continent3;
-	private ArrayList<Continent> listofContinents;
-	private MapOperations mapOperations;
+	private MapOperations mapOperations = new MapOperations();
+	private MapOperations mapOperationsDemo = new MapOperations();
+	GameMap gameMap = new GameMap();
+	GameMap gameMapDemo = new GameMap();
 
 	/**
 	 * Initial setup for Map operations.
+	 * 
+	 * @throws IOException Input output exception
+	 * 
 	 */
 	@Before
-	public void intialize() {
-		listofContinents = new ArrayList<Continent>();
-		mapOperations = new MapOperations();
-		continent1 = new Continent();
-		continent1.setContinentName("Asia");
-		listofContinents.add(continent1);
-		continent2 = new Continent();
-		continent2.setContinentName("Africa");
-		listofContinents.add(continent2);
-		continent3 = new Continent();
-		continent3.setContinentName("North America");
-		listofContinents.add(continent3);
+	public void intialize() throws IOException {
+		String workingDir = System.getProperty("user.dir");
+		String mapLocation = workingDir + "/resources/maps/" + "/ameroki.map";
+
+		HashMap<String, Country> countrySet = new HashMap<>();
+
+		String data = new String(Files.readAllBytes(Paths.get(mapLocation)));
+		String[] requiredData = data.split("name");
+		data = requiredData[1];
+		String[] formattedData = data.split("\\r\\n\\r\\n");
+		mapOperations.fillContinentsInGameMap(formattedData[2]);
+		mapOperations.fillCountriesInGameMap(formattedData[3]);
+		mapOperations.fillNeighboringCountriesInGameMap(formattedData[4]);
+		gameMap.getCountries().forEach(country -> {
+			countrySet.put(country.getCountryName(), country);
+			gameMap.setCountrySet(countrySet);
+		});
+
+		String mapLocationDemo = workingDir + "/resources/maps/" + "/demofinaltest.map";
+		HashMap<String, Country> countrySetdemo = new HashMap<>();
+		String datademo = new String(Files.readAllBytes(Paths.get(mapLocationDemo)));
+		String[] requiredDatademo = datademo.split("name");
+		datademo = requiredDatademo[1];
+		String[] formattedDatademo = datademo.split("\\r\\n\\r\\n");
+
+		mapOperationsDemo.fillContinentsInGameMap(formattedDatademo[2]);
+		mapOperationsDemo.fillCountriesInGameMap(formattedDatademo[3]);
+		mapOperationsDemo.fillNeighboringCountriesInGameMap(formattedDatademo[4]);
+		gameMapDemo = mapOperationsDemo.gameMap;
+		gameMapDemo.getCountries().forEach(country -> {
+			countrySetdemo.put(country.getCountryName(), country);
+			gameMapDemo.setCountrySet(countrySetdemo);
+		});
 	}
 
 	/**
@@ -62,6 +92,31 @@ public class MapOperationTest {
 	 */
 	@Test
 	public void testCountyExist() {
-		assertFalse(mapOperations.doesCountryExit("India"));
+		assertTrue(mapOperations.doesCountryExit("india"));
 	}
+
+	/**
+	 * Test method to check whether map countries are connected inside continent
+	 * 
+	 * @throws IOException Input output exception
+	 */
+	@Test
+	public void testConnectedGraph() throws IOException {
+
+		assertTrue(mapOperations.isConnected(gameMap));
+
+	}
+
+	/**
+	 * Test method to check whether map countries are connected inside continent
+	 * 
+	 * @throws IOException Input output exception
+	 */
+	@Test
+	public void testDisConnectedGraph() throws IOException {
+
+		assertFalse(mapOperationsDemo.isConnected(gameMapDemo));
+
+	}
+
 }

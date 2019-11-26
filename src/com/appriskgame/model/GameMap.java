@@ -1,5 +1,6 @@
 package com.appriskgame.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Observable;
@@ -14,7 +15,7 @@ import com.appriskgame.view.WorldDominationView;
  * @author Surya
  * @author Sahana
  */
-public class GameMap extends Observable {
+public class GameMap extends Observable implements Serializable{
 	private ArrayList<Country> countries = new ArrayList<Country>();
 	private ArrayList<Continent> continents = new ArrayList<Continent>();
 	private ArrayList<GamePlayer> players = new ArrayList<GamePlayer>();
@@ -23,6 +24,7 @@ public class GameMap extends Observable {
 	public String gamePhaseName;
 	public String currentPlayer;
 	public String actionMsg;
+	public String message;
 	public static int cardExchangeCountinTheGame = 0;
 
 	public static int getCardExchangeCountinTheGame() {
@@ -96,9 +98,12 @@ public class GameMap extends Observable {
 	/**
 	 * This method sets the message for observer of domination and knows them when
 	 * it is changed.
+	 * 
+	 * @param gameMap Game map object
 	 */
-	public void setDomination(GameMap gameMap) {
+	public void setDomination(GameMap gameMap, String message) {
 		this.gameMap = gameMap;
+		this.message = message;
 		setChanged();
 		notifyObservers();
 	}
@@ -125,9 +130,11 @@ public class GameMap extends Observable {
 	 * Sets the current game phase
 	 * 
 	 * @param gamePhase - the phase of the game
+	 * @param message   action message
 	 */
-	public void setGamePhase(String gamePhase) {
+	public void setGamePhase(String gamePhase, String message) {
 		this.gamePhaseName = gamePhase;
+		this.message = message;
 		setChanged();
 		notifyObservers();
 	}
@@ -151,6 +158,7 @@ public class GameMap extends Observable {
 		setChanged();
 		notifyObservers();
 	}
+
 	/**
 	 * Gets the current action message
 	 * 
@@ -163,10 +171,12 @@ public class GameMap extends Observable {
 	/**
 	 * Sets the current action
 	 * 
-	 * @param gamePhase - the phase of the game
+	 * @param actionMsg - the phase of the game
+	 * @param message   action message
 	 */
-	public void setActionMsg(String actionMsg) {
+	public void setActionMsg(String actionMsg, String message) {
 		this.actionMsg = actionMsg;
+		this.message = message;
 		setChanged();
 		notifyObservers();
 	}

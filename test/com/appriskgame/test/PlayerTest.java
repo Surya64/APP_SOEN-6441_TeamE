@@ -140,15 +140,6 @@ public class PlayerTest {
 	}
 
 	/**
-	 * This method to validate the populate countries allocation to each player.
-	 */
-	@Ignore
-	public void testpopulateCountries() {
-		player.populateCountries(gameMap);
-		assertEquals(1, player2.getPlayerCountries().size());
-	}
-
-	/**
 	 * Testing whether the count of reinforcement armies is proper
 	 */
 	@Test

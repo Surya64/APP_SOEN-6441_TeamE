@@ -35,7 +35,6 @@ public class PlayerView implements Observer {
 	/**
 	 * Method to initialize the frame.
 	 * 
-	 * @wbp.parser.entryPoint
 	 */
 	public void initialize() {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -104,21 +103,33 @@ public class PlayerView implements Observer {
 			mapinfo = mapinfo + "\n" + country;
 		}
 		String CurrentPhase = textGamePhase.getText();
+		if ("phase".equals(gameMap.message)) {
+			phaseName = gameMap.getGamePhase();
+			textGamePhase.setText(phaseName);
+			String appendLog = "";
+			textArea.setText(appendLog);
+			textInfo.setText(mapinfo);
+		}
 
-		phaseName = gameMap.getGamePhase();
 		playerName = gameMap.getCurrentPlayer();
-		textGamePhase.setText(phaseName);
 		textPlayerName.setText(playerName.toUpperCase());
-		textInfo.setText(mapinfo);
 
-		if (CurrentPhase.equals(gameMap.getGamePhase())) {
-			String newLog = gameMap.getActionMsg();
-			String currentTxt = textArea.getText();
-			String appendLog = newLog + "\n" + currentTxt;
-			textArea.setText(appendLog);
-		} else {
-			String appendLog = gameMap.getActionMsg();
-			textArea.setText(appendLog);
+		if ("domination".equals(gameMap.message)) {
+			textInfo.setText(mapinfo);
+		}
+
+		if ("action".equals(gameMap.message)) {
+			if (CurrentPhase.equals(gameMap.getGamePhase())) {
+				String newLog = gameMap.getActionMsg();
+				String currentTxt = textArea.getText();
+				String appendLog = newLog + "\n" + currentTxt;
+				textArea.setText(appendLog);
+				textInfo.setText(mapinfo);
+			} else {
+				String appendLog = gameMap.getActionMsg();
+				textArea.setText(appendLog);
+				textInfo.setText(mapinfo);
+			}
 		}
 
 		frame.revalidate();

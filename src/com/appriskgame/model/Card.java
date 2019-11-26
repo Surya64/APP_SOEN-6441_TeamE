@@ -1,5 +1,6 @@
 package com.appriskgame.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import com.appriskgame.controller.Player;
@@ -11,7 +12,7 @@ import com.appriskgame.controller.Player;
  *
  */
 
-public class Card {
+public class Card implements Serializable{
 
 	private String type;
 

@@ -28,7 +28,7 @@ public class WorldDominationView implements Observer {
 
 	/**
 	 * Method to initialize the frame.
-	 * @wbp.parser.entryPoint
+	 * 
 	 */
 	public void initialize() {
 		frame.getContentPane().add(info);
@@ -82,9 +82,9 @@ public class WorldDominationView implements Observer {
 					+ (continents.isEmpty() ? "None" : continents) + "\n";
 
 		}
-		//String currentText = log.getText();
+		// String currentText = log.getText();
 		String newInfo = "*******-------*******" + " " + output;
-		//String appendLog = newLog + "\n" + currentText;
+		// String appendLog = newLog + "\n" + currentText;
 		info.setText(newInfo);
 		frame.revalidate();
 		frame.repaint();

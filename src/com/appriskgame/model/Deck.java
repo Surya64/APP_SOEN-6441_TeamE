@@ -1,5 +1,6 @@
 package com.appriskgame.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -9,7 +10,7 @@ import java.util.Collections;
  * @author Shruthi
  *
  */
-public class Deck {
+public class Deck implements Serializable{
 
 	private static Deck deck;
 
@@ -21,10 +22,8 @@ public class Deck {
 	 * Creates all cards, one for each territory. Each card has either a type of
 	 * Infantry, Cavalry, or Artillery.
 	 *
-	 * @param list list of country names
 	 */
 	public void setDeckOfCards() {
-
 
 		typeOfCards = new String[] { "Infantry", "Cavalry", "Artillery" };
 

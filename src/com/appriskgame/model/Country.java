@@ -1,5 +1,6 @@
 package com.appriskgame.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
  * @author Sai
  * @author Shruthi
  */
-public class Country {
+public class Country implements Serializable{
 
 	private String countryName;
 	private String continentName;
