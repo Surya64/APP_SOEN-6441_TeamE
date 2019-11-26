@@ -1,6 +1,7 @@
 package com.appriskgame.strategy;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Random;
 
 import com.appriskgame.controller.Player;
@@ -33,8 +34,8 @@ public class Benevolent implements PlayerStrategy {
 	}
 
 	@Override
-	public void attackPhase(GameMap gameMap, GamePlayer player, Country attackerCountry, Country defenderCountry) {
-		// TODO Auto-generated method stub
+	public void attackPhase(GameMap gameMap, GamePlayer player, ArrayList<GamePlayer> playersList) {
+		System.out.println("Benevolent Never Attacks");
 
 	}
 
