@@ -19,7 +19,8 @@ import com.appriskgame.model.GamePlayer;
  * This class is used for Card allocation and exchange of cards for armies. It
  * also contains methods to check invalid cards and card types.
  *
- * @author shruthi
+ * @author Shruthi
+ * @author Sahana
  *
  */
 public class CardController {
@@ -90,45 +91,98 @@ public class CardController {
 				for (int k = 0; k < player.getCardList().size(); k++) {
 					System.out.print(k + 1 + "." + player.getCardList().get(k).getType() + "\n");
 				}
-				System.out.println("\n"
-						+ "Enter the numbers of card you want to exchange in the format exchangecards num num num \n");
-				String[] cardsList = returnInput(br.readLine());
+				List<Card> exchangeCards = new ArrayList<>();
+				List<Integer> cardNumbers = new ArrayList<>();
+				if (player.getPlayerType() == "human") {
+					System.out.println("\n"
+							+ "Enter the numbers of card you want to exchange in the format exchangecards num num num \n");
+					String[] cardsList = returnInput(br.readLine());
 
-				if (cardsList.length == 4) {
-					List<Card> exchangeCards = new ArrayList<>();
-					List<Integer> cardNumbers = new ArrayList<>();
+					if (cardsList.length == 4) {
+						for (int k = 1; k < cardsList.length; k++) {
+							cardNumbers.add(Integer.parseInt(cardsList[k]));
+						}
 
-					for (int k = 1; k < cardsList.length; k++) {
-						cardNumbers.add(Integer.parseInt(cardsList[k]));
+						for (int c : cardNumbers) {
+							exchangeCards.add(player.getCardList().get(c - 1));
+						}
+
+						if (!checkDiffTypesOfCards(exchangeCards, cardTypes)
+								&& !checkCardSameType(exchangeCards, cardAppearingMoreThanThrice)) {
+							System.out.println(
+									"Please enter numbers of same cards appearing thrice or three cards which are different.");
+							throw new Exception();
+						}
 					}
-
-					for (int c : cardNumbers) {
-						exchangeCards.add(player.getCardList().get(c - 1));
-					}
-
-					if (!checkDiffTypesOfCards(exchangeCards, cardTypes)
-							&& !checkCardSameType(exchangeCards, cardAppearingMoreThanThrice)) {
-						System.out.println(
-								"Please enter numbers of same cards appearing thrice or three cards which are different.");
-						throw new Exception();
-					}
-					int count = GameMap.getCardExchangeCountinTheGame();
-					armiesInExchange = (count + 1) * EXCHANGEARMY;
-					System.out.println("Succesfully exchanged the card");
-					GameMap.cardExchangeCountinTheGame = GameMap.getCardExchangeCountinTheGame() + 1;
-					for (int i = 0; i < exchangeCards.size(); i++) {
-						int count1 = 0;
-						String cardType = exchangeCards.get(i).getType();
-						for (int k = 0; k < player.getCardList().size(); k++) {
-							if (player.getCardList().get(k).getType().equalsIgnoreCase(cardType)) {
-								if (count1 == 0) {
-									player.getCardList().remove(k);
-									count1 = count1 + 1;
+				} else {
+					if (cardTypes == 3) {
+						int countinf = 0, countart = 0, countcav = 0;
+						for (int m = 0; m < player.getCardList().size(); m++) {
+							if (player.getCardList().get(m).getType().equalsIgnoreCase("infantry") && countinf == 0) {
+								exchangeCards.add(player.getCardList().get(m));
+								countinf++;
+							}
+							if (player.getCardList().get(m).getType().equalsIgnoreCase("artillery") && countart == 0) {
+								exchangeCards.add(player.getCardList().get(m));
+								countart++;
+							}
+							if (player.getCardList().get(m).getType().equalsIgnoreCase("cavalry") && countcav == 0) {
+								exchangeCards.add(player.getCardList().get(m));
+								countcav++;
+							}
+						}
+					} else {
+						int countinf = 0, countart = 0, countcav = 0;
+						for (int m = 0; m < player.getCardList().size(); m++) {
+							if (player.getCardList().get(m).getType().equalsIgnoreCase("infantry")) {
+								countinf++;
+							}
+							if (player.getCardList().get(m).getType().equalsIgnoreCase("artillery")) {
+								countart++;
+							}
+							if (player.getCardList().get(m).getType().equalsIgnoreCase("cavalry")) {
+								countcav++;
+							}
+						}
+						if (countart == 3) {
+							for (int m = 0; m < player.getCardList().size(); m++) {
+								if (player.getCardList().get(m).getType().equalsIgnoreCase("artillery")) {
+									exchangeCards.add(player.getCardList().get(m));
 								}
 							}
 						}
-						count1 = 0;
+						if (countinf == 3) {
+							for (int m = 0; m < player.getCardList().size(); m++) {
+								if (player.getCardList().get(m).getType().equalsIgnoreCase("infantry")) {
+									exchangeCards.add(player.getCardList().get(m));
+								}
+							}
+						}
+						if (countcav == 3) {
+							for (int m = 0; m < player.getCardList().size(); m++) {
+								if (player.getCardList().get(m).getType().equalsIgnoreCase("cavalry")) {
+									exchangeCards.add(player.getCardList().get(m));
+								}
+							}
+						}
 					}
+				}
+				int count = GameMap.getCardExchangeCountinTheGame();
+				armiesInExchange = (count + 1) * EXCHANGEARMY;
+				System.out.println("Succesfully exchanged the card");
+				GameMap.cardExchangeCountinTheGame = GameMap.getCardExchangeCountinTheGame() + 1;
+				for (int i = 0; i < exchangeCards.size(); i++) {
+					int count1 = 0;
+					String cardType = exchangeCards.get(i).getType();
+					for (int k = 0; k < player.getCardList().size(); k++) {
+						if (player.getCardList().get(k).getType().equalsIgnoreCase(cardType)) {
+							if (count1 == 0) {
+								player.getCardList().remove(k);
+								count1 = count1 + 1;
+							}
+						}
+					}
+					count1 = 0;
 				}
 			}
 
@@ -137,47 +191,99 @@ public class CardController {
 				for (int k = 0; k < player.getCardList().size(); k++) {
 					System.out.print(k + 1 + "." + player.getCardList().get(k).getType() + "\n");
 				}
+				List<Card> exchangeCards = new ArrayList<>();
+				List<Integer> cardNumbers = new ArrayList<>();
+				if (player.getPlayerType() == "human") {
+					System.out.println("You must have to exchange atleast 3 cards out of 5." + "\n"
+							+ "Input in the format exchangecards num num num \n");
+					String[] cardsList = returnInputForMoreThanFive(br.readLine());
 
-				System.out.println("You must have to exchange atleast 3 cards out of 5." + "\n"
-						+ "Input in the format exchangecards num num num \n");
-				String[] cardsList = returnInputForMoreThanFive(br.readLine());
+					if (cardsList.length == 4) {
 
-				if (cardsList.length == 4) {
-					List<Card> exchangeCards = new ArrayList<>();
-					List<Integer> cardNumbers = new ArrayList<>();
+						for (int k = 1; k < cardsList.length; k++) {
+							cardNumbers.add(Integer.parseInt(cardsList[k]));
+						}
 
-					for (int k = 1; k < cardsList.length; k++) {
-						cardNumbers.add(Integer.parseInt(cardsList[k]));
+						for (int c : cardNumbers) {
+							exchangeCards.add(player.getCardList().get(c - 1));
+						}
+
+						if (!checkDiffTypesOfCards(exchangeCards, cardTypes)
+								&& !checkCardSameType(exchangeCards, cardAppearingMoreThanThrice)) {
+							System.out.println(
+									"Please enter numbers of same cards appearing thrice or three cards which are different.\n");
+							throw new Exception();
+						}
 					}
-
-					for (int c : cardNumbers) {
-						exchangeCards.add(player.getCardList().get(c - 1));
-					}
-
-					if (!checkDiffTypesOfCards(exchangeCards, cardTypes)
-							&& !checkCardSameType(exchangeCards, cardAppearingMoreThanThrice)) {
-						System.out.println(
-								"Please enter numbers of same cards appearing thrice or three cards which are different.\n");
-						throw new Exception();
-					}
-					int count = GameMap.getCardExchangeCountinTheGame();
-					armiesInExchange = (count + 1) * EXCHANGEARMY;
-					System.out.println("Succesfully exchanged the card");
-					GameMap.cardExchangeCountinTheGame = GameMap.getCardExchangeCountinTheGame() + 1;
-					for (int i = 0; i < exchangeCards.size(); i++) {
-						int count1 = 0;
-						String cardType = exchangeCards.get(i).getType();
-						for (int k = 0; k < player.getCardList().size(); k++) {
-							if (player.getCardList().get(k).getType().equalsIgnoreCase(cardType)) {
-								if (count1 == 0) {
-									player.getCardList().remove(k);
-									count1 = count1 + 1;
+				} else {
+					if (cardTypes == 3) {
+						int countinf = 0, countart = 0, countcav = 0;
+						for (int m = 0; m < player.getCardList().size(); m++) {
+							if (player.getCardList().get(m).getType().equalsIgnoreCase("infantry") && countinf == 0) {
+								exchangeCards.add(player.getCardList().get(m));
+								countinf++;
+							}
+							if (player.getCardList().get(m).getType().equalsIgnoreCase("artillery") && countart == 0) {
+								exchangeCards.add(player.getCardList().get(m));
+								countart++;
+							}
+							if (player.getCardList().get(m).getType().equalsIgnoreCase("cavalry") && countcav == 0) {
+								exchangeCards.add(player.getCardList().get(m));
+								countcav++;
+							}
+						}
+					} else {
+						int countinf = 0, countart = 0, countcav = 0;
+						for (int m = 0; m < player.getCardList().size(); m++) {
+							if (player.getCardList().get(m).getType().equalsIgnoreCase("infantry")) {
+								countinf++;
+							}
+							if (player.getCardList().get(m).getType().equalsIgnoreCase("artillery")) {
+								countart++;
+							}
+							if (player.getCardList().get(m).getType().equalsIgnoreCase("cavalry")) {
+								countcav++;
+							}
+						}
+						if (countart == 3) {
+							for (int m = 0; m < player.getCardList().size(); m++) {
+								if (player.getCardList().get(m).getType().equalsIgnoreCase("artillery")) {
+									exchangeCards.add(player.getCardList().get(m));
 								}
 							}
 						}
-						count1 = 0;
+						if (countinf == 3) {
+							for (int m = 0; m < player.getCardList().size(); m++) {
+								if (player.getCardList().get(m).getType().equalsIgnoreCase("infantry")) {
+									exchangeCards.add(player.getCardList().get(m));
+								}
+							}
+						}
+						if (countcav == 3) {
+							for (int m = 0; m < player.getCardList().size(); m++) {
+								if (player.getCardList().get(m).getType().equalsIgnoreCase("cavalry")) {
+									exchangeCards.add(player.getCardList().get(m));
+								}
+							}
+						}
 					}
-
+				}
+				int count = GameMap.getCardExchangeCountinTheGame();
+				armiesInExchange = (count + 1) * EXCHANGEARMY;
+				System.out.println("Succesfully exchanged the card");
+				GameMap.cardExchangeCountinTheGame = GameMap.getCardExchangeCountinTheGame() + 1;
+				for (int i = 0; i < exchangeCards.size(); i++) {
+					int count1 = 0;
+					String cardType = exchangeCards.get(i).getType();
+					for (int k = 0; k < player.getCardList().size(); k++) {
+						if (player.getCardList().get(k).getType().equalsIgnoreCase(cardType)) {
+							if (count1 == 0) {
+								player.getCardList().remove(k);
+								count1 = count1 + 1;
+							}
+						}
+					}
+					count1 = 0;
 				}
 			}
 		} else {
