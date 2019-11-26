@@ -39,8 +39,33 @@ public class Cheater implements PlayerStrategy {
 
 	@Override
 	public void attackPhase(GameMap gameMap, GamePlayer player, ArrayList<GamePlayer> playersList) {
-		// TODO Auto-generated method stub
-
+		ArrayList<Country> cheatersWinningCountries = new ArrayList<Country>();
+		int armyCount = 1;
+		for (Country country : player.getPlayerCountries()) {
+			for (String adjCountry : country.getNeighbourCountries()) {
+				Country adjacentCountry = playerController.getAdjacentCountry(gameMap, adjCountry);
+				GamePlayer adjacentPlayer = playerController.getPlayerForCountry(gameMap,
+						adjacentCountry.getCountryName());
+				if (!(adjacentPlayer.getPlayerName().equalsIgnoreCase(player.getPlayerName()))
+						&& country.getNoOfArmies() > 1) {
+					adjacentCountry.setNoOfArmies(armyCount);
+					country.setNoOfArmies(country.getNoOfArmies() - armyCount);
+					cheatersWinningCountries.add(adjacentCountry);
+				}
+			}
+		}
+		for (Country country : cheatersWinningCountries) {
+			System.out.println(player.getPlayerName() + " (Cheater) has conquered " + country.getCountryName());
+			playerController.removeOwnerAddNewOwner(playersList, player, country.getCountryName());
+			String removePlayerName = country.getPlayer();
+			country.setPlayer(player.getPlayerName());
+			playerController.removePlayer(playersList, gameMap, removePlayerName);
+			if (playerController.isPlayerWinner(player, gameMap)) {
+				gameMap.setActionMsg(player.getPlayerName() + " won the Game!", "action");
+				System.out.println(player.getPlayerName() + " won the Game!");
+				System.exit(0);
+			}
+		}
 	}
 
 	@Override
