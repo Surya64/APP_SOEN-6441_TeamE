@@ -36,7 +36,7 @@ public class Aggressive implements PlayerStrategy {
 	}
 
 	@Override
-	public void attackPhase(GameMap gameMap, GamePlayer player, ArrayList<GamePlayer> playersList) {
+	public int attackPhase(GameMap gameMap, GamePlayer player, ArrayList<GamePlayer> playersList) {
 		playerController = new Player();
 		int numberOfArmies = 0;
 		Country defenderCountryObject = null;
@@ -53,9 +53,11 @@ public class Aggressive implements PlayerStrategy {
 			}
 		}
 		if (defenderCountryObject != null) {
-			System.out.println(attackCountryObject.getCountryName() + " is attacking " + defenderCountryObject.getCountryName());
+			System.out.println(
+					attackCountryObject.getCountryName() + " is attacking " + defenderCountryObject.getCountryName());
 			while (attackCountryObject.getNoOfArmies() > 1 && defenderCountryObject.getNoOfArmies() != 0) {
-				System.out.println(attackCountryObject.getCountryName() + " is attacking " + defenderCountryObject.getCountryName());
+				System.out.println(attackCountryObject.getCountryName() + " is attacking "
+						+ defenderCountryObject.getCountryName());
 				int attackerDices = playerController.maxAllowableAttackerDice(attackCountryObject.getNoOfArmies());
 				int defenderDices = playerController.maxAllowableDefenderDice(defenderCountryObject.getNoOfArmies());
 				if (attackerDices > 0 && defenderDices > 0) {
@@ -81,13 +83,19 @@ public class Aggressive implements PlayerStrategy {
 						if (playerController.isPlayerWinner(player, gameMap)) {
 							gameMap.setActionMsg(player.getPlayerName() + " won the Game!", "action");
 							System.out.println(player.getPlayerName() + " won the Game!");
-							System.exit(0);
+							if (gameMap.getMode().equalsIgnoreCase("Tournament")) {
+								return 1;
+							} else {
+								System.exit(0);
+							}
+
 						}
 						break;
 					}
 				}
 			}
 		}
+		return 0;
 
 	}
 

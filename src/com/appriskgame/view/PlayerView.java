@@ -93,6 +93,8 @@ public class PlayerView implements Observer {
 
 	@Override
 	public void update(Observable o, Object arg) {
+		
+		System.out.print("DDD");
 		GameMap gameMap = (GameMap) o;
 		if (!frame.isVisible()) {
 			initialize();

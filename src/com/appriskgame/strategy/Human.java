@@ -165,7 +165,7 @@ public class Human implements PlayerStrategy {
 	}
 
 	@Override
-	public void attackPhase(GameMap mapDetails, GamePlayer player, ArrayList<GamePlayer> playersList)
+	public int attackPhase(GameMap mapDetails, GamePlayer player, ArrayList<GamePlayer> playersList)
 			throws IOException {
 		playerController = new Player();
 		boolean gameContinue;
@@ -330,6 +330,7 @@ public class Human implements PlayerStrategy {
 				System.out.println("Attacking Phase is ended");
 			}
 		} while (gameContinue);
+		return 0;
 
 	}
 

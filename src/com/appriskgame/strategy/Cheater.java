@@ -38,7 +38,7 @@ public class Cheater implements PlayerStrategy {
 	}
 
 	@Override
-	public void attackPhase(GameMap gameMap, GamePlayer player, ArrayList<GamePlayer> playersList) {
+	public int attackPhase(GameMap gameMap, GamePlayer player, ArrayList<GamePlayer> playersList) {
 		ArrayList<Country> cheatersWinningCountries = new ArrayList<Country>();
 		int armyCount = 1;
 		for (Country country : player.getPlayerCountries()) {
@@ -63,11 +63,17 @@ public class Cheater implements PlayerStrategy {
 			if (playerController.isPlayerWinner(player, gameMap)) {
 				gameMap.setActionMsg(player.getPlayerName() + " won the Game!", "action");
 				System.out.println(player.getPlayerName() + " won the Game!");
-				System.exit(0);
+				if (gameMap.getMode().equalsIgnoreCase("Tournament")) {
+					return 1;
+				} else {
+					System.exit(0);
+				}
 			}
 		}
+		return 0;
 	}
-
+	
+	
 	@Override
 	public void fortificationPhase(GameMap gameMap, GamePlayer player) throws IOException {
 		playerController = new Player();
