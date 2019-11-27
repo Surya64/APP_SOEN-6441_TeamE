@@ -93,49 +93,50 @@ public class PlayerView implements Observer {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		
-		System.out.print("DDD");
+
 		GameMap gameMap = (GameMap) o;
-		if (!frame.isVisible()) {
-			initialize();
-		}
-		ArrayList<Country> print = gameMap.getCountries();
-		mapinfo = "";
-		for (Country country : print) {
-			mapinfo = mapinfo + "\n" + country;
-		}
-		String CurrentPhase = textGamePhase.getText();
-		if ("phase".equals(gameMap.message)) {
-			phaseName = gameMap.getGamePhase();
-			textGamePhase.setText(phaseName);
-			String appendLog = "";
-			textArea.setText(appendLog);
-			textInfo.setText(mapinfo);
-		}
-
-		playerName = gameMap.getCurrentPlayer();
-		textPlayerName.setText(playerName.toUpperCase());
-
-		if ("domination".equals(gameMap.message)) {
-			textInfo.setText(mapinfo);
-		}
-
-		if ("action".equals(gameMap.message)) {
-			if (CurrentPhase.equals(gameMap.getGamePhase())) {
-				String newLog = gameMap.getActionMsg();
-				String currentTxt = textArea.getText();
-				String appendLog = newLog + "\n" + currentTxt;
-				textArea.setText(appendLog);
-				textInfo.setText(mapinfo);
-			} else {
-				String appendLog = gameMap.getActionMsg();
+		if (!gameMap.getMode().equalsIgnoreCase("tournament")) {
+			if (!frame.isVisible()) {
+				initialize();
+			}
+			ArrayList<Country> print = gameMap.getCountries();
+			mapinfo = "";
+			for (Country country : print) {
+				mapinfo = mapinfo + "\n" + country;
+			}
+			String CurrentPhase = textGamePhase.getText();
+			if ("phase".equals(gameMap.message)) {
+				phaseName = gameMap.getGamePhase();
+				textGamePhase.setText(phaseName);
+				String appendLog = "";
 				textArea.setText(appendLog);
 				textInfo.setText(mapinfo);
 			}
-		}
 
-		frame.revalidate();
-		frame.repaint();
+			playerName = gameMap.getCurrentPlayer();
+			textPlayerName.setText(playerName.toUpperCase());
+
+			if ("domination".equals(gameMap.message)) {
+				textInfo.setText(mapinfo);
+			}
+
+			if ("action".equals(gameMap.message)) {
+				if (CurrentPhase.equals(gameMap.getGamePhase())) {
+					String newLog = gameMap.getActionMsg();
+					String currentTxt = textArea.getText();
+					String appendLog = newLog + "\n" + currentTxt;
+					textArea.setText(appendLog);
+					textInfo.setText(mapinfo);
+				} else {
+					String appendLog = gameMap.getActionMsg();
+					textArea.setText(appendLog);
+					textInfo.setText(mapinfo);
+				}
+			}
+
+			frame.revalidate();
+			frame.repaint();
+		}
 
 	}
 

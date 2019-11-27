@@ -375,6 +375,7 @@ public class Human implements PlayerStrategy {
 							doFortification = true;
 						} else {
 							System.out.println("Please enter the right format like : fortify none");
+							doFortification = true;
 						}
 					}
 

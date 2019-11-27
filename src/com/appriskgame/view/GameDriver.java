@@ -42,9 +42,9 @@ public class GameDriver {
 			System.out.println("\nChoose the below options\n");
 			System.out.println("1. Create a Map.");
 			System.out.println("2. Load an existing map");
-			System.out.println("3. Exit");
-			System.out.println("5. Enter the name of Saved Game Map");
-			System.out.println("6. Tournament Mode");
+			System.out.println("3. Enter the name of Saved Game Map");
+			System.out.println("4. Tournament Mode");
+			System.out.println("5. Exit");
 			System.out.println("\nPlease enter your choice below:");
 			Pattern pattern = Pattern.compile("[0-9]+");
 			String option = br.readLine().trim();
@@ -72,19 +72,15 @@ public class GameDriver {
 				}
 				break;
 			case 3:
+				Player p=new Player();
+				p.readGame();
+			case 4:
+				Tournament.startTournament();
+			case 5:
 				exit = false;
 				System.out.println("Thank You!!");
 				System.exit(0);
 				break;
-			case 5:
-				Player p1=new Player();
-				p1.readGame();
-				break;
-			case 4:
-				Player p=new Player();
-				p.readGame();
-			case 6:
-				Tournament.startTournament();
 			default:
 				System.out.println("Invalid option. Please choose the correct option.");
 				exit = true;

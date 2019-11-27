@@ -53,8 +53,6 @@ public class Aggressive implements PlayerStrategy {
 			}
 		}
 		if (defenderCountryObject != null) {
-			System.out.println(
-					attackCountryObject.getCountryName() + " is attacking " + defenderCountryObject.getCountryName());
 			while (attackCountryObject.getNoOfArmies() > 1 && defenderCountryObject.getNoOfArmies() != 0) {
 				System.out.println(attackCountryObject.getCountryName() + " is attacking "
 						+ defenderCountryObject.getCountryName());
