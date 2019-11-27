@@ -1,5 +1,6 @@
 package com.appriskgame.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -14,7 +15,7 @@ import com.appriskgame.view.CardView;
  * @author Dolly
  * @author Sahana
  */
-public class GamePlayer extends Observable {
+public class GamePlayer extends Observable implements Serializable {
 
 	private String playerName;
 	private ArrayList<Country> playerCountries = new ArrayList<Country>();
@@ -22,6 +23,7 @@ public class GamePlayer extends Observable {
 	private List<Card> cardList = new ArrayList<>();
 	public GamePlayer current;
 	private String playerType = "";
+	
 
 	/**
 	 * This method gets the card list

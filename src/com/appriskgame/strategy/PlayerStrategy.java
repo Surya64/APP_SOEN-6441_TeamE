@@ -13,7 +13,7 @@ public interface PlayerStrategy {
 
 	public void reinforcementPhase(GamePlayer player, GameMap gameMap) throws Exception;
 
-	public void attackPhase(GameMap gameMap, GamePlayer player, ArrayList<GamePlayer> playersList) throws IOException;
+	public int attackPhase(GameMap gameMap, GamePlayer player, ArrayList<GamePlayer> playersList) throws IOException;
 
 	public void fortificationPhase(GameMap gameMap, GamePlayer player) throws IOException;
 }

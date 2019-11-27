@@ -34,8 +34,9 @@ public class Benevolent implements PlayerStrategy {
 	}
 
 	@Override
-	public void attackPhase(GameMap gameMap, GamePlayer player, ArrayList<GamePlayer> playersList) {
+	public int attackPhase(GameMap gameMap, GamePlayer player, ArrayList<GamePlayer> playersList) {
 		System.out.println("Benevolent Never Attacks");
+		return 0;
 
 	}
 

@@ -10,8 +10,8 @@ import com.appriskgame.model.GameMap;
 
 public class Tournament {
 
-	List<String> maps;
-	List<String> playersStrategies;
+	ArrayList<String> maps;
+	ArrayList<String> playersStrategies;
 	int noOfGames;
 	int turns;
 	MapOperations loadGameMap;
@@ -19,16 +19,16 @@ public class Tournament {
 
 	ArrayList<String> preDefinedStrategies = new ArrayList<String>() {
 		{
-			add("Aggressive");
-			add("Benevolent");
-			add("Random");
-			add("Cheater");
+			add("aggressive-aggressive");
+			add("benevolent-benevolent");
+			add("random-random");
+			add("cheater-cheater");
 		}
 	};
 
-	public static void main(String[] args) throws Exception {
+	public static void startTournament() throws Exception {
 
-		System.out.println("Enter the command?");
+		System.out.println("Enter the Tournament command?");
 
 		Scanner sc = new Scanner(System.in);
 		Tournament tournament = new Tournament();
@@ -38,26 +38,24 @@ public class Tournament {
 
 		if (tournament.validateCommand(tournamentList)) {
 			tournament.fillTournamentData(tournamentList[2], tournamentList[4], tournamentList[6], tournamentList[8]);
-			if(!tournament.mapsValidation(tournament.maps))
-			{
+			if (!tournament.mapsValidation(tournament.maps)) {
 				System.out.println("Maps should be Different");
-			}
-			else {
-			
+			} else {
+
 				tournament.results = new String[tournament.maps.size()][tournament.noOfGames];
 
 				for (int i = 0; i < tournament.maps.size(); i++) {
 					for (int j = 0; j < tournament.noOfGames; j++) {
 						tournament.results[i][j] = tournament.startGame(j, tournament.maps.get(i),
-								tournament.playersStrategies,tournament.turns);
+								tournament.playersStrategies, tournament.turns);
 //						System.out.println("SAS");
 					}
 				}
 
 				tournament.generateReport();
+				System.exit(0);
 			}
 
-			
 		}
 
 	}
@@ -181,7 +179,7 @@ public class Tournament {
 
 	}
 
-	public String startGame(int gameNumber, String mapName, List<String> playerStrategies,int turns) throws Exception {
+	public String startGame(int gameNumber, String mapName, ArrayList<String> playerStrategies, int turns) throws Exception {
 
 		String workingDir = System.getProperty("user.dir");
 		String mapLocation = workingDir + "/resources/maps/";
@@ -190,7 +188,7 @@ public class Tournament {
 		loadGameMap = new MapOperations();
 		if (loadGameMap.isMapExists(mapName)) {
 			Player start = new Player();
-			//createMapGraph = loadGameMap.readGameMapTournament(inputGameMapName);
+			 createMapGraph = loadGameMap.readGameMap(inputGameMapName);
 			if (!createMapGraph.getContinents().isEmpty()) {
 
 				for (int i = 0; i < playerStrategies.size(); i++) {
@@ -201,7 +199,7 @@ public class Tournament {
 					}
 				}
 //					start.gamePlay(createMapGraph);
-				return getGameResult(gameNumber, mapName, playerStrategies,turns);
+				return getGameResult(gameNumber, inputGameMapName, playerStrategies, turns);
 			} else {
 				return "Incorrect Map";
 			}
@@ -211,38 +209,37 @@ public class Tournament {
 
 	}
 
-	public String getGameResult(int gameNumber, String mapName, List<String> playerStrategies,int turns) {
-		String strat = "";
+	public String getGameResult(int gameNumber, String mapName, ArrayList<String> playerStrategies, int turns) throws Exception {
 
-		Random random = new Random();
-		int i = random.nextInt(4) + 0;
-		return playerStrategies.get(i);
+		Player p = new Player();
+       
+		MapOperations mp=new MapOperations();
+		GameMap gm=mp.readGameMap(mapName);
+		gm.setMode("Tournament");
+		
+	String result=	p.gamePlayTournament(gm,playerStrategies,turns);
+        String[] formattedResult=result.split("-");
+        
+//		String strat = "";
+//
+//		Random random = new Random();
+//		int i = random.nextInt(4) + 0;
+		return formattedResult[1];
 	}
 
-	
-	
-	
-	public boolean mapsValidation(List<String> maps)
-	{
-		List<String> uniqueMaps=new ArrayList<String>();
-		
-		for(int i=0;i<maps.size();i++)
-		{
-			
-			if(uniqueMaps.contains(maps.get(i).toString()))
-			{
+	public boolean mapsValidation(List<String> maps) {
+		List<String> uniqueMaps = new ArrayList<String>();
+
+		for (int i = 0; i < maps.size(); i++) {
+
+			if (uniqueMaps.contains(maps.get(i).toString())) {
 				return false;
 			}
 			uniqueMaps.add(maps.get(i).toString());
 		}
 		return true;
 	}
-	
-	
-	
-	
-	
-	
+
 	public void fillTournamentData(String maps, String Strategies, String numberOfGames, String turns)
 
 	{
@@ -263,19 +260,19 @@ public class Tournament {
 
 	}
 
-	public List<String> getPlayersStrategies(String playersStrategy) {
+	public ArrayList<String> getPlayersStrategies(String playersStrategy) {
 		String[] playersStrategyList = playersStrategy.split(",");
-		List<String> listOfStrategies = new ArrayList<String>();
+		ArrayList<String> listOfStrategies = new ArrayList<String>();
 		for (int i = 0; i < playersStrategyList.length; i++) {
-			listOfStrategies.add(playersStrategyList[i]);
+			listOfStrategies.add(playersStrategyList[i]+"-"+playersStrategyList[i]);
 		}
 
 		return listOfStrategies;
 	}
 
-	public List<String> getMaps(String maps) {
+	public ArrayList<String> getMaps(String maps) {
 		String[] mapsList = maps.split(",");
-		List<String> listOfMaps = new ArrayList<String>();
+		ArrayList<String> listOfMaps = new ArrayList<String>();
 		for (int i = 0; i < mapsList.length; i++) {
 			listOfMaps.add(mapsList[i]);
 		}

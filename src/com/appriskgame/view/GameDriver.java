@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 
 import com.appriskgame.controller.MapOperations;
 import com.appriskgame.controller.Player;
+import com.appriskgame.controller.Tournament;
 import com.appriskgame.model.GameMap;
 
 /**
@@ -43,6 +44,7 @@ public class GameDriver {
 			System.out.println("2. Load an existing map");
 			System.out.println("3. Exit");
 			System.out.println("5. Enter the name of Saved Game Map");
+			System.out.println("6. Tournament Mode");
 			System.out.println("\nPlease enter your choice below:");
 			Pattern pattern = Pattern.compile("[0-9]+");
 			String option = br.readLine().trim();
@@ -81,6 +83,8 @@ public class GameDriver {
 			case 4:
 				Player p=new Player();
 				p.readGame();
+			case 6:
+				Tournament.startTournament();
 			default:
 				System.out.println("Invalid option. Please choose the correct option.");
 				exit = true;

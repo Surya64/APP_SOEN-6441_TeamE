@@ -36,7 +36,7 @@ public class RandomPlayer implements PlayerStrategy {
 	}
 
 	@Override
-	public void attackPhase(GameMap gameMap, GamePlayer player, ArrayList<GamePlayer> playersList) {
+	public int attackPhase(GameMap gameMap, GamePlayer player, ArrayList<GamePlayer> playersList) {
 		playerController = new Player();
 		GamePlayer adjPlayer = null;
 		Country attackCountryObject = null, defenderCountryObject = null;
@@ -87,13 +87,18 @@ public class RandomPlayer implements PlayerStrategy {
 						if (playerController.isPlayerWinner(player, gameMap)) {
 							gameMap.setActionMsg(player.getPlayerName() + " won the Game!", "action");
 							System.out.println(player.getPlayerName() + " won the Game!");
-							System.exit(0);
+							if (gameMap.getMode().equalsIgnoreCase("Tournament")) {
+								return 1;
+							} else {
+								System.exit(0);
+							}
 						}
 						break;
 					}
 				}
 			}
 		}
+		return 0;
 
 	}
 
