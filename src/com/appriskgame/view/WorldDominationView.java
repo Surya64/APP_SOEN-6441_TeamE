@@ -45,48 +45,50 @@ public class WorldDominationView implements Observer {
 	public void update(Observable o, Object arg) {
 		GameMap gameMap = (GameMap) o;
 
-		if (!frame.isVisible()) {
-			initialize();
-		}
-		DecimalFormat df = new DecimalFormat("#.##");
-		float totalCountries = gameMap.getCountrySet().size();
-		output = "";
-		for (GamePlayer player : gameMap.getPlayers()) {
-			float playerCountries = player.getPlayerCountries().size();
-			String mapPercent = df.format((playerCountries * 100) / totalCountries);
-			List<Country> countryList = player.getPlayerCountries();
-			int countryArmies = 0;
-			for (Country country : countryList) {
-				countryArmies = countryArmies + country.getNoOfArmies();
+		if (!gameMap.getMode().equalsIgnoreCase("tournament")) {
+			if (!frame.isVisible()) {
+				initialize();
 			}
-			ArrayList<String> continentsOccupiedName = new ArrayList<String>();
-			ArrayList<Continent> listOfPlayerContinents = new ArrayList<Continent>();
-			Player p = new Player();
-			Continent playerContinent = player.getPlayerCountries().get(0).getPartOfContinent();
-			int sizeOfPlayerCountries = player.getPlayerCountries().size();
-			for (int i = 0; i < sizeOfPlayerCountries; i++) {
-				playerContinent = player.getPlayerCountries().get(i).getPartOfContinent();
-				if (!listOfPlayerContinents.contains(playerContinent)) {
-					listOfPlayerContinents.add(playerContinent);
+			DecimalFormat df = new DecimalFormat("#.##");
+			float totalCountries = gameMap.getCountrySet().size();
+			output = "";
+			for (GamePlayer player : gameMap.getPlayers()) {
+				float playerCountries = player.getPlayerCountries().size();
+				String mapPercent = df.format((playerCountries * 100) / totalCountries);
+				List<Country> countryList = player.getPlayerCountries();
+				int countryArmies = 0;
+				for (Country country : countryList) {
+					countryArmies = countryArmies + country.getNoOfArmies();
 				}
-			}
-			for (int i = 0; i < listOfPlayerContinents.size(); i++) {
-				if (p.doesPlayerOwnAContinent(player, listOfPlayerContinents.get(i).getListOfCountries()))
-					continentsOccupiedName.add(listOfPlayerContinents.get(i).getContinentName());
-			}
-			String continents = continentsOccupiedName.toString();
-			continents = continents.substring(1, continents.length() - 1);
+				ArrayList<String> continentsOccupiedName = new ArrayList<String>();
+				ArrayList<Continent> listOfPlayerContinents = new ArrayList<Continent>();
+				Player p = new Player();
+				Continent playerContinent = player.getPlayerCountries().get(0).getPartOfContinent();
+				int sizeOfPlayerCountries = player.getPlayerCountries().size();
+				for (int i = 0; i < sizeOfPlayerCountries; i++) {
+					playerContinent = player.getPlayerCountries().get(i).getPartOfContinent();
+					if (!listOfPlayerContinents.contains(playerContinent)) {
+						listOfPlayerContinents.add(playerContinent);
+					}
+				}
+				for (int i = 0; i < listOfPlayerContinents.size(); i++) {
+					if (p.doesPlayerOwnAContinent(player, listOfPlayerContinents.get(i).getListOfCountries()))
+						continentsOccupiedName.add(listOfPlayerContinents.get(i).getContinentName());
+				}
+				String continents = continentsOccupiedName.toString();
+				continents = continents.substring(1, continents.length() - 1);
 
-			output = output + "\nPlayer Name = " + player.getPlayerName() + "\nPercentage of Map Contolled = "
-					+ mapPercent + "\nTotal Number of Armies = " + countryArmies + "\nContinents Controlled = "
-					+ (continents.isEmpty() ? "None" : continents) + "\n";
+				output = output + "\nPlayer Name = " + player.getPlayerName() + "\nPercentage of Map Contolled = "
+						+ mapPercent + "\nTotal Number of Armies = " + countryArmies + "\nContinents Controlled = "
+						+ (continents.isEmpty() ? "None" : continents) + "\n";
 
+			}
+			// String currentText = log.getText();
+			String newInfo = "*******-------*******" + " " + output;
+			// String appendLog = newLog + "\n" + currentText;
+			info.setText(newInfo);
+			frame.revalidate();
+			frame.repaint();
 		}
-		// String currentText = log.getText();
-		String newInfo = "*******-------*******" + " " + output;
-		// String appendLog = newLog + "\n" + currentText;
-		info.setText(newInfo);
-		frame.revalidate();
-		frame.repaint();
 	}
 }

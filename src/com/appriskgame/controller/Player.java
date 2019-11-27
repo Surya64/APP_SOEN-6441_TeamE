@@ -13,7 +13,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -267,13 +266,15 @@ public class Player {
 					gameMap.setActionMsg(
 							"** Fortification Phase Ends for Player: " + gameplayer.getPlayerName() + " **", "action");
 
-					// Change later once integrated
-					if (humanOperator) {
-						System.out.println("Enter 1 to save Game");
-						int save = Integer.parseInt(br.readLine().trim());
+					if (gameplayer.getPlayerType().equalsIgnoreCase("human")) {
+						System.out.println("Do you want to Save the Game?");
+						String choice = br.readLine().trim();
 
-						if (save == 1) {
-							// Checking the map
+						while (!(choice.equalsIgnoreCase("Yes") || choice.equalsIgnoreCase("No") || choice == null)) {
+							System.err.println("\nPlease enter the choice as either Yes or No:");
+							choice = br.readLine().trim();
+						}
+						if (choice.equalsIgnoreCase("Yes")) {
 							do {
 								System.out.println("Enter the Command to display Map");
 								String mapCommand = "showmap";
@@ -286,16 +287,11 @@ public class Player {
 								}
 							} while (mapFlag);
 							saveGame(gameMap);
-
-						} else {
-
 						}
 					}
-
 				}
 			}
 			gameContinue = true;
-
 		} while (gameContinue);
 	}
 
@@ -630,7 +626,9 @@ public class Player {
 			}
 		}
 		CardController cardController = new CardController();
-		player.setCurrentPlayer(player);
+		if (!mapDetails.getMode().equalsIgnoreCase("tournament")) {
+			player.setCurrentPlayer(player);
+		}
 		int exchangeInCard = cardController.exchangeCards(player);
 		int reinforcementArmies = assignReinforcedArmies(player, playerContinent);
 		player.setNoOfArmies((reinforcementArmies + exchangeInCard));
@@ -1399,12 +1397,11 @@ public class Player {
 	}
 
 	public void continueGame(GameMap gameMapcopy) throws Exception {
-		
-		
-		GameMap gameMap=new GameMap();
-	
-		gameMap=gameMapcopy;
-		
+
+		GameMap gameMap = new GameMap();
+
+		gameMap = gameMapcopy;
+
 		playerNames = new ArrayList<String>();
 
 		playerNames = setplayList(gameMap.getPlayers());
@@ -1415,110 +1412,7 @@ public class Player {
 			playersList.add(gamePlayers);
 		}
 		gameMap.setPlayers(playersList);
-		boolean proceed = false, populateFlag = false, mapFlag = true;
-//		playerNames = new ArrayList<String>();
-//		do {
-//			playerNames = playerCreation();
-//			if (playerNames.size() > 5 || playerNames.size() < 2) {
-//				System.out.println("Sorry! The numbers of players can be between 2 and 6.\n Current size is "
-//						+ playerNames.size() + "\nPlayers are : " + playerNames);
-//				proceed = true;
-//			} else {
-//				System.out.println("Great! Let's Play.");
-//				proceed = false;
-//			}
-//		} while (proceed);
-
-//		boolean humanOperator = false;
-//		for (String player : playerNames) {
-//			String[] data = player.split("-");
-//			GamePlayer gamePlayers = new GamePlayer();
-//			gamePlayers.setPlayerName(player);
-//			gamePlayers.setPlayerType(data[1]);
-//			if (data[1].equalsIgnoreCase("human")) {
-//				humanOperator = true;
-//			}
-//			playersList.add(gamePlayers);
-//		}
-//		gameMap.setPlayers(playersList);
-//
-//		if (humanOperator) {
-//			do {
-//				populateFlag = false;
-//				System.out.println("Human Player Present in Game");
-//				System.out.println("Enter Command to Populate Country to Players");
-//				String input = br.readLine().trim();
-//				Pattern commandName = Pattern.compile("populatecountries");
-//				Matcher commandMatch = commandName.matcher(input);
-//				if (!commandMatch.matches() || input.isEmpty()) {
-//					System.out.println("\nIncorrect Command");
-//					populateFlag = true;
-//				}
-//				if (!populateFlag) {
-//					populateCountries(gameMap);
-//				}
-//
-//			} while (populateFlag);
-//			defaultArmiesToPlayer();
-//			initialArmyAllocation(gameMap);
-//
-//			do {
-//				System.out.println("Enter the Command to display Map");
-//				String mapCommand = br.readLine().trim();
-//				if (mapCommand.equalsIgnoreCase("showmap")) {
-//					showMap(gameMap);
-//					mapFlag = false;
-//				} else {
-//					System.out.println("Incorrect Command");
-//					mapFlag = true;
-//				}
-//			} while (mapFlag);
-//		} else {
-//			populateCountries(gameMap);
-//			defaultArmiesToPlayer();
-//			initialArmyAllocation(gameMap);
-//			showMap(gameMap);
-//		}
-
-//		roundRobin = new RoundRobinAllocator(playersList);
-//		System.out.println("Place army Individually");
-//		while (playersList.get(playersList.size() - 1).getNoOfArmies() > 0) {
-//			for (int round = 1; round <= playersList.size(); round++) {
-//				gameplayer = roundRobin.nextTurn();
-//				System.out.println("Name: " + gameplayer.getPlayerName());
-//				System.out.println("No of Armies remaining: " + gameplayer.getNoOfArmies());
-//				PlayerStrategy playerStrategy = null;
-//				playerStrategy = gameplayer.getPlayerType().equalsIgnoreCase("Aggressive") ? new Aggressive()
-//						: (gameplayer.getPlayerType().equalsIgnoreCase("Benevolent") ? new Benevolent()
-//								: (gameplayer.getPlayerType().equalsIgnoreCase("Cheater") ? new Cheater()
-//										: (gameplayer.getPlayerType().equalsIgnoreCase("Random") ? new RandomPlayer()
-//												: (gameplayer.getPlayerType().equalsIgnoreCase("Human") ? new Human()
-//														: null))));
-//				boolean placeallflag = false;
-//				if (gameplayer.getPlayerType().equalsIgnoreCase("Human")) {
-//					System.out.println("As a Human Player, Do you want to place army individually?");
-//					String choice = br.readLine().trim();
-//					while (!(choice.equalsIgnoreCase("Yes") || choice.equalsIgnoreCase("No") || choice == null)) {
-//						System.err.println("\nPlease enter the choice as either Yes or No:");
-//						choice = br.readLine().trim();
-//					}
-//					if (choice.equalsIgnoreCase("Yes")) {
-//
-//					} else {
-//						System.out.println("Enter Command for Place all Armies : ");
-//						String command = br.readLine().trim();
-//						if (command.equalsIgnoreCase("placeall")) {
-//							placeallAmry();
-//							placeallflag = true;
-//							round = playersList.size();
-//						}
-//					}
-//				}
-//				if (!placeallflag) {
-//					playerStrategy.placeArmies(gameMap, gameplayer);
-//				}
-//			}
-//		}
+		boolean mapFlag = true;
 		boolean gameContinue;
 
 		do {
@@ -1575,13 +1469,15 @@ public class Player {
 					gameMap.setActionMsg(
 							"** Fortification Phase Ends for Player: " + gameplayer.getPlayerName() + " **", "action");
 
-					// Change later once integrated
 					if (gameplayer.getPlayerType().equalsIgnoreCase("human")) {
-						System.out.println("Enter 1 to save Game");
-						int save = Integer.parseInt(br.readLine().trim());
+						System.out.println("Do you want to Save the Game?");
+						String choice = br.readLine().trim();
 
-						if (save == 1) {
-							// Checking the map
+						while (!(choice.equalsIgnoreCase("Yes") || choice.equalsIgnoreCase("No") || choice == null)) {
+							System.err.println("\nPlease enter the choice as either Yes or No:");
+							choice = br.readLine().trim();
+						}
+						if (choice.equalsIgnoreCase("Yes")) {
 							do {
 								System.out.println("Enter the Command to display Map");
 								String mapCommand = "showmap";
@@ -1594,23 +1490,15 @@ public class Player {
 								}
 							} while (mapFlag);
 							saveGame(gameMap);
-
-						} else {
-
 						}
 					}
-
 				}
 			}
 			gameContinue = true;
-
 		} while (gameContinue);
-		
 	}
 
 	public void saveGame(GameMap gameMap) throws IOException {
-
-//		System.out.println(gameMap.getCurrentPlayer());
 		ArrayList<GamePlayer> changedOrder = new ArrayList<GamePlayer>();
 		changedOrder = getCorrectPlayList(gameMap);
 		gameMap.setPlayers(changedOrder);
@@ -1621,9 +1509,7 @@ public class Player {
 		String savedFilePath = mapLocation;
 		ObjectOutputStream objFile = null;
 		System.out.println("Please the enter the name of the saved Game?");
-		Scanner sc = new Scanner(System.in);
-
-		String fileName = sc.nextLine().trim();
+		String fileName = br.readLine().trim();
 		String fullPath = savedFilePath + fileName + ".txt";
 
 		File savingFile = new File(fullPath);
@@ -1636,8 +1522,7 @@ public class Player {
 		objFile = new ObjectOutputStream(savefile);
 
 		objFile.writeObject(gameMap);
-//		objFile.close();
-//		sc.close();
+		//objFile.close();
 		System.exit(0);
 
 	}
@@ -1646,28 +1531,18 @@ public class Player {
 		System.out.println("Please the enter the name of the saved Game?");
 		String workingDir = System.getProperty("user.dir");
 		String mapLocation = workingDir + "/resources/savedgames/";
-
 		String savedFilePath = mapLocation;
-		Scanner sc = new Scanner(System.in);
-
-		String fileName = sc.nextLine().trim();
+		String fileName = br.readLine().trim();
 		if (isSavedGameExists(savedFilePath, fileName)) {
-//			ObjectOutputStream objFile = null;
 			String fullPath = savedFilePath + fileName + ".txt";
 			FileInputStream getFile = new FileInputStream(fullPath);
 			ObjectInputStream backup = new ObjectInputStream(getFile);
-
 			GameMap gameMap = (GameMap) backup.readObject();
 			backup.close();
-//			sc.close();
 			continueGame(gameMap);
+		} else {
+			System.out.println("File Name Doesn't exist!");
 		}
-
-		else {
-			System.out.println("File Name Doesnot exists!");
-//			sc.close();
-		}
-
 	}
 
 	public boolean isSavedGameExists(String filepath, String fileName) {
@@ -1739,12 +1614,12 @@ public class Player {
 		}
 		return null;
 	}
-	
-	
-	public String gamePlayTournament(GameMap gameMap,ArrayList<String> players,int turns) throws Exception {
-		int maxTurns=turns;
-		int currentTurn=0;
-		int winnerAnnoced=0;
+
+	public String gamePlayTournament(GameMap gameMap, ArrayList<String> players, int turns) throws Exception {
+		int maxTurns = turns;
+		int currentTurn = 0;
+		int winnerAnnoced = 0;
+		gameMap.setMode("tournament");
 		boolean proceed = false, populateFlag = false, mapFlag = true;
 		playerNames = new ArrayList<String>();
 		do {
@@ -1888,7 +1763,7 @@ public class Player {
 					gameMap.setGamePhase("Attack Phase", "phase");
 					gameMap.setActionMsg("** Attack Phase Begins for Player: " + gameplayer.getPlayerName() + " **",
 							"action");
-					winnerAnnoced=playerStrategy.attackPhase(gameMap, gameplayer, playersList);
+					winnerAnnoced = playerStrategy.attackPhase(gameMap, gameplayer, playersList);
 					gameMap.setActionMsg("** Attack Phase Ends for Player: " + gameplayer.getPlayerName() + " **",
 							"action");
 					System.out.println("Attack Ends");
@@ -1904,42 +1779,14 @@ public class Player {
 					System.out.println("** Fortification Phase Ends for Player: " + gameplayer.getPlayerName() + " **");
 					gameMap.setActionMsg(
 							"** Fortification Phase Ends for Player: " + gameplayer.getPlayerName() + " **", "action");
-
-					// Change later once integrated
-					if (humanOperator) {
-						System.out.println("Enter 1 to save Game");
-						int save = Integer.parseInt(br.readLine().trim());
-
-						if (save == 1) {
-							// Checking the map
-							do {
-								System.out.println("Enter the Command to display Map");
-								String mapCommand = "showmap";
-								if (mapCommand.equalsIgnoreCase("showmap")) {
-									showMap(gameMap);
-									mapFlag = false;
-								} else {
-									System.out.println("Incorrect Command");
-									mapFlag = true;
-								}
-							} while (mapFlag);
-							saveGame(gameMap);
-
-						} else {
-
-						}
-					}
-
 				}
 			}
 			gameContinue = true;
-
-			if(winnerAnnoced==1)
-			{
+			if (winnerAnnoced == 1) {
 				return gameplayer.getPlayerName();
 			}
-			currentTurn=currentTurn+1;
-		} while (gameContinue&&currentTurn<=maxTurns&&winnerAnnoced==0);
+			currentTurn = currentTurn + 1;
+		} while (gameContinue && currentTurn <= maxTurns && winnerAnnoced == 0);
 		return "Draw-Draw";
 	}
 

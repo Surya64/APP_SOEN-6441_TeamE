@@ -24,7 +24,6 @@ public class GamePlayer extends Observable implements Serializable {
 	public GamePlayer current;
 	private String playerType = "";
 	
-
 	/**
 	 * This method gets the card list
 	 * 
