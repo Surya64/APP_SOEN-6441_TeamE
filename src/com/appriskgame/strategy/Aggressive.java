@@ -40,6 +40,7 @@ public class Aggressive implements PlayerStrategy {
 		playerController = new Player();
 		int numberOfArmies = 0;
 		Country defenderCountryObject = null;
+		gameMap.setActionMsg("Aggressive Player is Attacking", "action");
 		Country attackCountryObject = getStrongestCountryWithAdjCountry(gameMap, player);
 		numberOfArmies = attackCountryObject.getNoOfArmies();
 		List<String> adjacentCountriesList = attackCountryObject.getNeighbourCountries();
@@ -56,6 +57,8 @@ public class Aggressive implements PlayerStrategy {
 			while (attackCountryObject.getNoOfArmies() > 1 && defenderCountryObject.getNoOfArmies() != 0) {
 				System.out.println(attackCountryObject.getCountryName() + " is attacking "
 						+ defenderCountryObject.getCountryName());
+				gameMap.setActionMsg(attackCountryObject.getCountryName() + " is attacking "
+						+ defenderCountryObject.getCountryName(), "action");
 				int attackerDices = playerController.maxAllowableAttackerDice(attackCountryObject.getNoOfArmies());
 				int defenderDices = playerController.maxAllowableDefenderDice(defenderCountryObject.getNoOfArmies());
 				if (attackerDices > 0 && defenderDices > 0) {
@@ -64,6 +67,7 @@ public class Aggressive implements PlayerStrategy {
 					if (playerController.isAttackerWon(defenderCountryObject)) {
 						System.out.println("Card Phase");
 						CardController cardController = new CardController();
+						gameMap.setActionMsg("Player Card Allocation", "action");
 						cardController.setDeckOfCards();
 						cardController.allocateCardToPlayer(player);
 						gameMap.setActionMsg("Player got a Card", "action");
@@ -72,7 +76,8 @@ public class Aggressive implements PlayerStrategy {
 						if (playerController.ableToMoveArmy(attackCountryObject, moveNumberOfArmies)) {
 							playerController.removeOwnerAddNewOwner(playersList, player,
 									defenderCountryObject.getCountryName());
-
+							System.out.println(
+									"Moving " + moveNumberOfArmies + " Amries to " + defenderCountryObject.getCountryName());
 							defenderCountryObject.setPlayer(attackCountryObject.getPlayer());
 							defenderCountryObject.setNoOfArmies(moveNumberOfArmies);
 							attackCountryObject.setNoOfArmies(attackCountryObject.getNoOfArmies() - moveNumberOfArmies);
@@ -162,7 +167,6 @@ public class Aggressive implements PlayerStrategy {
 		for (Country country : player.getPlayerCountries()) {
 			for (String adjCountry : country.getNeighbourCountries()) {
 				GamePlayer adjPlayer = playerController.getPlayerForCountry(mapGraph, adjCountry);
-				Country adjCountryObject = playerController.getAdjacentCountry(mapGraph, adjCountry);
 				if (!player.getPlayerName().equalsIgnoreCase(adjPlayer.getPlayerName())) {
 					countriesWithAdjCountries.add(country);
 					break;

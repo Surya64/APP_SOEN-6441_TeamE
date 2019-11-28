@@ -83,6 +83,8 @@ public class Cheater implements PlayerStrategy {
 					GamePlayer adjPlayer = playerController.getPlayerForCountry(gameMap, adjCountry);
 					if (!player.getPlayerName().equalsIgnoreCase(adjPlayer.getPlayerName())) {
 						country.setNoOfArmies(country.getNoOfArmies() * 2);
+						System.out.println("Cheater fortified " + country.getCountryName()+ " with " + country.getNoOfArmies()*2);
+						gameMap.setActionMsg("Cheater fortified " + country.getCountryName()+ " with " + country.getNoOfArmies()*2, "action");
 						break;
 					}
 				}

@@ -60,7 +60,11 @@ public class RandomPlayer implements PlayerStrategy {
 		}
 
 		if (defenderCountryObject != null) {
-			System.out.println(attackCountryObject.getCountryName() + " is attacking " + defenderCountryObject.getCountryName());
+			System.out.println(
+					attackCountryObject.getCountryName() + " is attacking " + defenderCountryObject.getCountryName());
+			gameMap.setActionMsg(
+					attackCountryObject.getCountryName() + " is attacking " + defenderCountryObject.getCountryName(),
+					"action");
 			while (attackCountryObject.getNoOfArmies() > 1 && defenderCountryObject.getNoOfArmies() != 0) {
 				int attackerDices = playerController.maxAllowableAttackerDice(attackCountryObject.getNoOfArmies());
 				int defenderDices = playerController.maxAllowableDefenderDice(defenderCountryObject.getNoOfArmies());
@@ -70,6 +74,7 @@ public class RandomPlayer implements PlayerStrategy {
 					if (playerController.isAttackerWon(defenderCountryObject)) {
 						System.out.println("Card Phase");
 						CardController cardController = new CardController();
+						gameMap.setActionMsg("Player Card Allocation", "action");
 						cardController.setDeckOfCards();
 						cardController.allocateCardToPlayer(player);
 						gameMap.setActionMsg("Player got a Card", "action");
@@ -78,7 +83,7 @@ public class RandomPlayer implements PlayerStrategy {
 						if (playerController.ableToMoveArmy(attackCountryObject, moveNumberOfArmies)) {
 							playerController.removeOwnerAddNewOwner(playersList, player,
 									defenderCountryObject.getCountryName());
-
+							System.out.println("Moving " + moveNumberOfArmies +" Amries to " + defenderCountryObject.getCountryName());
 							defenderCountryObject.setPlayer(attackCountryObject.getPlayer());
 							defenderCountryObject.setNoOfArmies(moveNumberOfArmies);
 							attackCountryObject.setNoOfArmies(attackCountryObject.getNoOfArmies() - moveNumberOfArmies);
