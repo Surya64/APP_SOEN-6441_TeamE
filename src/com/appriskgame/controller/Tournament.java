@@ -5,9 +5,22 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import com.appriskgame.model.GameMap;
-
+/**
+ * This Class is used for implementation of Tournament Mode
+ * 
+ * @author Saicharanteja
+ */
 public class Tournament {
 
+	static int MINIMUMGAME = 1;
+	static int MAXIMUMGAME = 5;
+	static int MINUMUMTURNS = 10;
+	static int MAXIMUMTURNS = 50;
+	static int MAXIMUMSTRATEGYCOUNT=18;
+	static int MINIMUMSTRATEGYCOUNT=17;
+	static int MAXIMUMMAPCOUNT=20;
+	static int MINIMUMMAPCOUNT=19;
+	
 	ArrayList<String> maps;
 	ArrayList<String> playersStrategies;
 	int noOfGames;
@@ -65,8 +78,8 @@ public class Tournament {
 
 			if (tournament.equalsIgnoreCase("tournament") && game.equalsIgnoreCase("-G") && turn.equalsIgnoreCase("-D")
 					&& maps.equalsIgnoreCase("-M") && stategies.equalsIgnoreCase("-P")) {
-				if (games >= 1 && games <= 5) {
-					if (turns >= 10 && turns <= 50) {
+				if (games >= MINIMUMGAME && games <= MINIMUMGAME) {
+					if (turns >= MINUMUMTURNS && turns <= MAXIMUMTURNS) {
 						decision = true;
 						return decision;
 					} else {
@@ -121,9 +134,9 @@ public class Tournament {
 	public String getFormattedStrategry(String strategy) {
 		int currentLength = strategy.length();
 		String formattedStrategy = " " + strategy;
-		for (int i = currentLength; i < 18; i++) {
+		for (int i = currentLength; i < MAXIMUMSTRATEGYCOUNT; i++) {
 			formattedStrategy = formattedStrategy + " ";
-			if (i == 17) {
+			if (i == MINIMUMSTRATEGYCOUNT) {
 				formattedStrategy = formattedStrategy + " ";
 			}
 		}
@@ -133,9 +146,9 @@ public class Tournament {
 	public String getFormattedMapName(String mapName) {
 		int currentLength = mapName.length();
 		String formattedMapName = " " + mapName;
-		for (int i = currentLength; i < 20; i++) {
+		for (int i = currentLength; i < MAXIMUMMAPCOUNT; i++) {
 			formattedMapName = formattedMapName + " ";
-			if (i == 19) {
+			if (i == MINIMUMMAPCOUNT) {
 				formattedMapName = formattedMapName + " ";
 			}
 		}
