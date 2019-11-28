@@ -148,7 +148,7 @@ public class MapValidation {
 				splitVal = " ";
 				value = 1;
 			} else {
-				patternvalue = "[a-zA-Z\\s-]+,[0-9]+,[0-9]+,[a-zA-Z\\s-]+(,[a-zA-Z\\s-]+)*";
+				patternvalue = "[a-zA-Z\\s-_]+,[0-9]+,[0-9]+,[a-zA-Z\\s-_]+(,[a-zA-Z\\s-_]+)*";
 				splitVal = ",";
 				value = 0;
 			}
