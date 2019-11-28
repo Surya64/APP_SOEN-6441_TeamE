@@ -1522,7 +1522,7 @@ public class Player {
 		objFile = new ObjectOutputStream(savefile);
 
 		objFile.writeObject(gameMap);
-		//objFile.close();
+		objFile.close();
 		System.exit(0);
 
 	}

@@ -693,7 +693,7 @@ public class MapOperations {
 		if (!res) {
 			adjError = adjError + "Map is not connected";
 		}
-		if (validate.validateContinents(continentsData) == true && validate.validateCountries(countriesData) == true
+		if (validate.validateContinents(continentsData,"domination") == true && validate.validateCountries(countriesData,"domination") == true
 				&& validate.validateBoundaries(boundariesData) == true && adjError.isEmpty()) {
 			return true;
 		} else {
