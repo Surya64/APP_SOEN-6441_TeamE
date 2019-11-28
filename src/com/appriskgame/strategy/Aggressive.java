@@ -11,10 +11,21 @@ import com.appriskgame.model.Country;
 import com.appriskgame.model.GameMap;
 import com.appriskgame.model.GamePlayer;
 
+/**
+ * This class reinforces the strongest country, attacks until the army count of
+ * the attacking country is one, fortifies the strongest country for the
+ * aggressive player.
+ * 
+ * @author surya
+ *
+ */
 public class Aggressive implements PlayerStrategy {
 
 	Player playerController;
 
+	/**
+	 * This method places armies on the countries owned by Aggressive player
+	 */
 	@Override
 	public void placeArmies(GameMap gameMap, GamePlayer player) {
 		playerController = new Player();
@@ -24,6 +35,10 @@ public class Aggressive implements PlayerStrategy {
 		playerController.placearmyassigned(player, countryName);
 	}
 
+	/**
+	 * This method reinforces armies to the strongest country of the Aggressive
+	 * player
+	 */
 	@Override
 	public void reinforcementPhase(GamePlayer player, GameMap gameMap) throws Exception {
 		playerController = new Player();
@@ -35,6 +50,12 @@ public class Aggressive implements PlayerStrategy {
 
 	}
 
+	/**
+	 * This method calls the Attack method of player class by passing the aggressive
+	 * player's strongest country as the attacking country and the adjacent country
+	 * of the strongest country which belongs to other player as the defender
+	 * country.
+	 */
 	@Override
 	public int attackPhase(GameMap gameMap, GamePlayer player, ArrayList<GamePlayer> playersList) {
 		playerController = new Player();
@@ -76,8 +97,8 @@ public class Aggressive implements PlayerStrategy {
 						if (playerController.ableToMoveArmy(attackCountryObject, moveNumberOfArmies)) {
 							playerController.removeOwnerAddNewOwner(playersList, player,
 									defenderCountryObject.getCountryName());
-							System.out.println(
-									"Moving " + moveNumberOfArmies + " Amries to " + defenderCountryObject.getCountryName());
+							System.out.println("Moving " + moveNumberOfArmies + " Amries to "
+									+ defenderCountryObject.getCountryName());
 							defenderCountryObject.setPlayer(attackCountryObject.getPlayer());
 							defenderCountryObject.setNoOfArmies(moveNumberOfArmies);
 							attackCountryObject.setNoOfArmies(attackCountryObject.getNoOfArmies() - moveNumberOfArmies);
@@ -102,6 +123,9 @@ public class Aggressive implements PlayerStrategy {
 
 	}
 
+	/**
+	 * This method is used for fortifying armies in the strongest armies
+	 */
 	@Override
 	public void fortificationPhase(GameMap gameMap, GamePlayer player) throws IOException {
 		playerController = new Player();
@@ -136,9 +160,9 @@ public class Aggressive implements PlayerStrategy {
 	 * Method to get the strongest country from the Aggressive player's countries
 	 * list
 	 * 
-	 * @param mapGraph - GameMapGraph object
-	 * @param player   - current player which is the aggressive player
-	 * @return strongestCountry - strongest country of aggressive player
+	 * @param mapGraph GameMapGraph object
+	 * @param player   current player which is the aggressive player
+	 * @return strongestCountry strongest country of aggressive player
 	 */
 	public Country getStrongestCountry(GameMap mapGraph, GamePlayer player) {
 		int numberOfArmies = 0;
@@ -153,11 +177,11 @@ public class Aggressive implements PlayerStrategy {
 	}
 
 	/**
-	 * Method to get the strongest country
+	 * This method is used to get the strongest country
 	 * 
-	 * @param mapGraph - GameMapGraph object
-	 * @param player   - current player which is the aggressive player
-	 * @return strongestCountry - strongest country of aggressive player
+	 * @param mapGraph GameMapGraph object
+	 * @param player   current player which is the aggressive player
+	 * @return strongestCountry strongest country of aggressive player
 	 */
 	public Country getStrongestCountryWithAdjCountry(GameMap mapGraph, GamePlayer player) {
 		int numberOfArmies = 0;

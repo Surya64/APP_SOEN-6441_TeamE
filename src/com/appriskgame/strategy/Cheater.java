@@ -9,10 +9,24 @@ import com.appriskgame.model.Country;
 import com.appriskgame.model.GameMap;
 import com.appriskgame.model.GamePlayer;
 
+/**
+ * This class is for cheater who used to reinforce the methods that doubles the
+ * army count on all its countries, attack method automatically conquers all the
+ * neighbors of all its countries, doubles the number of armies on its countries
+ * that have neighbors that belong to other players.
+ * 
+ * @author sahana
+ * @author surya
+ *
+ */
 public class Cheater implements PlayerStrategy {
 
 	Player playerController;
 
+	/**
+	 * this method is used to place armies in the countries owned by the cheater
+	 * player
+	 */
 	@Override
 	public void placeArmies(GameMap gameMap, GamePlayer player) {
 		playerController = new Player();
@@ -23,6 +37,10 @@ public class Cheater implements PlayerStrategy {
 
 	}
 
+	/**
+	 * this method is used for the reinforcement of the cheater player's countries,
+	 * it doubles the armies on each country
+	 */
 	@Override
 	public void reinforcementPhase(GamePlayer player, GameMap gameMap) {
 		playerController = new Player();
@@ -37,6 +55,10 @@ public class Cheater implements PlayerStrategy {
 
 	}
 
+	/**
+	 * this method is for the attack of the cheater player. it attacks its neighbor
+	 * countries and wins them.
+	 */
 	@Override
 	public int attackPhase(GameMap gameMap, GamePlayer player, ArrayList<GamePlayer> playersList) {
 		ArrayList<Country> cheatersWinningCountries = new ArrayList<Country>();
@@ -72,8 +94,11 @@ public class Cheater implements PlayerStrategy {
 		}
 		return 0;
 	}
-	
-	
+
+	/**
+	 * this method is used for fortifying the countries of the cheater player that
+	 * are neighbors to countries owned by other players
+	 */
 	@Override
 	public void fortificationPhase(GameMap gameMap, GamePlayer player) throws IOException {
 		playerController = new Player();
@@ -83,8 +108,10 @@ public class Cheater implements PlayerStrategy {
 					GamePlayer adjPlayer = playerController.getPlayerForCountry(gameMap, adjCountry);
 					if (!player.getPlayerName().equalsIgnoreCase(adjPlayer.getPlayerName())) {
 						country.setNoOfArmies(country.getNoOfArmies() * 2);
-						System.out.println("Cheater fortified " + country.getCountryName()+ " with " + country.getNoOfArmies()*2);
-						gameMap.setActionMsg("Cheater fortified " + country.getCountryName()+ " with " + country.getNoOfArmies()*2, "action");
+						System.out.println("Cheater fortified " + country.getCountryName() + " with "
+								+ country.getNoOfArmies() * 2);
+						gameMap.setActionMsg("Cheater fortified " + country.getCountryName() + " with "
+								+ country.getNoOfArmies() * 2, "action");
 						break;
 					}
 				}

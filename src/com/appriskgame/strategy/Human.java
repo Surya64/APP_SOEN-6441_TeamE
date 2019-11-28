@@ -15,12 +15,22 @@ import com.appriskgame.model.Country;
 import com.appriskgame.model.GameMap;
 import com.appriskgame.model.GamePlayer;
 
+/**
+ * This class is based on the normal human player for reinforcement, attack and
+ * fortification phase.
+ * 
+ * @author surya
+ *
+ */
 public class Human implements PlayerStrategy {
 	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	Player playerController;
 	public static String playersChoice;
 	public static List<String> playersChoiceList = new ArrayList<String>();
 
+	/**
+	 * This method is used to place the remaining armies to countries
+	 */
 	@Override
 	public void placeArmies(GameMap gameMap, GamePlayer player) throws IOException {
 		playerController = new Player();
@@ -44,6 +54,9 @@ public class Human implements PlayerStrategy {
 
 	}
 
+	/**
+	 * This method is used to reinforce armies
+	 */
 	@Override
 	public void reinforcementPhase(GamePlayer player, GameMap gameMap) throws Exception {
 		playerController = new Player();
@@ -168,6 +181,9 @@ public class Human implements PlayerStrategy {
 		}
 	}
 
+	/**
+	 * This method is used to perform attack
+	 */
 	@Override
 	public int attackPhase(GameMap mapDetails, GamePlayer player, ArrayList<GamePlayer> playersList)
 			throws IOException {
@@ -199,7 +215,8 @@ public class Human implements PlayerStrategy {
 				}
 				String defenderCountry = attackDetails[2];
 				String decision = attackDetails[3];
-				boolean attackerCountryPresent = playerController.isCountryAttackPresent(player, attackCountry, mapDetails);
+				boolean attackerCountryPresent = playerController.isCountryAttackPresent(player, attackCountry,
+						mapDetails);
 				boolean defenderCountryPresent = playerController.isCountryPresent(defenderCountry, mapDetails);
 				Country attackCountryObject = null;
 				Country defenderCountryObject = null;
@@ -218,7 +235,8 @@ public class Human implements PlayerStrategy {
 					attackCountryObject = playerController.getCountryObject(attackCountry, mapDetails);
 					defenderCountryObject = playerController.getCountryObject(defenderCountry, mapDetails);
 
-					isAttackAndDefenderAdajacent = playerController.isCountryAdjacent(attackCountryObject, defenderCountry, mapDetails);
+					isAttackAndDefenderAdajacent = playerController.isCountryAdjacent(attackCountryObject,
+							defenderCountry, mapDetails);
 				}
 				if (defenderCountryPresent) {
 					if (defenderCountryObject != null) {
@@ -238,10 +256,13 @@ public class Human implements PlayerStrategy {
 				}
 				if (decision.equalsIgnoreCase("-allout") && errorOccured == false) {
 					while (attackCountryObject.getNoOfArmies() > 1 && defenderCountryObject.getNoOfArmies() != 0) {
-						int attackerDices = playerController.maxAllowableAttackerDice(attackCountryObject.getNoOfArmies());
-						int defenderDices = playerController.maxAllowableDefenderDice(defenderCountryObject.getNoOfArmies());
+						int attackerDices = playerController
+								.maxAllowableAttackerDice(attackCountryObject.getNoOfArmies());
+						int defenderDices = playerController
+								.maxAllowableDefenderDice(defenderCountryObject.getNoOfArmies());
 						if (attackerDices > 0 && defenderDices > 0) {
-							playerController.attackingStarted(attackerDices, defenderDices, attackCountryObject, defenderCountryObject);
+							playerController.attackingStarted(attackerDices, defenderDices, attackCountryObject,
+									defenderCountryObject);
 							if (playerController.isAttackerWon(defenderCountryObject)) {
 
 								System.out.println("Card Phase");
@@ -345,6 +366,9 @@ public class Human implements PlayerStrategy {
 
 	}
 
+	/**
+	 * This method is used for fortification.
+	 */
 	@Override
 	public void fortificationPhase(GameMap gameMap, GamePlayer player) throws IOException {
 		playerController = new Player();
