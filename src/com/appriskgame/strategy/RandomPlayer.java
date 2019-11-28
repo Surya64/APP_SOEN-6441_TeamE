@@ -11,10 +11,20 @@ import com.appriskgame.model.Country;
 import com.appriskgame.model.GameMap;
 import com.appriskgame.model.GamePlayer;
 
+/**
+ * This class is for Random player who reinforces random country, attacks random
+ * country a random number of times and fortifies a random country.
+ * 
+ * @author Surya
+ *
+ */
 public class RandomPlayer implements PlayerStrategy {
 
 	Player playerController;
 
+	/**
+	 * this method place armies on a random country owned by the player.
+	 */
 	@Override
 	public void placeArmies(GameMap gameMap, GamePlayer player) {
 		playerController = new Player();
@@ -25,6 +35,9 @@ public class RandomPlayer implements PlayerStrategy {
 
 	}
 
+	/**
+	 * This method is for Reinforcement phase of the random player.
+	 */
 	@Override
 	public void reinforcementPhase(GamePlayer player, GameMap gameMap) throws Exception {
 		playerController = new Player();
@@ -35,6 +48,12 @@ public class RandomPlayer implements PlayerStrategy {
 		System.out.println(country.getCountryName() + " reinforced with " + numOfarmies);
 	}
 
+	/**
+	 * this method chooses two random adjacent countries and decide whether to
+	 * attack or not. if it chooses to attack it randomly decide how many times to
+	 * attack if the attack is possible
+	 * 
+	 */
 	@Override
 	public int attackPhase(GameMap gameMap, GamePlayer player, ArrayList<GamePlayer> playersList) {
 		playerController = new Player();
@@ -83,7 +102,8 @@ public class RandomPlayer implements PlayerStrategy {
 						if (playerController.ableToMoveArmy(attackCountryObject, moveNumberOfArmies)) {
 							playerController.removeOwnerAddNewOwner(playersList, player,
 									defenderCountryObject.getCountryName());
-							System.out.println("Moving " + moveNumberOfArmies +" Amries to " + defenderCountryObject.getCountryName());
+							System.out.println("Moving " + moveNumberOfArmies + " Amries to "
+									+ defenderCountryObject.getCountryName());
 							defenderCountryObject.setPlayer(attackCountryObject.getPlayer());
 							defenderCountryObject.setNoOfArmies(moveNumberOfArmies);
 							attackCountryObject.setNoOfArmies(attackCountryObject.getNoOfArmies() - moveNumberOfArmies);
@@ -107,6 +127,10 @@ public class RandomPlayer implements PlayerStrategy {
 
 	}
 
+	/**
+	 * this method chooses two random adjacent countries and fortifies a random
+	 * number of possible armies
+	 */
 	@Override
 	public void fortificationPhase(GameMap gameMap, GamePlayer player) throws IOException {
 		playerController = new Player();
@@ -131,9 +155,9 @@ public class RandomPlayer implements PlayerStrategy {
 	/**
 	 * this method gets a random country owned by the Random player
 	 * 
-	 * @param mapGraph - The object of the GameMap
-	 * @param player   - The object of the player
-	 * @return randomCountry
+	 * @param mapGraph GameMap object
+	 * @param player   current player
+	 * @return randomCountry object
 	 */
 	public Country getRandomCountry(GameMap mapGraph, GamePlayer player) {
 		int countryIndexAssignment = new Random().nextInt(player.getPlayerCountries().size());
@@ -143,8 +167,8 @@ public class RandomPlayer implements PlayerStrategy {
 	/**
 	 * this method gets a random neighbor country owned by the Random player
 	 * 
-	 * @param gamemap     - object of the GameMap
-	 * @param fromcountry - Country Object
+	 * @param gamemap     GameMap object
+	 * @param fromcountry Country Object
 	 * @return random neighbor Country
 	 */
 	public Country getRandomNeighbourCountry(Country fromcountry, GameMap gamemap) {
@@ -164,9 +188,9 @@ public class RandomPlayer implements PlayerStrategy {
 	 * this method gets a random country of player with adjacent country belonging
 	 * to a different player
 	 * 
-	 * @param mapGraph - The object of the GameMapGraph
-	 * @param player   - The player of the country
-	 * @return randomAdjacentCountry
+	 * @param mapGraph GameMapGraph object
+	 * @param player   current player
+	 * @return List of Adjacent Country
 	 */
 	public List<Country> getRandomCountryWithAdjCountry(GameMap mapGraph, GamePlayer player) {
 		playerController = new Player();

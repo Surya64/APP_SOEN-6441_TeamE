@@ -9,10 +9,21 @@ import com.appriskgame.model.Country;
 import com.appriskgame.model.GameMap;
 import com.appriskgame.model.GamePlayer;
 
+/**
+ * This method reinforces its weakest countries, does not attack, fortifies by
+ * moving armies to weaker countries
+ * 
+ * @author surya
+ * @author sahana
+ *
+ */
 public class Benevolent implements PlayerStrategy {
 
 	Player playerController;
 
+	/**
+	 * This method places armies on the countries owned by Benevolent player
+	 */
 	@Override
 	public void placeArmies(GameMap gameMap, GamePlayer player) {
 		playerController = new Player();
@@ -23,6 +34,9 @@ public class Benevolent implements PlayerStrategy {
 
 	}
 
+	/**
+	 * This method reinforces armies to the weakest country of the Benevolent player
+	 */
 	@Override
 	public void reinforcementPhase(GamePlayer player, GameMap gameMap) throws Exception {
 		playerController = new Player();
@@ -33,6 +47,9 @@ public class Benevolent implements PlayerStrategy {
 		System.out.println(country.getCountryName() + " reinforced with " + numOfarmies);
 	}
 
+	/**
+	 * This method is used for attack and the benevolent player cannot attack.
+	 */
 	@Override
 	public int attackPhase(GameMap gameMap, GamePlayer player, ArrayList<GamePlayer> playersList) {
 		System.out.println("Benevolent Never Attacks");
@@ -40,6 +57,10 @@ public class Benevolent implements PlayerStrategy {
 
 	}
 
+	/**
+	 * This method fortifies armies from the strongest country to the weakest
+	 * country of the Benevolent player
+	 */
 	@Override
 	public void fortificationPhase(GameMap gameMap, GamePlayer player) throws IOException {
 		playerController = new Player();
@@ -70,8 +91,8 @@ public class Benevolent implements PlayerStrategy {
 	/**
 	 * this method gets the weakest country owned by the benevolent player
 	 * 
-	 * @param mapGraph - The object of the GameMap
-	 * @param player   - The object of the player
+	 * @param mapGraph GameMap object
+	 * @param player   player object
 	 * @return weakest country
 	 */
 	public Country getWeakestCountry(GameMap mapGraph, GamePlayer player) {
@@ -90,8 +111,8 @@ public class Benevolent implements PlayerStrategy {
 	/**
 	 * this method gets the strongest country owned by the benevolent player
 	 * 
-	 * @param mapGraph - The object of the GameMap
-	 * @param player   - The object of the player
+	 * @param mapGraph GameMap object
+	 * @param player   player object
 	 * @return strongest country
 	 */
 	public Country getStrongestCountry(GameMap mapGraph, GamePlayer player) {

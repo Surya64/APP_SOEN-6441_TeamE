@@ -1290,9 +1290,9 @@ public class Player {
 	 * fortification. It internally calls the moveArmies method once all the
 	 * validation with respect to fortification are performed.
 	 *
-	 * @param player  - The player who is doing fortification.
-	 * @param gameMap - GameMap object
-	 * @throws IOException - throws Input-Output exception
+	 * @param player  The player who is doing fortification.
+	 * @param gameMap GameMap object
+	 * @throws IOException throws Input-Output exception
 	 */
 	public boolean startGameFortification(GamePlayer player, GameMap gameMap) throws IOException {
 		if (player.getPlayerCountries().size() >= 2) {
@@ -1335,9 +1335,9 @@ public class Player {
 	 * This method takes the values for each player from the startFortification
 	 * method and does the manipulation of armies and assign the armies
 	 *
-	 * @param fromCountry - The country from where player want to move army
-	 * @param toCountry   - The country to where player want to move army
-	 * @param armiesCount - Count of armies player wish to move
+	 * @param fromCountry The country from where player want to move army
+	 * @param toCountry   The country to where player want to move army
+	 * @param armiesCount Count of armies player wish to move
 	 */
 	public boolean moveArmies(Country fromCountry, Country toCountry, int armiesCount) {
 		boolean neighbourCountries = false;
@@ -1388,10 +1388,12 @@ public class Player {
 		}
 		return false;
 	}
+
 	/**
+	 * This method sets the player name.
 	 * 
-	 * @param - players current players in the game
-	 * @return - name of the player
+	 * @param players current players in the game
+	 * @return name of the player
 	 */
 	public ArrayList<String> setplayList(ArrayList<GamePlayer> players) {
 		ArrayList<String> playerNames = new ArrayList<String>();
@@ -1400,10 +1402,12 @@ public class Player {
 		}
 		return playerNames;
 	}
+
 	/**
+	 * This method is used for continuing the game.
 	 * 
-	 * @param gameMapcopy - copy of the gameMap
-	 * @throws Exception
+	 * @param gameMapcopy gameMap object
+	 * @throws Exception input/output exception
 	 */
 	public void continueGame(GameMap gameMapcopy) throws Exception {
 
@@ -1506,10 +1510,11 @@ public class Player {
 			gameContinue = true;
 		} while (gameContinue);
 	}
+
 	/**
 	 * 
-	 * @param gameMap - Map of the game
-	 * @throws IOException
+	 * @param gameMap current gameMap object
+	 * @throws IOException input/output exception
 	 */
 	public void saveGame(GameMap gameMap) throws IOException {
 		ArrayList<GamePlayer> changedOrder = new ArrayList<GamePlayer>();
@@ -1539,9 +1544,11 @@ public class Player {
 		System.exit(0);
 
 	}
+
 	/**
+	 * This method is used to read the saved gameMap
 	 * 
-	 * @throws Exception
+	 * @throws Exception input/output exception
 	 */
 	public void readGame() throws Exception {
 		System.out.println("Please the enter the name of the saved Game?");
@@ -1560,11 +1567,13 @@ public class Player {
 			System.out.println("File Name Doesn't exist!");
 		}
 	}
+
 	/**
+	 * This method is used to check whether the saved map exists or not.
 	 * 
-	 * @param filepath - path of the file	
-	 * @param fileName - name of the file
-	 * @return - true
+	 * @param filepath path of the file
+	 * @param fileName name of the file
+	 * @return - true if exist,else false
 	 */
 	public boolean isSavedGameExists(String filepath, String fileName) {
 		String mapFileNameWithExtention = fileName + ".txt";
@@ -1577,10 +1586,12 @@ public class Player {
 		}
 		return false;
 	}
+
 	/**
+	 * This method is used to get the correct player list
 	 * 
-	 * @param gameMap - object of GameMap
-	 * @return -correctOrderPlayList
+	 * @param gameMap GameMap object
+	 * @return correct order of list of player
 	 */
 	public ArrayList<GamePlayer> getCorrectPlayList(GameMap gameMap) {
 		ArrayList<GamePlayer> correctOrderPlayList = new ArrayList<GamePlayer>();
@@ -1607,9 +1618,9 @@ public class Player {
 	/**
 	 * This method gets the adjacent country object for the entered country
 	 * 
-	 * @param mapGraph           - The GameMap object
-	 * @param attackerAdjCountry - the adjacent country of the attacker
-	 * @return Country object
+	 * @param mapGraph           The GameMap object
+	 * @param attackerAdjCountry adjacent country name
+	 * @return adjacent country object
 	 */
 	public Country getAdjacentCountry(GameMap mapGraph, String attackerAdjCountry) {
 		for (GamePlayer player : mapGraph.getPlayers()) {
@@ -1625,9 +1636,9 @@ public class Player {
 	/**
 	 * This method returns the player who owns the given country
 	 * 
-	 * @param mapGraph    - The GameMap object
-	 * @param countryName - The country whose owner is to searched
-	 * @return -the player object
+	 * @param mapGraph    The GameMap object
+	 * @param countryName country name
+	 * @return current player object
 	 */
 	public GamePlayer getPlayerForCountry(GameMap mapGraph, String countryName) {
 		for (GamePlayer player : mapGraph.getPlayers()) {
@@ -1639,13 +1650,15 @@ public class Player {
 		}
 		return null;
 	}
+
 	/**
+	 * This method is used to starts the tournament mode.
 	 * 
-	 * @param gameMap - gameMap object	
-	 * @param players - players in the game	
-	 * @param turns - number of turns
-	 * @return - "turn-turn"
-	 * @throws Exception
+	 * @param gameMap gameMap object
+	 * @param players players in the game
+	 * @param turns   number of turns
+	 * @return winner of the game
+	 * @throws Exception input/output exception
 	 */
 	public String gamePlayTournament(GameMap gameMap, ArrayList<String> players, int turns) throws Exception {
 		int maxTurns = turns;
