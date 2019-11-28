@@ -1387,7 +1387,11 @@ public class Player {
 		}
 		return false;
 	}
-
+	/**
+	 * 
+	 * @param - players current players in the game
+	 * @return - name of the player
+	 */
 	public ArrayList<String> setplayList(ArrayList<GamePlayer> players) {
 		ArrayList<String> playerNames = new ArrayList<String>();
 		for (int i = 0; i < players.size(); i++) {
@@ -1395,7 +1399,11 @@ public class Player {
 		}
 		return playerNames;
 	}
-
+	/**
+	 * 
+	 * @param gameMapcopy - copy of the gameMap
+	 * @throws Exception
+	 */
 	public void continueGame(GameMap gameMapcopy) throws Exception {
 
 		GameMap gameMap = new GameMap();
@@ -1497,7 +1505,11 @@ public class Player {
 			gameContinue = true;
 		} while (gameContinue);
 	}
-
+	/**
+	 * 
+	 * @param gameMap - Map of the game
+	 * @throws IOException
+	 */
 	public void saveGame(GameMap gameMap) throws IOException {
 		ArrayList<GamePlayer> changedOrder = new ArrayList<GamePlayer>();
 		changedOrder = getCorrectPlayList(gameMap);
@@ -1526,7 +1538,10 @@ public class Player {
 		System.exit(0);
 
 	}
-
+	/**
+	 * 
+	 * @throws Exception
+	 */
 	public void readGame() throws Exception {
 		System.out.println("Please the enter the name of the saved Game?");
 		String workingDir = System.getProperty("user.dir");
@@ -1544,7 +1559,12 @@ public class Player {
 			System.out.println("File Name Doesn't exist!");
 		}
 	}
-
+	/**
+	 * 
+	 * @param filepath - path of the file	
+	 * @param fileName - name of the file
+	 * @return - true
+	 */
 	public boolean isSavedGameExists(String filepath, String fileName) {
 		String mapFileNameWithExtention = fileName + ".txt";
 		File mapFolder = new File(filepath);
@@ -1556,7 +1576,11 @@ public class Player {
 		}
 		return false;
 	}
-
+	/**
+	 * 
+	 * @param gameMap - object of GameMap
+	 * @return -correctOrderPlayList
+	 */
 	public ArrayList<GamePlayer> getCorrectPlayList(GameMap gameMap) {
 		ArrayList<GamePlayer> correctOrderPlayList = new ArrayList<GamePlayer>();
 		int currentIndex = 0;
@@ -1614,7 +1638,14 @@ public class Player {
 		}
 		return null;
 	}
-
+	/**
+	 * 
+	 * @param gameMap - gameMap object	
+	 * @param players - players in the game	
+	 * @param turns - number of turns
+	 * @return - "turn-turn"
+	 * @throws Exception
+	 */
 	public String gamePlayTournament(GameMap gameMap, ArrayList<String> players, int turns) throws Exception {
 		int maxTurns = turns;
 		int currentTurn = 0;
