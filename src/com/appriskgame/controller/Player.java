@@ -267,7 +267,7 @@ public class Player {
 							"** Fortification Phase Ends for Player: " + gameplayer.getPlayerName() + " **", "action");
 
 					if (gameplayer.getPlayerType().equalsIgnoreCase("human")) {
-						System.out.println("Do you want to Save the Game?");
+						System.out.println("Do you want to Save the Game? (Yes/No)");
 						String choice = br.readLine().trim();
 
 						while (!(choice.equalsIgnoreCase("Yes") || choice.equalsIgnoreCase("No") || choice == null)) {
@@ -648,6 +648,7 @@ public class Player {
 			if ((player.getNoOfArmies()) > 0 && player.getNoOfArmies() >= armiesCount) {
 				country.setNoOfArmies(country.getNoOfArmies() + armiesCount);
 				player.setNoOfArmies(player.getNoOfArmies() - armiesCount);
+				System.out.println(country.getCountryName() + " is reinforced with " + armiesCount);
 			} else {
 				System.out.println("Insufficient number of armies.\n");
 			}
@@ -1470,7 +1471,7 @@ public class Player {
 							"** Fortification Phase Ends for Player: " + gameplayer.getPlayerName() + " **", "action");
 
 					if (gameplayer.getPlayerType().equalsIgnoreCase("human")) {
-						System.out.println("Do you want to Save the Game?");
+						System.out.println("Do you want to Save the Game? (Yes/No)");
 						String choice = br.readLine().trim();
 
 						while (!(choice.equalsIgnoreCase("Yes") || choice.equalsIgnoreCase("No") || choice == null)) {

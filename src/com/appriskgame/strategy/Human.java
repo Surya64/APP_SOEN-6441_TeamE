@@ -53,12 +53,14 @@ public class Human implements PlayerStrategy {
 			System.out.println(" Player Name :" + player.getPlayerName());
 			gameMap.setActionMsg("Armies available for Reinforcement: " + player.getNoOfArmies(), "action");
 			System.out.println("Armies available for Reinforcement: " + player.getNoOfArmies());
+			gameMap.setActionMsg("User entering reinforce Command", "action");
 			System.out.println(
 					"Please enter the country and number of armies to reinforcein the format: reinforce countryname num");
 			playersChoice = br.readLine().trim();
 			playersChoiceList = Arrays.asList(playersChoice.split(" "));
 			if (!(playersChoiceList.size() == 3)) {
 				System.out.println("Please enter the right format like : reinforce countryname num");
+				gameMap.setActionMsg("Incorrect Command", "action");
 				playersChoice = br.readLine().trim();
 				playersChoiceList = Arrays.asList(playersChoice.split(" "));
 			}
@@ -107,10 +109,12 @@ public class Human implements PlayerStrategy {
 				}
 
 				if (!match.matches() || armyCount.isEmpty()) {
+					gameMap.setActionMsg("Incorrect Command", "action");
 					System.out.println("\nPlease enter the correct army count in right format");
 					playersChoice = br.readLine().trim();
 					playersChoiceList = Arrays.asList(playersChoice.split(" "));
 					if (!(playersChoiceList.size() == 3)) {
+						gameMap.setActionMsg("Incorrect Command", "action");
 						System.out.println("Please enter the right format like : reinforce countryname num");
 						playersChoice = br.readLine().trim();
 						playersChoiceList = Arrays.asList(playersChoice.split(" "));
@@ -182,6 +186,7 @@ public class Human implements PlayerStrategy {
 				System.out.println("Enter the Attacker command?\n" + "Player Name : " + player.getPlayerName());
 				userCommand = br.readLine().trim();
 			} else {
+				mapDetails.setActionMsg("No Attack", "action");
 				userCommand = "attack -noattack";
 
 			}
@@ -240,6 +245,7 @@ public class Human implements PlayerStrategy {
 							if (playerController.isAttackerWon(defenderCountryObject)) {
 
 								System.out.println("Card Phase");
+								mapDetails.setActionMsg("Player Card Allocation", "action");
 								CardController cardController = new CardController();
 								cardController.setDeckOfCards();
 								cardController.allocateCardToPlayer(player);
@@ -274,6 +280,7 @@ public class Human implements PlayerStrategy {
 								if (playerController.isAttackerWon(defenderCountryObject)) {
 									System.out.println("Card Phase");
 									CardController cardController = new CardController();
+									mapDetails.setActionMsg("Player card Allocation", "action");
 									cardController.setDeckOfCards();
 									cardController.allocateCardToPlayer(player);
 									mapDetails.setActionMsg("Player got a Card", "action");
@@ -291,6 +298,7 @@ public class Human implements PlayerStrategy {
 								playerController.reasonForFailedDefender(defenderArmies, defenderDices);
 							}
 						} else {
+							mapDetails.setActionMsg("Defender Incorrect Command", "action");
 							System.out.println("Please enter the defender Command in the below correct Format\n"
 									+ "Format :defend numdice[numdice>0]\n");
 						}
@@ -299,10 +307,12 @@ public class Human implements PlayerStrategy {
 					}
 				} else if (errorOccured == true) {
 					System.out.println(errorDetails);
+					mapDetails.setActionMsg("Error: " + errorDetails, "action");
 					errorDetails = "";
 					errorOccured = false;
 				}
 			} else {
+				mapDetails.setActionMsg("InCorrect Commands", "action");
 				System.out.println("Please enter the attack Command in any one of the below correct Format\n"
 						+ "Format 1:attack countrynamefrom countynameto numdice[numdice>0]\n"
 						+ "Format 2:attack countrynamefrom countynameto  allout\n" + "Format 3:attack -noattack\n");
@@ -328,6 +338,7 @@ public class Human implements PlayerStrategy {
 			} else {
 				gameContinue = false;
 				System.out.println("Attacking Phase is ended");
+				mapDetails.setActionMsg("Attacking Phase is ended", "action");
 			}
 		} while (gameContinue);
 		return 0;
@@ -362,6 +373,7 @@ public class Human implements PlayerStrategy {
 						System.out.println("* " + country.getCountryName() + ":" + country.getNoOfArmies() + "\n");
 					}
 					System.out.println("Enter the Command for fortification");
+					gameMap.setActionMsg("Player entering fortification Command", "action");
 					strUser = br.readLine().trim();
 					playersCommandList = Arrays.asList(strUser.split(" "));
 					if (playersCommandList.size() == 2) {
@@ -374,6 +386,7 @@ public class Human implements PlayerStrategy {
 							doFortificationNone = true;
 							doFortification = true;
 						} else {
+							gameMap.setActionMsg("Incorrect Command", "action");
 							System.out.println("Please enter the right format like : fortify none");
 							doFortification = true;
 						}
