@@ -27,6 +27,7 @@ public class GameMap extends Observable implements Serializable{
 	public String message;
 	public static int cardExchangeCountinTheGame = 0;
 	private String mode="";
+	private String format="";
 
 	public static int getCardExchangeCountinTheGame() {
 		return cardExchangeCountinTheGame;
@@ -211,5 +212,13 @@ public class GameMap extends Observable implements Serializable{
 
 	public void setMode(String mode) {
 		this.mode = mode;
+	}
+
+	public String getFormat() {
+		return format;
+	}
+
+	public void setFormat(String format) {
+		this.format = format;
 	}
 }
