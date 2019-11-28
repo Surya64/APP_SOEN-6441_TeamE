@@ -252,7 +252,7 @@ public class ReadAndWriteMapConquest implements ReadAndWrite {
 	 */
 
 	public String getContriesAndNeighbour() {
-		String countriesDetails = "[countries]\r\n";
+		String countriesDetails = "[Territories]\r\n";
 		for (int i = 0; i < gameMap.getCountries().size(); i++) {
 			String currentLine = "";
 			Country country = gameMap.getCountries().get(i);

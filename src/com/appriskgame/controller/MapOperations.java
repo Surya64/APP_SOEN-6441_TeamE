@@ -34,6 +34,7 @@ public class MapOperations {
 	String mapLocation = workingDir + "/resources/maps/";
 	public GameMap gameMap = new GameMap();
 	static int connectableCountries = 0;
+	String format = "";
 
 	/**
 	 * This Method is to check whether the Map File exists.
@@ -53,25 +54,19 @@ public class MapOperations {
 		}
 		return false;
 	}
-	
-	
-	
-	
-	public String getFileForamt(String mapFileName) throws IOException
-	{
+
+	public String getFileForamt(String mapFileName) throws IOException {
 		String data = "";
 		String mapFormat = "";
 		data = new String(Files.readAllBytes(Paths.get(mapFileName)));
 		boolean isName = data.contains("name");
 //		data = requiredData[1];
 //		String[] formattedData = data.split("\\r\\n\\r\\n");
-		
-		if(isName)
-		{
-			mapFormat="Domination";
-		}
-		else {
-			mapFormat="Conquest";
+
+		if (isName) {
+			mapFormat = "Domination";
+		} else {
+			mapFormat = "Conquest";
 		}
 		return mapFormat;
 	}
@@ -89,7 +84,7 @@ public class MapOperations {
 
 		ReadAndWrite readAndWrite = null;
 		String mapFormat = getFileForamt(inputGameMapName);
-
+		format = mapFormat;
 		MapValidation validate = new MapValidation();
 
 		if (mapFormat.equalsIgnoreCase("Domination")) {
@@ -271,7 +266,6 @@ public class MapOperations {
 			}
 		}
 	}
-	
 
 	/**
 	 * This Method is to write the Continents, Countries and boundaries details to
@@ -284,12 +278,11 @@ public class MapOperations {
 
 	public void writeGameMap(String ouputGameMapName, String mapFileName) throws IOException {
 
-		
-		String mapFormat ="Conquest"
-				+ "";
+		String mapFormat = format;
+
 		try {
 			ReadAndWrite readAndWrite = null;
-			
+
 			if (mapFormat.equalsIgnoreCase("Domination")) {
 				readAndWrite = new ReadAndWriteDomination();
 
@@ -301,11 +294,10 @@ public class MapOperations {
 
 			readAndWrite.writeGameMap(ouputGameMapName, mapFileName, gameMap);
 		}
-	
 
-		 catch (IOException e) {
-				System.err.println("File not found exception");
-			}
+		catch (IOException e) {
+			System.err.println("File not found exception");
+		}
 
 //		File GameMapName = new File(ouputGameMapName);
 //		FileWriter fw = new FileWriter(GameMapName);
@@ -693,7 +685,8 @@ public class MapOperations {
 		if (!res) {
 			adjError = adjError + "Map is not connected";
 		}
-		if (validate.validateContinents(continentsData,"domination") == true && validate.validateCountries(countriesData,"domination") == true
+		if (validate.validateContinents(continentsData, "domination") == true
+				&& validate.validateCountries(countriesData, "domination") == true
 				&& validate.validateBoundaries(boundariesData) == true && adjError.isEmpty()) {
 			return true;
 		} else {
@@ -1048,7 +1041,7 @@ public class MapOperations {
 			System.out.println("Enter the command to save the Map File");
 			String command = br.readLine().trim();
 			String[] cmdDetails = command.split(" ");
-			
+
 			String cmdType = cmdDetails[0];
 			if (cmdType.equals("savemap")) {
 				if (cmdDetails.length == 2) {
@@ -1062,8 +1055,18 @@ public class MapOperations {
 					MapValidation validate = new MapValidation();
 					boolean uploadSuccessful = false;
 					try {
-						uploadSuccessful = validate.validateMapDomination(ouputGameMapName);
-						uploadSuccessful = validate.validateMapConquest(ouputGameMapName);
+
+						String mapFormat = format;
+
+						if (mapFormat.equalsIgnoreCase("Domination")) {
+							uploadSuccessful = validate.validateMapDomination(ouputGameMapName);
+
+						}
+						if (mapFormat.equalsIgnoreCase("Conquest")) {
+							uploadSuccessful = validate.validateMapConquest(ouputGameMapName);
+
+						}
+
 					} catch (IOException e) {
 						System.out.println("File Not found Exception");
 					}
