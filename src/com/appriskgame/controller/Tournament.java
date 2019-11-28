@@ -78,7 +78,7 @@ public class Tournament {
 
 			if (tournament.equalsIgnoreCase("tournament") && game.equalsIgnoreCase("-G") && turn.equalsIgnoreCase("-D")
 					&& maps.equalsIgnoreCase("-M") && stategies.equalsIgnoreCase("-P")) {
-				if (games >= MINIMUMGAME && games <= MINIMUMGAME) {
+				if (games >= MINIMUMGAME && games <= MAXIMUMGAME) {
 					if (turns >= MINUMUMTURNS && turns <= MAXIMUMTURNS) {
 						decision = true;
 						return decision;
