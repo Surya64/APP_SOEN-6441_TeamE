@@ -1048,6 +1048,7 @@ public class MapOperations {
 			System.out.println("Enter the command to save the Map File");
 			String command = br.readLine().trim();
 			String[] cmdDetails = command.split(" ");
+			
 			String cmdType = cmdDetails[0];
 			if (cmdType.equals("savemap")) {
 				if (cmdDetails.length == 2) {
@@ -1062,6 +1063,7 @@ public class MapOperations {
 					boolean uploadSuccessful = false;
 					try {
 						uploadSuccessful = validate.validateMapDomination(ouputGameMapName);
+						uploadSuccessful = validate.validateMapConquest(ouputGameMapName);
 					} catch (IOException e) {
 						System.out.println("File Not found Exception");
 					}

@@ -58,6 +58,7 @@ public class ReadAndWriteDomination implements ReadAndWrite {
 				countrySet.put(country.getCountryName(), country);
 				gameMap.setCountrySet(countrySet);
 			});
+			gameMap.setFormat("Domination");
 			boolean res = isConnected(gameMap);
 			if (res == true) {
 				return gameMap;

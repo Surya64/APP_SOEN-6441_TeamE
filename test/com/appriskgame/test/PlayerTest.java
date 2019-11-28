@@ -39,12 +39,16 @@ public class PlayerTest {
 	ArrayList<Country> listOfCountries;
 	ArrayList<GamePlayer> listOfPlayers;
 	ArrayList<Country> listOfNeighbours;
+	String savedFilePath;
+	String savedFileName;
 
 	/**
 	 * This is the setup method for the pre-requisite values before the test cases
 	 */
 	@Before
 	public void initializePlayerTest() {
+		 savedFilePath="C:\\Users\\saich\\Desktop\\Saicharanteja_TournamentChanges/resources/savedgames/";
+		 savedFileName="Content";
 		player = new Player();
 		continent = new Continent();
 		player1 = new GamePlayer();
@@ -299,5 +303,12 @@ public class PlayerTest {
 	public void testNotableToMoveArmy() {
 		assertFalse(player.ableToMoveArmy(country1, 0));
 	}
+	
+	@Test
+	public void testSavedGameExists() {
+		assertTrue(player.isSavedGameExists(savedFilePath, savedFileName));
+	}
+	
+	
 
 }

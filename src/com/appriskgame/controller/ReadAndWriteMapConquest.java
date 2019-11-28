@@ -16,14 +16,14 @@ import com.appriskgame.model.Continent;
 import com.appriskgame.model.Country;
 import com.appriskgame.model.GameMap;
 
-public class ReadAndWriteMapConquest  implements ReadAndWrite{
+public class ReadAndWriteMapConquest implements ReadAndWrite {
 
-	
 //	private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	String workingDir = System.getProperty("user.dir");
 	String mapLocation = workingDir + "/resources/maps/";
 	public GameMap gameMap = new GameMap();
 	static int connectableCountries = 0;
+
 	/**
 	 * This Method is to load the contents of Continents, Countries and neighboring
 	 * countries.
@@ -41,13 +41,13 @@ public class ReadAndWriteMapConquest  implements ReadAndWrite{
 		String GameMapName = inputGameMapName;
 		boolean uploadSuccessful = false;
 		String data = "";
-		uploadSuccessful = validate.validateMapConquest(GameMapName);
-//		uploadSuccessful = true;
-		String[] requiredData=null;
+//		uploadSuccessful = validate.validateMapConquest(GameMapName);
+		uploadSuccessful = true;
+		String[] requiredData = null;
 		if (uploadSuccessful) {
 			try {
 				data = new String(Files.readAllBytes(Paths.get(GameMapName)));
-				requiredData= data.split("\\r\\n\\r\\n");
+				requiredData = data.split("\\r\\n\\r\\n");
 //				data = requiredData[1];
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -60,6 +60,7 @@ public class ReadAndWriteMapConquest  implements ReadAndWrite{
 				countrySet.put(country.getCountryName(), country);
 				gameMap.setCountrySet(countrySet);
 			});
+			gameMap.setFormat("Conquest");
 			boolean res = isConnected(gameMap);
 //			boolean res = true;
 			if (res == true) {
@@ -76,9 +77,7 @@ public class ReadAndWriteMapConquest  implements ReadAndWrite{
 
 		return new GameMap();
 	}
-	
-	
-	
+
 	/**
 	 * This Method is to write the Continents, Countries and boundaries details to
 	 * the map file.
@@ -88,8 +87,8 @@ public class ReadAndWriteMapConquest  implements ReadAndWrite{
 	 * @throws IOException IO
 	 */
 
-	public void writeGameMap(String ouputGameMapName, String mapFileName,GameMap gameMap ) throws IOException {
-		this.gameMap=gameMap;
+	public void writeGameMap(String ouputGameMapName, String mapFileName, GameMap gameMap) throws IOException {
+		this.gameMap = gameMap;
 		File GameMapName = new File(ouputGameMapName);
 		FileWriter fw = new FileWriter(GameMapName);
 		BufferedWriter bw = new BufferedWriter(fw);
@@ -110,8 +109,7 @@ public class ReadAndWriteMapConquest  implements ReadAndWrite{
 			System.err.println("File not found exception");
 		}
 	}
-	
-	
+
 	/**
 	 * This method is to fill the Continents Details in the Game Map.
 	 *
@@ -123,12 +121,12 @@ public class ReadAndWriteMapConquest  implements ReadAndWrite{
 		for (int i = 1; i < continentList.length; i++) {
 			String[] ContinentDetails = continentList[i].split("=");
 			Continent continent = new Continent();
-			continent.setContinentName(ContinentDetails[0]);
+			continent.setContinentName(getStringdelimited(ContinentDetails[0]));
 			continent.setContinentControlValue(Integer.parseInt(ContinentDetails[1]));
 			gameMap.getContinents().add(continent);
 		}
 	}
-	
+
 	/**
 	 * This method is to fill the Countries Details in the Game Map.
 	 *
@@ -146,15 +144,14 @@ public class ReadAndWriteMapConquest  implements ReadAndWrite{
 //			Continent continent = gameMap.getContinents().get(continentNumber - 1);
 			Continent continent = getContinentObject(continentName);
 			Country country = new Country();
-			country.setCountryName(countryDetails[0]);
+			country.setCountryName(getStringdelimited(countryDetails[0]));
 			country.setContinentName(continentName);
 			country.setPartOfContinent(continent);
 			continent.getListOfCountries().add(country);
 			gameMap.getCountries().add(country);
 		}
 	}
-	
-	
+
 	/**
 	 * This method is to fill the Neighboring Countries Details in the Game Map.
 	 *
@@ -171,54 +168,45 @@ public class ReadAndWriteMapConquest  implements ReadAndWrite{
 			for (int j = 4; j < arrayOfCountries.length; j++) {
 //				int neighbourCountryNumber = Integer.parseInt(arrayOfCountries[j]) - 1;
 //				Country neighbourCountry = gameMap.getCountries().get(neighbourCountryNumber);
-				Country neighbourCountry = getCountryObject(arrayOfCountries[j]);
+				Country neighbourCountry = getCountryObject(getStringdelimited(arrayOfCountries[j]));
 //				Country currentCountry = gameMap.getCountries().get(currentCountryNumber - 1);
-				Country currentCountry = getCountryObject(arrayOfCountries[0]);
+				Country currentCountry = getCountryObject(getStringdelimited(arrayOfCountries[0]));
 				currentCountry.getNeighbourCountriesToAdd().add(neighbourCountry);
 				currentCountry.getNeighbourCountries().add(neighbourCountry.getCountryName());
 			}
 		}
 	}
-	
-	public Continent getContinentObject(String countryName)
-	{
-		
-		int desiredIndex=0;
-		
-		for(int i=0;i<gameMap.getContinents().size();i++)
-		{
-		 if(gameMap.getContinents().get(i).getContinentName().equalsIgnoreCase(countryName))
-		 {
-			 
-			 desiredIndex=i;
-			 break;
-		 }
+
+	public Continent getContinentObject(String countryName) {
+
+		int desiredIndex = 0;
+
+		for (int i = 0; i < gameMap.getContinents().size(); i++) {
+			if (gameMap.getContinents().get(i).getContinentName().equalsIgnoreCase(countryName)) {
+
+				desiredIndex = i;
+				break;
+			}
 		}
-		
+
 		return gameMap.getContinents().get(desiredIndex);
 	}
-	
-	
-	public Country getCountryObject(String countryName)
-	{
-		
-		int desiredIndex=0;
-		
-		for(int i=0;i<gameMap.getCountries().size();i++)
-		{
-		 if(gameMap.getCountries().get(i).getCountryName().equalsIgnoreCase(countryName))
-		 {
-			 
-			 desiredIndex=i;
-			 break;
-		 }
+
+	public Country getCountryObject(String countryName) {
+
+		int desiredIndex = 0;
+
+		for (int i = 0; i < gameMap.getCountries().size(); i++) {
+			if (gameMap.getCountries().get(i).getCountryName().equalsIgnoreCase(countryName)) {
+
+				desiredIndex = i;
+				break;
+			}
 		}
-		
+
 		return gameMap.getCountries().get(desiredIndex);
 	}
-	
-	
-	
+
 	/**
 	 * This Method give standard file tags to the output file.
 	 *
@@ -227,17 +215,16 @@ public class ReadAndWriteMapConquest  implements ReadAndWrite{
 	 */
 
 	public String getFileTags(String ouputGameMapName) {
-		
-		String map="[Map]\r\n";
-		String author="author=Team 7\r\n";
-		String image="image="+ouputGameMapName+".bmp\r\n";
-		String wrap="wrap=yes\r\n";
-		String scroll="scroll=none\r\n";
-		String warn="warn=yes";
-		String fullFormat = map + author + image+wrap+scroll+warn;
+
+		String map = "[Map]\r\n";
+		String author = "author=Team 7\r\n";
+		String image = "image=" + ouputGameMapName + ".bmp\r\n";
+		String wrap = "wrap=yes\r\n";
+		String scroll = "scroll=none\r\n";
+		String warn = "warn=yes";
+		String fullFormat = map + author + image + wrap + scroll + warn;
 		return fullFormat;
 	}
-	
 
 	/**
 	 * This Method will give the continent details in a standard format.
@@ -250,13 +237,13 @@ public class ReadAndWriteMapConquest  implements ReadAndWrite{
 		String continentsDetails = "[continents]";
 		for (int i = 0; i < gameMap.getContinents().size(); i++) {
 			Continent continent = gameMap.getContinents().get(i);
-			String continentDetails = continent.getContinentName() + "=" + continent.getContinentControlValue();
+			String continentDetails = getStringdelimitedReversed(continent.getContinentName()) + "=" + continent.getContinentControlValue();
 //					+ "#99NoColor";
 			continentsDetails = continentsDetails + "\r\n" + continentDetails;
 		}
 		return continentsDetails;
 	}
-	
+
 	/**
 	 * This Method will give the continent details in a standard format.
 	 *
@@ -267,26 +254,23 @@ public class ReadAndWriteMapConquest  implements ReadAndWrite{
 	public String getContriesAndNeighbour() {
 		String countriesDetails = "[countries]\r\n";
 		for (int i = 0; i < gameMap.getCountries().size(); i++) {
-			String currentLine="";
+			String currentLine = "";
 			Country country = gameMap.getCountries().get(i);
-			currentLine=country.getCountryName().toString();
-			currentLine=currentLine+","+"100"+","+"100";
-			currentLine=currentLine+","+country.getContinentName();
-			String neigbourDetails="";
-			for(int j=0;j<country.getNeighbourCountries().size();j++)
-			{
-				String currentNeighbourDetail=country.getNeighbourCountries().get(j).toString();
-				neigbourDetails=neigbourDetails+","+currentNeighbourDetail;
+			currentLine = getStringdelimitedReversed(country.getCountryName().toString());
+			currentLine = currentLine + "," + "100" + "," + "100";
+			currentLine = currentLine + "," + getStringdelimitedReversed(country.getContinentName());
+			String neigbourDetails = "";
+			for (int j = 0; j < country.getNeighbourCountries().size(); j++) {
+				String currentNeighbourDetail = getStringdelimitedReversed(country.getNeighbourCountries().get(j).toString());
+				neigbourDetails = neigbourDetails + "," + currentNeighbourDetail;
 			}
-			
-			currentLine=currentLine+neigbourDetails+"\r\n";
-			countriesDetails=countriesDetails+currentLine;
+
+			currentLine = currentLine + neigbourDetails + "\r\n";
+			countriesDetails = countriesDetails + currentLine;
 		}
 		return countriesDetails;
 	}
 	//////////////////////////////////////////
-	
-	
 
 	/**
 	 * This method checks for continent connectivity.
@@ -337,7 +321,7 @@ public class ReadAndWriteMapConquest  implements ReadAndWrite{
 		connectableCountries = connectableCountries + 1;
 
 	}
-	
+
 	/**
 	 * This method gives neighbor countries' list in integer.
 	 * 
@@ -362,5 +346,27 @@ public class ReadAndWriteMapConquest  implements ReadAndWrite{
 		}
 		return neighbourCountriesIntegerList;
 	}
+
+	public String getStringdelimited(String unformatteData) {
+		String[] formattedDataArray = unformatteData.split(" ");
+		String delimitedString = formattedDataArray[0];
+		for (int i = 1; i < formattedDataArray.length; i++) {
+			delimitedString = delimitedString +"_" +formattedDataArray[i];
+		}
+		return delimitedString;
+
+	}
 	
+	public String getStringdelimitedReversed(String unformatteData) {
+		String[] formattedDataArray = unformatteData.split("_");
+		String delimitedString = formattedDataArray[0];
+		for (int i = 1; i < formattedDataArray.length; i++) {
+			delimitedString = delimitedString +" " +formattedDataArray[i];
+		}
+		return delimitedString;
+
+	}
+	
+	
+
 }

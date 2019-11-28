@@ -347,7 +347,7 @@ public class MapValidation {
 			for (String tagdetails : result) {
 				String tag = tagdetails.split("\\n")[0].trim();
 				if (tag.equalsIgnoreCase("[Map]") || tag.equalsIgnoreCase("[Continents]")
-						|| tag.equalsIgnoreCase("[Countries]")) {
+						|| tag.equalsIgnoreCase("[Territories]")) {
 					if (tag.equalsIgnoreCase("[Map]")) {
 						if (!visitedtag.contains(tag)) {
 							if (validatemetadata(tagdetails)) {
@@ -368,7 +368,7 @@ public class MapValidation {
 							errorMessage = errorMessage.concat("Duplicate Entry for [Continent] Tag Found.\n");
 							validatecontinentdata = false;
 						}
-					} else if (tag.equalsIgnoreCase("[Countries]")) {
+					} else if (tag.equalsIgnoreCase("[Territories]")) {
 						if (!visitedtag.contains(tag)) {
 
 							if (validateCountries(tagdetails, "conquest")) {
