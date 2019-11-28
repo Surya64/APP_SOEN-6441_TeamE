@@ -46,7 +46,7 @@ public class MapValidationTest {
 	 */
 	@Test
 	public void testIsValidMap() throws IOException {
-		assertTrue(mapValidation.validateMap(validMap));
+		assertTrue(mapValidation.validateMapDomination(validMap));
 	}
 
 	/**
@@ -56,7 +56,7 @@ public class MapValidationTest {
 	 */
 	@Test
 	public void testIsInvalidMap() throws IOException {
-		assertFalse(mapValidation.validateMap(invalidMap));
+		assertFalse(mapValidation.validateMapDomination(invalidMap));
 	}
 
 	/**
@@ -66,7 +66,7 @@ public class MapValidationTest {
 	 */
 	@Test
 	public void testnotConnectedGraph() throws IOException {
-		assertFalse(mapValidation.validateMap(notConnectedGraph));
+		assertFalse(mapValidation.validateMapDomination(notConnectedGraph));
 	}
 
 	/**
@@ -74,8 +74,8 @@ public class MapValidationTest {
 	 */
 	@Test
 	public void testIsValidCountryData() {
-		mapValidation.validateContinents(validContinentData);
-		assertTrue(mapValidation.validateCountries(validCountryData));
+		mapValidation.validateContinents(validContinentData, "domination");
+		assertTrue(mapValidation.validateCountries(validCountryData, "domination"));
 	}
 
 	/**
@@ -83,8 +83,8 @@ public class MapValidationTest {
 	 */
 	@Test
 	public void testIsInvalidCountryData() {
-		mapValidation.validateContinents(validContinentData);
-		assertFalse(mapValidation.validateCountries(invalidCountryData));
+		mapValidation.validateContinents(validContinentData, "domination");
+		assertFalse(mapValidation.validateCountries(invalidCountryData, "domination"));
 	}
 
 	/**
@@ -92,7 +92,7 @@ public class MapValidationTest {
 	 */
 	@Test
 	public void testIsValidContinentData() {
-		assertTrue(mapValidation.validateContinents(validContinentData));
+		assertTrue(mapValidation.validateContinents(validContinentData, "domination"));
 	}
 
 	/**
@@ -100,7 +100,7 @@ public class MapValidationTest {
 	 */
 	@Test
 	public void testIsInvalidContinentData() {
-		assertFalse(mapValidation.validateContinents(invalidContinentData));
+		assertFalse(mapValidation.validateContinents(invalidContinentData, "domination"));
 	}
 
 	/**
@@ -108,8 +108,8 @@ public class MapValidationTest {
 	 */
 	@Test
 	public void testIsValidBorderData() {
-		mapValidation.validateContinents(validContinentData);
-		mapValidation.validateCountries(validCountryData);
+		mapValidation.validateContinents(validContinentData, "domination");
+		mapValidation.validateCountries(validCountryData, "domination");
 		assertTrue(mapValidation.validateBoundaries(validBoundaryData));
 	}
 
@@ -118,8 +118,8 @@ public class MapValidationTest {
 	 */
 	@Test
 	public void testIsInvalidBorderData() {
-		mapValidation.validateContinents(validContinentData);
-		mapValidation.validateCountries(validCountryData);
+		mapValidation.validateContinents(validContinentData, "domination");
+		mapValidation.validateCountries(validCountryData, "domination");
 		assertFalse(mapValidation.validateBoundaries(invalidBoundaryData));
 	}
 }

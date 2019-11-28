@@ -96,11 +96,8 @@ public class Tournament {
 	}
 
 	public void generateReport() {
-//		System.out.print("|                    |");
 		System.out.print("                      ");
-
 		printHeaders();
-//		System.out.println();
 		printReport();
 	}
 
@@ -146,7 +143,6 @@ public class Tournament {
 	}
 
 	public String getFormattedGameNumber(int number) {
-//		String formattedGame="|" + "Game " + number + "            |";
 		String formattedGame = " " + "Game " + number + "             ";
 		return formattedGame;
 	}
