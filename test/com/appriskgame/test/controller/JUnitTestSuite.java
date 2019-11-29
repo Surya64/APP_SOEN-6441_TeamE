@@ -1,4 +1,4 @@
-package com.appriskgame.test;
+package com.appriskgame.test.controller;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;

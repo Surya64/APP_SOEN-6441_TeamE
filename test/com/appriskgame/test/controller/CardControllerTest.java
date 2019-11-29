@@ -1,4 +1,4 @@
-package com.appriskgame.test;
+package com.appriskgame.test.controller;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
