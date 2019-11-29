@@ -286,7 +286,8 @@ public class Player {
 									mapFlag = true;
 								}
 							} while (mapFlag);
-							saveGame(gameMap);
+							GameSaveLoad gameSaveLoad = new GameSaveLoad();
+							gameSaveLoad.saveGame(gameMap);
 						}
 					}
 				}
@@ -1411,22 +1412,26 @@ public class Player {
 	 */
 	public void continueGame(GameMap gameMapcopy) throws Exception {
 
-		GameMap gameMap = new GameMap();
+//		GameMap gameMap = new GameMap("test");
+//		GameMap gameMap = new GameMap();
 
-		gameMap = gameMapcopy;
+//		gameMap = (GameMap)gameMapcopy.clone();
+		GameMap gameMap = gameMapcopy;
 
 		playerNames = new ArrayList<String>();
 
 		playerNames = setplayList(gameMap.getPlayers());
 		playersList = gameMap.getPlayers();
-		for (String player : playerNames) {
-			GamePlayer gamePlayers = new GamePlayer();
-			gamePlayers.setPlayerName(player);
-			playersList.add(gamePlayers);
-		}
-		gameMap.setPlayers(playersList);
+//		gameMap.getPlayers();
+//		for (String player : playerNames) {
+//			GamePlayer gamePlayers = new GamePlayer();
+//			gamePlayers.setPlayerName(player);
+//			playersList.add(gamePlayers);
+//		}
+//		gameMap.setPlayers(playersList);
 		boolean mapFlag = true;
 		boolean gameContinue;
+		gameMap.attach();
 
 		do {
 			for (int round = 0; round < playersList.size(); round++) {
@@ -1502,7 +1507,8 @@ public class Player {
 									mapFlag = true;
 								}
 							} while (mapFlag);
-							saveGame(gameMap);
+							GameSaveLoad gameSaveLoad = new GameSaveLoad();
+							gameSaveLoad.saveGame(gameMap);
 						}
 					}
 				}
@@ -1511,81 +1517,7 @@ public class Player {
 		} while (gameContinue);
 	}
 
-	/**
-	 * 
-	 * @param gameMap current gameMap object
-	 * @throws IOException input/output exception
-	 */
-	public void saveGame(GameMap gameMap) throws IOException {
-		ArrayList<GamePlayer> changedOrder = new ArrayList<GamePlayer>();
-		changedOrder = getCorrectPlayList(gameMap);
-		gameMap.setPlayers(changedOrder);
-		String workingDir = System.getProperty("user.dir");
-		String mapLocation = workingDir + "/resources/savedgames/";
-		FileOutputStream savefile = null;
-
-		String savedFilePath = mapLocation;
-		ObjectOutputStream objFile = null;
-		System.out.println("Please the enter the name of the saved Game?");
-		String fileName = br.readLine().trim();
-		String fullPath = savedFilePath + fileName + ".txt";
-
-		File savingFile = new File(fullPath);
-
-		savingFile.setReadable(true);
-		savingFile.setExecutable(true);
-		savingFile.setWritable(true);
-
-		savefile = new FileOutputStream(fullPath);
-		objFile = new ObjectOutputStream(savefile);
-
-		objFile.writeObject(gameMap);
-		objFile.close();
-		System.exit(0);
-
-	}
-
-	/**
-	 * This method is used to read the saved gameMap
-	 * 
-	 * @throws Exception input/output exception
-	 */
-	public void readGame() throws Exception {
-		System.out.println("Please the enter the name of the saved Game?");
-		String workingDir = System.getProperty("user.dir");
-		String mapLocation = workingDir + "/resources/savedgames/";
-		String savedFilePath = mapLocation;
-		String fileName = br.readLine().trim();
-		if (isSavedGameExists(savedFilePath, fileName)) {
-			String fullPath = savedFilePath + fileName + ".txt";
-			FileInputStream getFile = new FileInputStream(fullPath);
-			ObjectInputStream backup = new ObjectInputStream(getFile);
-			GameMap gameMap = (GameMap) backup.readObject();
-			backup.close();
-			continueGame(gameMap);
-		} else {
-			System.out.println("File Name Doesn't exist!");
-		}
-	}
-
-	/**
-	 * This method is used to check whether the saved map exists or not.
-	 * 
-	 * @param filepath path of the file
-	 * @param fileName name of the file
-	 * @return - true if exist,else false
-	 */
-	public boolean isSavedGameExists(String filepath, String fileName) {
-		String mapFileNameWithExtention = fileName + ".txt";
-		File mapFolder = new File(filepath);
-		File[] listFiles = mapFolder.listFiles();
-		for (int i = 0; i < listFiles.length; i++) {
-			if (mapFileNameWithExtention.equals(listFiles[i].getName())) {
-				return true;
-			}
-		}
-		return false;
-	}
+	
 
 	/**
 	 * This method is used to get the correct player list

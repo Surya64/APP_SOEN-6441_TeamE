@@ -304,10 +304,7 @@ public class PlayerTest {
 		assertFalse(player.ableToMoveArmy(country1, 0));
 	}
 	
-	@Test
-	public void testSavedGameExists() {
-		assertTrue(player.isSavedGameExists(savedFilePath, savedFileName));
-	}
+
 	
 	
 

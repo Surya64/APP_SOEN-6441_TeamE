@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.appriskgame.controller.GameSaveLoad;
 import com.appriskgame.controller.MapOperations;
 import com.appriskgame.controller.Player;
 import com.appriskgame.controller.Tournament;
@@ -72,8 +73,8 @@ public class GameDriver {
 				}
 				break;
 			case 3:
-				Player p=new Player();
-				p.readGame();
+				GameSaveLoad gameSaveLoad = new GameSaveLoad();
+				gameSaveLoad.readGame();
 			case 4:
 				Tournament.startTournament();
 			case 5:
