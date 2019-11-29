@@ -34,7 +34,7 @@ public class MapOperations {
 	String mapLocation = workingDir + "/resources/maps/";
 	public GameMap gameMap = new GameMap();
 	static int connectableCountries = 0;
-	String format = "";
+	String format = "Domination";
 
 	/**
 	 * This Method is to check whether the Map File exists.
