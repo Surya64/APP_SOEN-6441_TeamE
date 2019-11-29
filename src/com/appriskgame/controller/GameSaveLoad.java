@@ -27,24 +27,23 @@ public class GameSaveLoad implements SaveAndLoad {
 
 		String savedFilePath = mapLocation;
 		ObjectOutputStream objFile = null;
-		String fullPath="";
-		boolean repeat=true;
+		String fullPath = "";
+		boolean repeat = true;
 		do {
-			
-		System.out.println("Please enter the command to save Game?");
-		String command = br.readLine().trim();
-		String fileName="";
-		String[] cmdDetails=command.split(" ");
-		
-		if (checkSaveCommand(cmdDetails)) {
-			fileName=cmdDetails[1];
-			fullPath = savedFilePath + fileName + ".txt";
-			repeat=false;
+			System.out.println("Please enter the command to save Game?");
+			String command = br.readLine().trim();
+			String fileName = "";
+			String[] cmdDetails = command.split(" ");
 
-		} else {
-			repeat = true;
-		}
-	} while (repeat);
+			if (checkSaveCommand(cmdDetails)) {
+				fileName = cmdDetails[1];
+				fullPath = savedFilePath + fileName + ".txt";
+				repeat = false;
+
+			} else {
+				repeat = true;
+			}
+		} while (repeat);
 
 		File savingFile = new File(fullPath);
 
@@ -143,8 +142,7 @@ public class GameSaveLoad implements SaveAndLoad {
 			return false;
 		}
 	}
-	
-	
+
 	public boolean checkloadCommand(String[] saveDetails) {
 		try {
 			String save = saveDetails[0].trim();

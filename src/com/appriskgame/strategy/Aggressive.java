@@ -46,7 +46,6 @@ public class Aggressive implements PlayerStrategy {
 		Country country = getStrongestCountryWithAdjCountry(gameMap, player);
 		int numOfarmies = player.getNoOfArmies();
 		playerController.userAssignedArmiesToCountries(country, numOfarmies, player);
-		System.out.println(country.getCountryName() + " reinforced with " + numOfarmies);
 
 	}
 

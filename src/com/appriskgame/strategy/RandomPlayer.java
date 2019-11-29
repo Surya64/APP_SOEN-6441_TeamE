@@ -45,7 +45,6 @@ public class RandomPlayer implements PlayerStrategy {
 		Country country = getRandomCountry(gameMap, player);
 		int numOfarmies = player.getNoOfArmies();
 		playerController.userAssignedArmiesToCountries(country, numOfarmies, player);
-		System.out.println(country.getCountryName() + " reinforced with " + numOfarmies);
 	}
 
 	/**
