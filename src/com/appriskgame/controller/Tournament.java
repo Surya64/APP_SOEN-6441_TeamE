@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import com.appriskgame.model.GameMap;
+
 /**
  * This Class is used for implementation of Tournament Mode
  * 
@@ -16,11 +17,11 @@ public class Tournament {
 	static int MAXIMUMGAME = 5;
 	static int MINUMUMTURNS = 10;
 	static int MAXIMUMTURNS = 50;
-	static int MAXIMUMSTRATEGYCOUNT=18;
-	static int MINIMUMSTRATEGYCOUNT=17;
-	static int MAXIMUMMAPCOUNT=20;
-	static int MINIMUMMAPCOUNT=19;
-	
+	static int MAXIMUMSTRATEGYCOUNT = 18;
+	static int MINIMUMSTRATEGYCOUNT = 17;
+	static int MAXIMUMMAPCOUNT = 20;
+	static int MINIMUMMAPCOUNT = 19;
+
 	ArrayList<String> maps;
 	ArrayList<String> playersStrategies;
 	int noOfGames;
@@ -173,9 +174,8 @@ public class Tournament {
 				for (int i = 0; i < playerStrategies.size(); i++) {
 					if (preDefinedStrategies.contains(playerStrategies.get(i))) {
 					} else {
-						
-//						return "Invalid Strategy";
-						return "File Not Found";
+
+						return "Invalid Strategy";
 					}
 				}
 				return getGameResult(gameNumber, inputGameMapName, playerStrategies, turns);
