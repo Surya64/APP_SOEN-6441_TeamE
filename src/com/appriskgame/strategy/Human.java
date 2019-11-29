@@ -290,7 +290,22 @@ public class Human implements PlayerStrategy {
 					if (playerController.isAttackerDicePossible(attackerArmies, attackerDices)) {
 						mapDetails.setActionMsg("Defender Entering Defender Commands", "action");
 						System.out.println("Enter the Defender command?");
-						String defenderUserCommand = br.readLine().trim();
+						String name[] = defenderCountryObject.getPlayer().split("-");
+						String defenderUserCommand;
+						if (name[1].equalsIgnoreCase("human")) {
+							defenderUserCommand = br.readLine().trim();
+						} else {
+							System.out.println("System entering Command");
+							int defenderArmies = defenderCountryObject.getNoOfArmies();
+							if (defenderArmies >= 2) {
+								System.out.println("defend 2");
+								defenderUserCommand = "defend 2";
+							} else {
+								System.out.println("defend 1");
+								defenderUserCommand = "defend 1";
+							}
+						}
+
 						if (playerController.checkUserDefenderValidation(defenderUserCommand)) {
 							String[] defenderDetails = defenderUserCommand.split(" ");
 							int defenderDices = Integer.parseInt(defenderDetails[1]);
