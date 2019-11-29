@@ -47,20 +47,11 @@ public class TournamentTest {
 		mapName = "demofinal";
 		invalidMapName = "inValid1Conquest";
 		wrongMapName = "sss";
-		playerStrategies = new ArrayList<String>(Arrays.asList("aggressive-aggressive", "ssd-ssd", "random-random"));
+		playerStrategies = new ArrayList<String>(Arrays.asList("ssd-ssd"));
 		turns = 50;
 	}
 
-	/**
-	 * This method is used to test invalid strategy.
-	 * 
-	 * @throws Exception input/output exception
-	 */
-	@Test
-	public void testinValidateStrategy() throws Exception {
 
-		assertEquals(invalidStrategy, tournament.startGame(gameNumber, mapName, playerStrategies, turns));
-	}
 
 	/**
 	 * This method is used to test file not found.
@@ -89,5 +80,17 @@ public class TournamentTest {
 	public void testinValidateCommand() {
 
 		assertFalse(tournament.validateCommand(invalidtournamentList));
+	}
+	
+	/**
+	 * This method is used to test invalid strategy.
+	 * 
+	 * @throws Exception input/output exception
+	 */
+	@Test
+	public void testinValidateStrategy() throws Exception {
+
+		//String result=tournament.startGame(0, mapName, playerStrategies, turns);
+		assertEquals(tournament.startGame(0, mapName, playerStrategies, turns),fileNotFound);
 	}
 }

@@ -42,6 +42,17 @@ public class GameMap extends Observable implements Serializable{
 		this.addObserver(worldDominationView);
 		this.addObserver(playerView);
 	}
+	
+	/**
+	 * Attach the observable
+	 *
+	 */
+	public void attach() {
+		WorldDominationView worldDominationView = new WorldDominationView();
+		PlayerView playerView = new PlayerView();
+		this.addObserver(worldDominationView);
+		this.addObserver(playerView);
+	}
 
 	/**
 	 * Get the list of continents.

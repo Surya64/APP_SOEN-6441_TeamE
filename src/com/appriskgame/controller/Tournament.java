@@ -173,7 +173,9 @@ public class Tournament {
 				for (int i = 0; i < playerStrategies.size(); i++) {
 					if (preDefinedStrategies.contains(playerStrategies.get(i))) {
 					} else {
-						return "Invalid Strategy";
+						
+//						return "Invalid Strategy";
+						return "File Not Found";
 					}
 				}
 				return getGameResult(gameNumber, inputGameMapName, playerStrategies, turns);
