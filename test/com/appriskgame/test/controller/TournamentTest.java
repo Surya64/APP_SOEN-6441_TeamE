@@ -51,8 +51,6 @@ public class TournamentTest {
 		turns = 50;
 	}
 
-
-
 	/**
 	 * This method is used to test file not found.
 	 * 
@@ -81,7 +79,7 @@ public class TournamentTest {
 
 		assertFalse(tournament.validateCommand(invalidtournamentList));
 	}
-	
+
 	/**
 	 * This method is used to test invalid strategy.
 	 * 
@@ -90,7 +88,6 @@ public class TournamentTest {
 	@Test
 	public void testinValidateStrategy() throws Exception {
 
-		//String result=tournament.startGame(0, mapName, playerStrategies, turns);
-		assertEquals(tournament.startGame(0, mapName, playerStrategies, turns),fileNotFound);
+		assertEquals(tournament.startGame(0, mapName, playerStrategies, turns), invalidStrategy);
 	}
 }
