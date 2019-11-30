@@ -20,7 +20,6 @@ import com.appriskgame.model.GamePlayer;
  * fortification phase.
  * 
  * @author surya
- *
  */
 public class Human implements PlayerStrategy {
 	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -49,9 +48,7 @@ public class Human implements PlayerStrategy {
 			if (!placeArmyFlag) {
 				placeArmyFlag = !playerController.placearmyassigned(player, data[1]);
 			}
-
 		} while (placeArmyFlag);
-
 	}
 
 	/**
@@ -204,7 +201,6 @@ public class Human implements PlayerStrategy {
 			} else {
 				mapDetails.setActionMsg("No Attack", "action");
 				userCommand = "attack -noattack";
-
 			}
 
 			if (playerController.checkUserValidation(userCommand)) {
@@ -305,7 +301,6 @@ public class Human implements PlayerStrategy {
 								defenderUserCommand = "defend 1";
 							}
 						}
-
 						if (playerController.checkUserDefenderValidation(defenderUserCommand)) {
 							String[] defenderDetails = defenderUserCommand.split(" ");
 							int defenderDices = Integer.parseInt(defenderDetails[1]);
@@ -368,7 +363,6 @@ public class Human implements PlayerStrategy {
 			} else {
 				continueAttacking = "No";
 			}
-
 			if (continueAttacking.equalsIgnoreCase("Yes")) {
 				gameContinue = true;
 			} else {
@@ -378,7 +372,6 @@ public class Human implements PlayerStrategy {
 			}
 		} while (gameContinue);
 		return 0;
-
 	}
 
 	/**
@@ -430,7 +423,6 @@ public class Human implements PlayerStrategy {
 							doFortification = true;
 						}
 					}
-
 					if (!doFortification) {
 						if (!(playersCommandList.size() == 4)) {
 							System.out
@@ -536,7 +528,5 @@ public class Human implements PlayerStrategy {
 				}
 			}
 		}
-
 	}
-
 }

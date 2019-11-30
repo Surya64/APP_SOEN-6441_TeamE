@@ -9,7 +9,7 @@ import com.appriskgame.model.GameMap;
 /**
  * This Class is used for implementation of Tournament Mode
  * 
- * @author Saicharanteja
+ * @author Sai
  */
 public class Tournament {
 
@@ -39,12 +39,15 @@ public class Tournament {
 		}
 	};
 
+	/**
+	 * Method used to start the tournament game
+	 * 
+	 * @throws Exception IO Exception
+	 */
 	public static void startTournament() throws Exception {
-
 		System.out.println("Enter the Tournament command?");
 		Tournament tournament = new Tournament();
 		String tournamentDetails = br.readLine().trim();
-
 		String[] tournamentList = tournamentDetails.split(" ");
 		if (tournament.validateCommand(tournamentList)) {
 			tournament.fillTournamentData(tournamentList[2], tournamentList[4], tournamentList[6], tournamentList[8]);
@@ -64,9 +67,14 @@ public class Tournament {
 		}
 	}
 
+	/**
+	 * Method used to validate the tournament command
+	 * 
+	 * @param tournamentList input command
+	 * @return true if command is valid else false
+	 */
 	@SuppressWarnings("finally")
 	public boolean validateCommand(String[] tournamentList) {
-
 		boolean decision = false;
 		try {
 			String tournament = tournamentList[0];
@@ -76,7 +84,6 @@ public class Tournament {
 			String turn = tournamentList[7];
 			int games = Integer.parseInt(tournamentList[6]);
 			int turns = Integer.parseInt(tournamentList[8]);
-
 			if (tournament.equalsIgnoreCase("tournament") && game.equalsIgnoreCase("-G") && turn.equalsIgnoreCase("-D")
 					&& maps.equalsIgnoreCase("-M") && stategies.equalsIgnoreCase("-P")) {
 				if (games >= MINIMUMGAME && games <= MAXIMUMGAME) {
@@ -106,21 +113,29 @@ public class Tournament {
 		} finally {
 			return decision;
 		}
-
 	}
 
+	/**
+	 * Method to generate the tournament game report
+	 */
 	public void generateReport() {
 		System.out.print("                      ");
 		printHeaders();
 		printReport();
 	}
 
+	/**
+	 * Method to print the header of report
+	 */
 	public void printHeaders() {
 		for (int i = 0; i < this.noOfGames; i++) {
 			System.out.print(getFormattedGameNumber(i + 1));
 		}
 	}
 
+	/**
+	 * Method to print the report
+	 */
 	public void printReport() {
 		System.out.println();
 		for (int i = 0; i < this.maps.size(); i++) {
@@ -132,6 +147,12 @@ public class Tournament {
 		}
 	}
 
+	/**
+	 * Method to get the formatted strategy
+	 * 
+	 * @param strategy current strategy
+	 * @return string of formatted strategy
+	 */
 	public String getFormattedStrategry(String strategy) {
 		int currentLength = strategy.length();
 		String formattedStrategy = " " + strategy;
@@ -144,6 +165,12 @@ public class Tournament {
 		return formattedStrategy;
 	}
 
+	/**
+	 * Method to get the formatted map name
+	 * 
+	 * @param mapName map name
+	 * @return formatted map name
+	 */
 	public String getFormattedMapName(String mapName) {
 		int currentLength = mapName.length();
 		String formattedMapName = " " + mapName;
@@ -156,11 +183,27 @@ public class Tournament {
 		return formattedMapName;
 	}
 
+	/**
+	 * Method to get the formatted game number
+	 * 
+	 * @param number game number
+	 * @return formatted game number
+	 */
 	public String getFormattedGameNumber(int number) {
 		String formattedGame = " " + "Game " + number + "             ";
 		return formattedGame;
 	}
 
+	/**
+	 * Method to start the individual tournament game
+	 * 
+	 * @param gameNumber       game number
+	 * @param mapName          map name
+	 * @param playerStrategies player strategy
+	 * @param turns            number of turns
+	 * @return result of the game
+	 * @throws Exception IO Exception
+	 */
 	public String startGame(int gameNumber, String mapName, ArrayList<String> playerStrategies, int turns)
 			throws Exception {
 		String workingDir = System.getProperty("user.dir");
@@ -187,6 +230,16 @@ public class Tournament {
 		}
 	}
 
+	/**
+	 * Method to get the tournament game result
+	 * 
+	 * @param gameNumber       game number
+	 * @param mapName          map name
+	 * @param playerStrategies player strategy
+	 * @param turns            number of turns
+	 * @return string with tournament result
+	 * @throws Exception IO Exception
+	 */
 	public String getGameResult(int gameNumber, String mapName, ArrayList<String> playerStrategies, int turns)
 			throws Exception {
 		Player p = new Player();
@@ -198,6 +251,12 @@ public class Tournament {
 		return formattedResult[1];
 	}
 
+	/**
+	 * Method to validate the game map
+	 * 
+	 * @param maps list of game map
+	 * @return true if valid game map else false
+	 */
 	public boolean mapsValidation(List<String> maps) {
 		List<String> uniqueMaps = new ArrayList<String>();
 		for (int i = 0; i < maps.size(); i++) {
@@ -209,6 +268,14 @@ public class Tournament {
 		return true;
 	}
 
+	/**
+	 * Method to fill the tournament data
+	 * 
+	 * @param maps          map name
+	 * @param Strategies    strategy
+	 * @param numberOfGames number of games
+	 * @param turns         number of turns
+	 */
 	public void fillTournamentData(String maps, String Strategies, String numberOfGames, String turns) {
 		this.maps = getMaps(maps);
 		this.playersStrategies = getPlayersStrategies(Strategies);
@@ -216,14 +283,32 @@ public class Tournament {
 		this.turns = getTurns(turns);
 	}
 
+	/**
+	 * Method to get number of turns
+	 * 
+	 * @param turns number of turns
+	 * @return integer turns
+	 */
 	public int getTurns(String turns) {
 		return Integer.parseInt(turns.trim());
 	}
 
+	/**
+	 * Method to get number of games
+	 * 
+	 * @param noOfGames string number of games
+	 * @return integer number of games
+	 */
 	public int getnoOfGames(String noOfGames) {
 		return Integer.parseInt(noOfGames.trim());
 	}
 
+	/**
+	 * Method to get list of player strategies
+	 * 
+	 * @param playersStrategy player strategy
+	 * @return list of player strategies
+	 */
 	public ArrayList<String> getPlayersStrategies(String playersStrategy) {
 		String[] playersStrategyList = playersStrategy.split(",");
 		ArrayList<String> listOfStrategies = new ArrayList<String>();
@@ -233,6 +318,12 @@ public class Tournament {
 		return listOfStrategies;
 	}
 
+	/**
+	 * Method to get the maps
+	 * 
+	 * @param maps map names
+	 * @return List of maps
+	 */
 	public ArrayList<String> getMaps(String maps) {
 		String[] mapsList = maps.split(",");
 		ArrayList<String> listOfMaps = new ArrayList<String>();

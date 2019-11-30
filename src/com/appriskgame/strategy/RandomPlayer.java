@@ -16,7 +16,6 @@ import com.appriskgame.model.GamePlayer;
  * country a random number of times and fortifies a random country.
  * 
  * @author Surya
- *
  */
 public class RandomPlayer implements PlayerStrategy {
 
@@ -204,5 +203,4 @@ public class RandomPlayer implements PlayerStrategy {
 		}
 		return countriesWithAdjCountries;
 	}
-
 }

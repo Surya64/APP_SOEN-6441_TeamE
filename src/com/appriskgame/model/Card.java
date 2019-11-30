@@ -9,10 +9,9 @@ import com.appriskgame.controller.Player;
  * Card definition, to have different types of cards
  *
  * @author Shruthi
- *
  */
 
-public class Card implements Serializable{
+public class Card implements Serializable {
 
 	private String type;
 
@@ -86,7 +85,6 @@ public class Card implements Serializable{
 		this.currentPlayer = currentPlayer;
 	}
 
-	// Methods related to Card
 	/**
 	 * This method creates an arrayList of cards
 	 *

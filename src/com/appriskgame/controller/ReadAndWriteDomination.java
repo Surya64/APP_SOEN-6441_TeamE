@@ -16,6 +16,13 @@ import com.appriskgame.model.Continent;
 import com.appriskgame.model.Country;
 import com.appriskgame.model.GameMap;
 
+/**
+ * This class is used for read and write of domination file
+ * 
+ * @author Sai
+ * @author Shruthi
+ *
+ */
 public class ReadAndWriteDomination implements ReadAndWrite {
 
 	private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -32,7 +39,6 @@ public class ReadAndWriteDomination implements ReadAndWrite {
 	 * @return Game Map Object.
 	 * @throws IOException FileNotFound Exception.
 	 */
-
 	public GameMap readGameMap(String inputGameMapName) throws IOException {
 		HashMap<String, Country> countrySet = new HashMap<>();
 		MapValidation validate = new MapValidation();
@@ -80,7 +86,6 @@ public class ReadAndWriteDomination implements ReadAndWrite {
 	 *
 	 * @param ContinentsString String of all Continent details.
 	 */
-
 	public void fillContinentsInGameMap(String ContinentsString) {
 		String[] continentList = ContinentsString.split("\\r\\n");
 		for (int i = 1; i < continentList.length; i++) {
@@ -97,7 +102,6 @@ public class ReadAndWriteDomination implements ReadAndWrite {
 	 *
 	 * @param CountriesString String of all Countries details.
 	 */
-
 	public void fillCountriesInGameMap(String CountriesString) {
 		String[] countriesList = CountriesString.split("\\r\\n");
 
@@ -121,7 +125,6 @@ public class ReadAndWriteDomination implements ReadAndWrite {
 	 * @param neighboringCountriesString String of all Neighboring Countries
 	 *                                   details.
 	 */
-
 	public void fillNeighboringCountriesInGameMap(String neighboringCountriesString) {
 		String[] neighbouringCountriesList = neighboringCountriesString.split("\\r\\n");
 
@@ -172,7 +175,6 @@ public class ReadAndWriteDomination implements ReadAndWrite {
 	 *                        be find.
 	 * @return Continent Name.
 	 */
-
 	public String getContinentName(int continentNumber) {
 		String cotinenentName = "";
 		cotinenentName = gameMap.getContinents().get(continentNumber - 1).getContinentName();
@@ -236,7 +238,6 @@ public class ReadAndWriteDomination implements ReadAndWrite {
 	 * @param mapFileName      File Name of the writing file.
 	 * @throws IOException IO
 	 */
-
 	public void writeGameMap(String ouputGameMapName, String mapFileName, GameMap gameMap) throws IOException {
 		this.gameMap = gameMap;
 		File GameMapName = new File(ouputGameMapName);
@@ -266,7 +267,6 @@ public class ReadAndWriteDomination implements ReadAndWrite {
 	 * @param ouputGameMapName output File Name.
 	 * @return String of file Tags.
 	 */
-
 	public String getFileTags(String ouputGameMapName) {
 		String mapNameDetails = "\r\n\r\nname " + ouputGameMapName + " Map";
 		String fileTag = "\r\n\r\n[files]\r\n";
@@ -281,7 +281,6 @@ public class ReadAndWriteDomination implements ReadAndWrite {
 	 * @return String consists of continent details in a standard format.
 	 *
 	 */
-
 	public String getCountries() {
 		String countriesDetails = "[countries]";
 		for (int i = 0; i < gameMap.getCountries().size(); i++) {
@@ -299,7 +298,6 @@ public class ReadAndWriteDomination implements ReadAndWrite {
 	 * @return String consists of borders details in a standard format.
 	 *
 	 */
-
 	public String getBoundaries() {
 		String boundariesDetails = "[borders]";
 
@@ -322,7 +320,6 @@ public class ReadAndWriteDomination implements ReadAndWrite {
 	 * @param countryName Name of the Country for which serial number to be find.
 	 * @return serial number of the given Country.
 	 */
-
 	public int getCountryNumber(String countryName) {
 		int countryNumber = 0;
 		for (int i = 0; i < gameMap.getCountries().size()
@@ -339,7 +336,6 @@ public class ReadAndWriteDomination implements ReadAndWrite {
 	 * @return String consists of continent details in a standard format.
 	 *
 	 */
-
 	public String getContinents() {
 		String continentsDetails = "[continents]";
 		for (int i = 0; i < gameMap.getContinents().size(); i++) {
@@ -358,7 +354,6 @@ public class ReadAndWriteDomination implements ReadAndWrite {
 	 *                      find.
 	 * @return serial number of the given continent.
 	 */
-
 	public int getContinentNumber(String continentName) {
 		int cotinenentNumber = 0;
 		for (int i = 0; i < gameMap.getContinents().size()

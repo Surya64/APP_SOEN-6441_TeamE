@@ -13,9 +13,18 @@ import java.util.ArrayList;
 import com.appriskgame.model.GameMap;
 import com.appriskgame.model.GamePlayer;
 
+/**
+ * This Class is used for saving and loading game map
+ * 
+ * @author Sai
+ *
+ */
 public class GameSaveLoad implements SaveAndLoad {
 	public BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
+	/**
+	 * Method for saving the game map object
+	 */
 	@Override
 	public void saveGame(GameMap gameMap) throws IOException {
 		ArrayList<GamePlayer> changedOrder = new ArrayList<GamePlayer>();
@@ -60,6 +69,9 @@ public class GameSaveLoad implements SaveAndLoad {
 
 	}
 
+	/**
+	 * This method is for reading the game map object
+	 */
 	@Override
 	public void readGame() throws Exception {
 		boolean repeat = true;
@@ -94,6 +106,13 @@ public class GameSaveLoad implements SaveAndLoad {
 
 	}
 
+	/**
+	 * This method is used to check if the save map exist or not
+	 * 
+	 * @param filepath saved file path
+	 * @param fileName saved file name
+	 * @return true if file exist else false
+	 */
 	public boolean isSavedGameExists(String filepath, String fileName) {
 		String mapFileNameWithExtention = fileName + ".txt";
 		File mapFolder = new File(filepath);
@@ -106,6 +125,12 @@ public class GameSaveLoad implements SaveAndLoad {
 		return false;
 	}
 
+	/**
+	 * This method is used to get the correct player List
+	 * 
+	 * @param gameMap game map object
+	 * @return list of players
+	 */
 	public ArrayList<GamePlayer> getCorrectPlayList(GameMap gameMap) {
 		ArrayList<GamePlayer> correctOrderPlayList = new ArrayList<GamePlayer>();
 		int currentIndex = 0;
@@ -128,6 +153,12 @@ public class GameSaveLoad implements SaveAndLoad {
 		return correctOrderPlayList;
 	}
 
+	/**
+	 * This Method is used to validate the save command
+	 * 
+	 * @param saveDetails save command
+	 * @return true if command is valid else false
+	 */
 	public boolean checkSaveCommand(String[] saveDetails) {
 		try {
 			String save = saveDetails[0].trim();
@@ -143,6 +174,12 @@ public class GameSaveLoad implements SaveAndLoad {
 		}
 	}
 
+	/**
+	 * This Method is used to validate the load command
+	 * 
+	 * @param saveDetails load command
+	 * @return true if command is valid else false
+	 */
 	public boolean checkloadCommand(String[] saveDetails) {
 		try {
 			String save = saveDetails[0].trim();

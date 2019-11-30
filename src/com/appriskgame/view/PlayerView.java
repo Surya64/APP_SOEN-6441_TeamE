@@ -91,6 +91,9 @@ public class PlayerView implements Observer {
 		frame.setVisible(true);
 	}
 
+	/**
+	 * This method is used to update the player view screen
+	 */
 	@Override
 	public void update(Observable o, Object arg) {
 

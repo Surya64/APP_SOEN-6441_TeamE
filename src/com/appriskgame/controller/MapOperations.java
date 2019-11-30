@@ -55,14 +55,18 @@ public class MapOperations {
 		return false;
 	}
 
+	/**
+	 * Method the get the file format
+	 * 
+	 * @param mapFileName input file name
+	 * @return input data in string
+	 * @throws IOException IOException
+	 */
 	public String getFileForamt(String mapFileName) throws IOException {
 		String data = "";
 		String mapFormat = "";
 		data = new String(Files.readAllBytes(Paths.get(mapFileName)));
 		boolean isName = data.contains("name");
-//		data = requiredData[1];
-//		String[] formattedData = data.split("\\r\\n\\r\\n");
-
 		if (isName) {
 			mapFormat = "Domination";
 		} else {
@@ -105,39 +109,6 @@ public class MapOperations {
 			gameMap = null;
 			return new GameMap();
 		}
-//	} else {
-//		System.out.println(MapValidation.getError());
-//		System.out.println("\nPlease rectify all the above mentioned issues.");
-//	}
-//
-//	return new GameMap();
-
-//		readAndWrite.writeGameMap(ouputGameMapName, fileName,gameMap);
-//		HashMap<String, Country> countrySet = new HashMap<>();
-//		MapValidation validate = new MapValidation();
-//		gameMap = new GameMap();
-//		connectableCountries = 0;
-//		String GameMapName = inputGameMapName;
-//		boolean uploadSuccessful = false;
-//		String data = "";
-//		uploadSuccessful = validate.validateMap(GameMapName);
-//		if (uploadSuccessful) {
-//			try {
-//				data = new String(Files.readAllBytes(Paths.get(GameMapName)));
-//				String[] requiredData = data.split("name");
-//				data = requiredData[1];
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//			String[] formattedData = data.split("\\r\\n\\r\\n");
-//			fillContinentsInGameMap(formattedData[2]);
-//			fillCountriesInGameMap(formattedData[3]);
-//			fillNeighboringCountriesInGameMap(formattedData[4]);
-//			gameMap.getCountries().forEach(country -> {
-//				countrySet.put(country.getCountryName(), country);
-//				gameMap.setCountrySet(countrySet);
-//			});
-
 	}
 
 	/**
@@ -145,7 +116,6 @@ public class MapOperations {
 	 *
 	 * @param ContinentsString String of all Continent details.
 	 */
-
 	public void fillContinentsInGameMap(String ContinentsString) {
 		String[] continentList = ContinentsString.split("\\r\\n");
 		for (int i = 1; i < continentList.length; i++) {
@@ -164,7 +134,6 @@ public class MapOperations {
 	 *                      find.
 	 * @return serial number of the given continent.
 	 */
-
 	public int getContinentNumber(String continentName) {
 		int cotinenentNumber = 0;
 		for (int i = 0; i < gameMap.getContinents().size()
@@ -183,7 +152,6 @@ public class MapOperations {
 	 *                        be find.
 	 * @return Continent Name.
 	 */
-
 	public String getContinentName(int continentNumber) {
 		String cotinenentName = "";
 		cotinenentName = gameMap.getContinents().get(continentNumber - 1).getContinentName();
@@ -196,7 +164,6 @@ public class MapOperations {
 	 * @param countryName Name of the Country for which serial number to be find.
 	 * @return serial number of the given Country.
 	 */
-
 	public int getCountryNumber(String countryName) {
 		int countryNumber = 0;
 		for (int i = 0; i < gameMap.getCountries().size()
@@ -214,7 +181,6 @@ public class MapOperations {
 	 *                      find.
 	 * @return Country Name.
 	 */
-
 	public String getCountryName(int countryNumber) {
 		String countryName = "";
 		countryName = gameMap.getCountries().get(countryNumber).getCountryName();
@@ -226,7 +192,6 @@ public class MapOperations {
 	 *
 	 * @param CountriesString String of all Countries details.
 	 */
-
 	public void fillCountriesInGameMap(String CountriesString) {
 		String[] countriesList = CountriesString.split("\\r\\n");
 
@@ -250,7 +215,6 @@ public class MapOperations {
 	 * @param neighboringCountriesString String of all Neighboring Countries
 	 *                                   details.
 	 */
-
 	public void fillNeighboringCountriesInGameMap(String neighboringCountriesString) {
 		String[] neighbouringCountriesList = neighboringCountriesString.split("\\r\\n");
 
@@ -275,7 +239,6 @@ public class MapOperations {
 	 * @param mapFileName      File Name of the writing file.
 	 * @throws IOException IO
 	 */
-
 	public void writeGameMap(String ouputGameMapName, String mapFileName) throws IOException {
 
 		String mapFormat = format;
@@ -298,27 +261,6 @@ public class MapOperations {
 		catch (IOException e) {
 			System.err.println("File not found exception");
 		}
-
-//		File GameMapName = new File(ouputGameMapName);
-//		FileWriter fw = new FileWriter(GameMapName);
-//		BufferedWriter bw = new BufferedWriter(fw);
-//		String fileData = getFileTags(mapFileName);
-//		try {
-//			bw.write(fileData);
-//			bw.write("\r\n\r\n");
-//			String continentsData = getContinents();
-//			bw.write(continentsData);
-//			bw.write("\r\n\r\n");
-//			String countriesData = getCountries();
-//			bw.write(countriesData);
-//			bw.write("\r\n\r\n");
-//			String boundariesData = getBoundaries();
-//			bw.write(boundariesData);
-//			bw.close();
-//		} catch (IOException e) {
-//			System.err.println("File not found exception");
-//		}
-
 	}
 
 	/**
@@ -327,7 +269,6 @@ public class MapOperations {
 	 * @param ouputGameMapName output File Name.
 	 * @return String of file Tags.
 	 */
-
 	public String getFileTags(String ouputGameMapName) {
 		String mapNameDetails = "\r\n\r\nname " + ouputGameMapName + " Map";
 		String fileTag = "\r\n\r\n[files]\r\n";
@@ -342,7 +283,6 @@ public class MapOperations {
 	 * @return String consists of continent details in a standard format.
 	 *
 	 */
-
 	public String getContinents() {
 		String continentsDetails = "[continents]";
 		for (int i = 0; i < gameMap.getContinents().size(); i++) {
@@ -360,7 +300,6 @@ public class MapOperations {
 	 * @return String consists of continent details in a standard format.
 	 *
 	 */
-
 	public String getCountries() {
 		String countriesDetails = "[countries]";
 		for (int i = 0; i < gameMap.getCountries().size(); i++) {
@@ -378,7 +317,6 @@ public class MapOperations {
 	 * @return String consists of borders details in a standard format.
 	 *
 	 */
-
 	public String getBoundaries() {
 		String boundariesDetails = "[borders]";
 
@@ -401,7 +339,6 @@ public class MapOperations {
 	 * @param continentName         Continent Name to be Added.
 	 * @param continentControlValue Continent Control Value to be Added.
 	 */
-
 	public void addContinentToGameMap(String continentName, int continentControlValue) {
 		Continent continent = new Continent();
 		continent.setContinentName(continentName);
@@ -415,7 +352,6 @@ public class MapOperations {
 	 * @param countryName   Country Name to be added.
 	 * @param continentName Continent Name to which country to be added.
 	 */
-
 	public void addCountryToGameMap(String countryName, String continentName) {
 		Country country = new Country();
 		country.setCountryName(countryName);
@@ -433,7 +369,6 @@ public class MapOperations {
 	 * @param countryName         Country Name to which border to be added.
 	 * @param neighborCountryName Country Name to which border to be added.
 	 */
-
 	public void addNeighborCountryToGameMap(String countryName, String neighborCountryName) {
 		Country country = null;
 		int countryIndex = getCountryNumber(countryName) - 1;
@@ -450,7 +385,6 @@ public class MapOperations {
 	 *
 	 * @param countryName Country Name which needs to be removed from map.
 	 */
-
 	public void removeCountryFromGameMap(String countryName) {
 		// Get the country Object to be removed
 		int removeCountryIndex = getCountryNumber(countryName) - 1;
@@ -501,7 +435,6 @@ public class MapOperations {
 	 * @param neighborRemoveCountryName Country Name for which neighbor needs to be
 	 *                                  removed.
 	 */
-
 	public void removeNeighborCountryFromGameMap(String countryName, String neighborRemoveCountryName) {
 		int desiredCountryIndex = 0;
 		int desiredNeighborIndex = 0;
@@ -525,7 +458,6 @@ public class MapOperations {
 	 *
 	 * @param continentName Continent Name to be removed from Map.
 	 */
-
 	public void removeContinentFromGameMap(String continentName) {
 		int removeContinentIndex = getContinentNumber(continentName) - 1;
 		java.util.List<Country> removeCountries = gameMap.getContinents().get(removeContinentIndex)
@@ -547,7 +479,6 @@ public class MapOperations {
 	 * @param countryName Country Name to Check.
 	 * @return boolean true if exist or else false.
 	 */
-
 	public boolean doesCountryExit(String countryName) {
 		for (int i = 0; i < gameMap.getCountries().size(); i++) {
 			if (gameMap.getCountries().get(i).getCountryName().equalsIgnoreCase(countryName)) {
@@ -564,7 +495,6 @@ public class MapOperations {
 	 * @param continentName Continent Name to Check.
 	 * @return boolean true if exist or else false.
 	 */
-
 	public boolean doesContinentExit(String continentName) {
 		for (int i = 0; i < gameMap.getContinents().size(); i++) {
 			if (gameMap.getContinents().get(i).getContinentName().equalsIgnoreCase(continentName)) {
@@ -577,7 +507,6 @@ public class MapOperations {
 	/**
 	 * This Method display Map details to the user.
 	 */
-
 	public void showmapDetails() {
 		System.out.println("Continents");
 		System.out.println("----------");
@@ -600,7 +529,6 @@ public class MapOperations {
 	 * @param countryName Country Name to check.
 	 * @return true if unique or else false.
 	 */
-
 	public boolean isCountryUnique(String countryName) {
 		for (int i = 0; i < gameMap.getCountries().size(); i++) {
 			if (gameMap.getCountries().get(i).getCountryName().equalsIgnoreCase(countryName)) {
@@ -616,7 +544,6 @@ public class MapOperations {
 	 * @param continentName Continent Name to Check.
 	 * @return true if unique or else false.
 	 */
-
 	public boolean isContinentUnique(String continentName) {
 		for (int i = 0; i < gameMap.getContinents().size(); i++) {
 			if (gameMap.getContinents().get(i).getContinentName().equalsIgnoreCase(continentName)) {
@@ -633,7 +560,6 @@ public class MapOperations {
 	 * @param neighborCountryName neighbor Country Name to check.
 	 * @return boolean true if unique or else false.
 	 */
-
 	public boolean isBorderUnique(String countryName, String neighborCountryName) {
 		int desiredCountryIndex = getCountryNumber(countryName) - 1;
 		Country currentCountry = gameMap.getCountries().get(desiredCountryIndex);
@@ -652,7 +578,6 @@ public class MapOperations {
 	 *
 	 * @return true if continent rule is satisfied or else false.
 	 */
-
 	public boolean isContinentRuleSatisfied() {
 		if (gameMap.getContinents().size() > 2) {
 			return true;
@@ -668,7 +593,6 @@ public class MapOperations {
 	 * @return boolean true if validation is successful or else false.
 	 * @throws IOException
 	 */
-
 	private boolean validateMapDetails() {
 		MapValidation validate = new MapValidation();
 		ConnectedGraph connect = new ConnectedGraph();
@@ -701,7 +625,6 @@ public class MapOperations {
 	 * @param cmdDetails command string
 	 * @return single command as string
 	 */
-
 	public String singleCommandOperation(String cmdDetails[]) {
 		String command = "";
 		for (int i = 0; i < cmdDetails.length; i++) {
@@ -716,7 +639,6 @@ public class MapOperations {
 	 * @param fullCommand input command with multiple add and remove
 	 * @return single command in arrayList
 	 */
-
 	public ArrayList<String> multipleCommands(String fullCommand) {
 
 		String[] commandArrays = fullCommand.split(" ");
@@ -798,7 +720,6 @@ public class MapOperations {
 	 * @throws IOException IO
 	 *
 	 */
-
 	public GameMap editMap() throws IOException {
 
 		boolean flag = true;
@@ -1102,7 +1023,6 @@ public class MapOperations {
 	 *
 	 * @return Game Map with details
 	 */
-
 	public GameMap createFile() {
 		GameMap map = null;
 		try {
@@ -1119,7 +1039,6 @@ public class MapOperations {
 	 * @return Game Map with details
 	 * @throws IOException IO
 	 */
-
 	public GameMap loadFile() throws IOException {
 		boolean flag = true;
 		while (flag) {
