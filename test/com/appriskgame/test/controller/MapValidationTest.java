@@ -17,9 +17,9 @@ import org.junit.Before;
  */
 public class MapValidationTest {
 	MapValidation mapValidation;
-	private String validMap,validMapConquest, invalidMap,invalidMapConquest, notConnectedGraph;
-	private String validCountryData, invalidCountryData,validCountryDataConquest,invalidCountryDataConquest;
-	private String validContinentData, invalidContinentData,validContinentDataConquest,invalidContinentDataConquest;
+	private String validMap, validMapConquest, invalidMap, invalidMapConquest, notConnectedGraph;
+	private String validCountryData, invalidCountryData, validCountryDataConquest, invalidCountryDataConquest;
+	private String validContinentData, invalidContinentData, validContinentDataConquest, invalidContinentDataConquest;
 	private String validBoundaryData, invalidBoundaryData;
 
 	/**
@@ -56,7 +56,7 @@ public class MapValidationTest {
 	public void testIsValidMap() throws IOException {
 		assertTrue(mapValidation.validateMapDomination(validMap));
 	}
-	
+
 	/**
 	 * Test method for testing whether the Conquest map file is valid.
 	 * 
@@ -86,6 +86,7 @@ public class MapValidationTest {
 	public void testIsInvalidMapConquest() throws IOException {
 		assertFalse(mapValidation.validateMapConquest(invalidMapConquest));
 	}
+
 	/**
 	 * Test method for testing whether the map connected or not.
 	 * 
@@ -131,6 +132,7 @@ public class MapValidationTest {
 		mapValidation.validateContinents(validContinentDataConquest, "Conquest");
 		assertFalse(mapValidation.validateCountries(invalidCountryDataConquest, "Conquest"));
 	}
+
 	/**
 	 * Test method for validating the valid continent data.
 	 */
@@ -146,7 +148,7 @@ public class MapValidationTest {
 	public void testIsInvalidContinentData() {
 		assertFalse(mapValidation.validateContinents(invalidContinentData, "domination"));
 	}
-	
+
 	/**
 	 * Test method for validating the valid continent data.
 	 */

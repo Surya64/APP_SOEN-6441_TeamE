@@ -7,6 +7,11 @@ import org.junit.Test;
 
 import com.appriskgame.controller.GameSaveLoad;
 
+/**
+ * This Class for test the save and load game map
+ * @author Sai
+ *
+ */
 public class SaveAndLoadTest {
 
 	String savedFilePath;
@@ -23,6 +28,9 @@ public class SaveAndLoadTest {
 		gameSaveLoad = new GameSaveLoad();
 	}
 
+	/**
+	 * This method check whether saved map file exist or not
+	 */
 	@Test
 	public void testSavedGameExists() {
 		assertTrue(gameSaveLoad.isSavedGameExists(savedFilePath, savedFileName));

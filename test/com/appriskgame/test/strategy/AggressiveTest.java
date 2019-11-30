@@ -16,7 +16,6 @@ import com.appriskgame.strategy.Aggressive;
  * This class aims to test the Aggressive class
  * 
  * @author Dolly
- *
  */
 public class AggressiveTest {
 
@@ -125,7 +124,7 @@ public class AggressiveTest {
 	 * This method tests the reinforcement for aggressive checks whether it
 	 * reinforces its strongest country or not
 	 * 
-	 * @throws Exception
+	 * @throws Exception IO Exception
 	 */
 	@Test
 	public void reinforcementPhaseTest() throws Exception {
@@ -147,7 +146,7 @@ public class AggressiveTest {
 	 * This method tests the fortification for aggressive checks whether it
 	 * fortifies its strongest country or not
 	 * 
-	 * @throws IOException
+	 * @throws IOException IO Exception
 	 */
 	@Test
 	public void fortificationPhaseTest() throws IOException {

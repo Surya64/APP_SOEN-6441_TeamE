@@ -13,8 +13,7 @@ import org.junit.Test;
 import com.appriskgame.controller.Tournament;
 
 /**
- * Tournament class for Player class Method of startup ,reinforcement and
- * fortification
+ * This Class to test the tournament methods
  * 
  * @author dollymodha
  * @author sai
