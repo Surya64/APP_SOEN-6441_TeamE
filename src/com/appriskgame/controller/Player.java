@@ -627,7 +627,7 @@ public class Player {
 			}
 		}
 		CardController cardController = new CardController();
-		if (!mapDetails.getMode().equalsIgnoreCase("tournament")) {
+		if (!(mapDetails.getMode().equalsIgnoreCase("tournament") || mapDetails.getMode().equalsIgnoreCase("test"))) {
 			player.setCurrentPlayer(player);
 		}
 		int exchangeInCard = cardController.exchangeCards(player);
