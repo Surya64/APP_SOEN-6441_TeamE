@@ -133,7 +133,7 @@ public class BenevolentTest {
 	@Test
 	public void reinforcementPhaseTest() throws Exception {
 		benevolent.reinforcementPhase(player, mapGraph);
-		assertEquals(8, country.getNoOfArmies());
+		assertEquals(11, country.getNoOfArmies());
 	}
 
 	/**
