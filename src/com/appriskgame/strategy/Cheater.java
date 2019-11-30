@@ -110,8 +110,11 @@ public class Cheater implements PlayerStrategy {
 						country.setNoOfArmies(country.getNoOfArmies() * 2);
 						System.out.println("Cheater fortified " + country.getCountryName() + " with "
 								+ country.getNoOfArmies() * 2);
-						gameMap.setActionMsg("Cheater fortified " + country.getCountryName() + " with "
-								+ country.getNoOfArmies() * 2, "action");
+						if (!(gameMap.getMode().equalsIgnoreCase("tournament")
+								|| gameMap.getMode().equalsIgnoreCase("test"))) {
+							gameMap.setActionMsg("Cheater fortified " + country.getCountryName() + " with "
+									+ country.getNoOfArmies() * 2, "action");
+						}
 						break;
 					}
 				}
