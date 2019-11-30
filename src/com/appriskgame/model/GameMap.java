@@ -15,7 +15,7 @@ import com.appriskgame.view.WorldDominationView;
  * @author Surya
  * @author Sahana
  */
-public class GameMap extends Observable implements Serializable{
+public class GameMap extends Observable implements Serializable {
 	private ArrayList<Country> countries = new ArrayList<Country>();
 	private ArrayList<Continent> continents = new ArrayList<Continent>();
 	private ArrayList<GamePlayer> players = new ArrayList<GamePlayer>();
@@ -26,8 +26,8 @@ public class GameMap extends Observable implements Serializable{
 	public String actionMsg;
 	public String message;
 	public static int cardExchangeCountinTheGame = 0;
-	private String mode="";
-	private String format="";
+	private String mode = "";
+	private String format = "";
 
 	public static int getCardExchangeCountinTheGame() {
 		return cardExchangeCountinTheGame;
@@ -42,7 +42,7 @@ public class GameMap extends Observable implements Serializable{
 		this.addObserver(worldDominationView);
 		this.addObserver(playerView);
 	}
-	
+
 	/**
 	 * Attach the observable
 	 *
@@ -212,24 +212,44 @@ public class GameMap extends Observable implements Serializable{
 		this.players = players;
 	}
 
-	@Override
-	public String toString() {
-		return "[continents=" + continents + ", countries=" + countries + ", countrySet=" + countrySet + "]";
-	}
-
+	/**
+	 * gets the mode of game
+	 * 
+	 * @return mode of game
+	 */
 	public String getMode() {
 		return mode;
 	}
 
+	/**
+	 * sets the mode of game
+	 * 
+	 * @param mode type of mode
+	 */
 	public void setMode(String mode) {
 		this.mode = mode;
 	}
 
+	/**
+	 * get the format
+	 * 
+	 * @return format
+	 */
 	public String getFormat() {
 		return format;
 	}
 
+	/**
+	 * sets the format
+	 * 
+	 * @param format format
+	 */
 	public void setFormat(String format) {
 		this.format = format;
+	}
+
+	@Override
+	public String toString() {
+		return "[continents=" + continents + ", countries=" + countries + ", countrySet=" + countrySet + "]";
 	}
 }

@@ -28,7 +28,7 @@ import com.appriskgame.model.GamePlayer;
 public class PlayerTest {
 	private GamePlayer player1, player2;
 	private Country country1, country2, country3, country4, country5, country6, country7, country8, country9, country10,
-			country11, country12, country13, country14, country15;
+			country11, country12, country13, country14;
 	private Continent continent;
 	private Country country, toCountry, fromCountry, toCountry1, countryStart;
 	private ArrayList<String> NeighbourCountries;
@@ -47,8 +47,8 @@ public class PlayerTest {
 	 */
 	@Before
 	public void initializePlayerTest() {
-		 savedFilePath="C:\\Users\\saich\\Desktop\\Saicharanteja_TournamentChanges/resources/savedgames/";
-		 savedFileName="Content";
+		savedFilePath = "C:\\Users\\saich\\Desktop\\Saicharanteja_TournamentChanges/resources/savedgames/";
+		savedFileName = "Content";
 		player = new Player();
 		continent = new Continent();
 		player1 = new GamePlayer();
@@ -303,9 +303,5 @@ public class PlayerTest {
 	public void testNotableToMoveArmy() {
 		assertFalse(player.ableToMoveArmy(country1, 0));
 	}
-	
-
-	
-	
 
 }

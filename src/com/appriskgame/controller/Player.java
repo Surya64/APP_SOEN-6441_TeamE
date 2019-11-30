@@ -850,7 +850,6 @@ public class Player {
 					mapDetails.getPlayers().remove(i);
 					break;
 				}
-
 			}
 		}
 	}
@@ -1412,23 +1411,12 @@ public class Player {
 	 */
 	public void continueGame(GameMap gameMapcopy) throws Exception {
 
-//		GameMap gameMap = new GameMap("test");
-//		GameMap gameMap = new GameMap();
-
-//		gameMap = (GameMap)gameMapcopy.clone();
 		GameMap gameMap = gameMapcopy;
 
 		playerNames = new ArrayList<String>();
 
 		playerNames = setplayList(gameMap.getPlayers());
 		playersList = gameMap.getPlayers();
-//		gameMap.getPlayers();
-//		for (String player : playerNames) {
-//			GamePlayer gamePlayers = new GamePlayer();
-//			gamePlayers.setPlayerName(player);
-//			playersList.add(gamePlayers);
-//		}
-//		gameMap.setPlayers(playersList);
 		boolean mapFlag = true;
 		boolean gameContinue;
 		gameMap.attach();
@@ -1517,36 +1505,6 @@ public class Player {
 		} while (gameContinue);
 	}
 
-	
-
-	/**
-	 * This method is used to get the correct player list
-	 * 
-	 * @param gameMap GameMap object
-	 * @return correct order of list of player
-	 */
-	public ArrayList<GamePlayer> getCorrectPlayList(GameMap gameMap) {
-		ArrayList<GamePlayer> correctOrderPlayList = new ArrayList<GamePlayer>();
-		int currentIndex = 0;
-		for (int i = 0; i < gameMap.getPlayers().size(); i++) {
-			GamePlayer current = gameMap.getPlayers().get(i);
-			if (current.getPlayerName().toString().equalsIgnoreCase(gameMap.getCurrentPlayer())) {
-				currentIndex = i;
-
-				for (int j = currentIndex + 1; j < gameMap.getPlayers().size(); j++) {
-					GamePlayer nextGame = gameMap.getPlayers().get(j);
-					correctOrderPlayList.add(nextGame);
-				}
-			}
-		}
-
-		for (int i = 0; i <= currentIndex; i++) {
-			GamePlayer current = gameMap.getPlayers().get(i);
-			correctOrderPlayList.add(current);
-		}
-		return correctOrderPlayList;
-	}
-
 	/**
 	 * This method gets the adjacent country object for the entered country
 	 * 
@@ -1584,7 +1542,7 @@ public class Player {
 	}
 
 	/**
-	 * This method is used to starts the tournament mode.
+	 * This method is used to starts the tournament game mode.
 	 * 
 	 * @param gameMap gameMap object
 	 * @param players players in the game
@@ -1766,5 +1724,4 @@ public class Player {
 		} while (gameContinue && currentTurn <= maxTurns && winnerAnnoced == 0);
 		return "Draw-Draw";
 	}
-
 }

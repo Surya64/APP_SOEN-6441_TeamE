@@ -206,7 +206,6 @@ public class Aggressive implements PlayerStrategy {
 		if (strongestCountry == null) {
 			strongestCountry = getStrongestCountry(mapGraph, player);
 		}
-
 		return strongestCountry;
 	}
 

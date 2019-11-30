@@ -18,7 +18,6 @@ import com.appriskgame.strategy.Cheater;
  * This class aims to test the Cheater class
  * 
  * @author Dolly
- *
  */
 public class CheaterTest {
 
@@ -127,7 +126,7 @@ public class CheaterTest {
 	 * This method tests the reinforcement for cheater checks whether it reinforces
 	 * its all countries double
 	 * 
-	 * @throws Exception
+	 * @throws Exception IO Exception
 	 */
 	@Test
 	public void reinforcementPhaseTest() throws Exception {
@@ -139,7 +138,7 @@ public class CheaterTest {
 	 * This method tests the fortification for cheater whether it doubles the number
 	 * of armies on its countries that have neighbors that belong to other players.
 	 * 
-	 * @throws IOException
+	 * @throws IOException IO Exception
 	 */
 	@Test
 	public void fortificationPhaseTest() throws IOException {

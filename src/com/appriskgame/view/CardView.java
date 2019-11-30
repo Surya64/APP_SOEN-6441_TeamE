@@ -103,6 +103,9 @@ public class CardView implements Observer {
 		frmPlayerCardView.setVisible(true);
 	}
 
+	/**
+	 * Method to update the card view screen
+	 */
 	@Override
 	public void update(Observable o, Object arg) {
 		numOfInfantry = 0;

@@ -84,7 +84,6 @@ public class Benevolent implements PlayerStrategy {
 			}
 		}
 		System.out.println("Benevolent fortification complete");
-
 	}
 
 	/**
@@ -125,5 +124,4 @@ public class Benevolent implements PlayerStrategy {
 		}
 		return strongestCountry;
 	}
-
 }

@@ -4,6 +4,12 @@ import java.io.IOException;
 
 import com.appriskgame.model.GameMap;
 
+/**
+ * read and write game map interface
+ * 
+ * @author Sai
+ *
+ */
 public interface ReadAndWrite {
 	public GameMap readGameMap(String inputGameMapName) throws IOException;
 

@@ -41,6 +41,9 @@ public class WorldDominationView implements Observer {
 		frame.setVisible(true);
 	}
 
+	/**
+	 * This method is used to update the domination view
+	 */
 	@Override
 	public void update(Observable o, Object arg) {
 		GameMap gameMap = (GameMap) o;
@@ -83,9 +86,8 @@ public class WorldDominationView implements Observer {
 						+ (continents.isEmpty() ? "None" : continents) + "\n";
 
 			}
-			// String currentText = log.getText();
+
 			String newInfo = "*******-------*******" + " " + output;
-			// String appendLog = newLog + "\n" + currentText;
 			info.setText(newInfo);
 			frame.revalidate();
 			frame.repaint();

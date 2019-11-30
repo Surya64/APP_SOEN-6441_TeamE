@@ -12,7 +12,6 @@ import com.appriskgame.model.GamePlayer;
  * players.
  * 
  * @author Surya
- *
  */
 public interface PlayerStrategy {
 	/**

@@ -22,9 +22,9 @@ import com.appriskgame.strategy.Benevolent;
  *
  */
 public class BenevolentTest {
-	
+
 	private static Benevolent benevolent;
-	
+
 	private static GameMap mapGraph;
 	private static GamePlayer player, player1;
 	private static ArrayList<GamePlayer> players;
@@ -128,7 +128,7 @@ public class BenevolentTest {
 	 * This method tests the reinforcement for benevolent checks whether it
 	 * reinforces its weakest country or not
 	 * 
-	 * @throws Exception
+	 * @throws Exception IO Exception
 	 */
 	@Test
 	public void reinforcementPhaseTest() throws Exception {
@@ -145,7 +145,7 @@ public class BenevolentTest {
 		assertSame(country1, benevolent.getStrongestCountry(mapGraph, player));
 
 	}
-	
+
 	/**
 	 * This method tests the strongest country checks whether it attack with its
 	 * strongest country or not
@@ -160,7 +160,7 @@ public class BenevolentTest {
 	 * This method tests the fortification for benevolent checks whether it
 	 * fortifies its weakest country or not
 	 * 
-	 * @throws IOException
+	 * @throws IOException IO Exception
 	 */
 	@Test
 	public void fortificationPhaseTest() throws IOException {

@@ -316,9 +316,9 @@ public class MapValidation {
 	 * This method validates the map which is loaded and stores the details of valid
 	 * data in the form of GameMap object.
 	 *
-	 * @param fileName - Name of file which will be loaded.
-	 * @return flag - To check if file content is valid.
-	 * @throws IOException -throws for input output
+	 * @param fileName Name of file which will be loaded.
+	 * @return flag To check if file content is valid.
+	 * @throws IOException throws for input output
 	 */
 	public boolean validateMapConquest(String fileName) throws IOException {
 

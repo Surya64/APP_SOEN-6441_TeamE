@@ -17,7 +17,6 @@ import com.appriskgame.model.GamePlayer;
  * 
  * @author sahana
  * @author surya
- *
  */
 public class Cheater implements PlayerStrategy {
 
@@ -52,7 +51,6 @@ public class Cheater implements PlayerStrategy {
 			System.out.println(currentCountry.getCountryName() + " reinforced with " + reinforcementArmies);
 		}
 		player.setNoOfArmies(0);
-
 	}
 
 	/**
@@ -121,7 +119,5 @@ public class Cheater implements PlayerStrategy {
 			}
 			System.out.println("Cheater fortification complete");
 		}
-
 	}
-
 }
