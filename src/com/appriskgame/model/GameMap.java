@@ -111,8 +111,8 @@ public class GameMap extends Observable implements Serializable {
 	/**
 	 * This method sets the message for observer of domination and knows them when
 	 * it is changed.
-	 * 
-	 * @param gameMap Game map object
+	 * @param gameMap game map object
+	 * @param message Action type message
 	 */
 	public void setDomination(GameMap gameMap, String message) {
 		this.gameMap = gameMap;
