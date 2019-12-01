@@ -1,4 +1,6 @@
 com.appriskgame.controller
 com.appriskgame.model
-com.appriskgame.test
+com.appriskgame.strategy
+com.appriskgame.test.controller
+com.appriskgame.test.strategy
 com.appriskgame.view

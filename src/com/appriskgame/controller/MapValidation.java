@@ -52,6 +52,7 @@ public class MapValidation {
 	 * the uploaded file and check the correct format.
 	 *
 	 * @param tagData Value of the continent tag
+	 * @param type    map type
 	 * @return flag to check if entered continents are valid
 	 */
 	public boolean validateContinents(String tagData, String type) {
@@ -121,6 +122,7 @@ public class MapValidation {
 	 * the uploaded file and check the correct format.
 	 *
 	 * @param tagData Value of the country tag
+	 * @param type    map type
 	 * @return flag to check if entered countries are valid
 	 */
 	public boolean validateCountries(String tagData, String type) {

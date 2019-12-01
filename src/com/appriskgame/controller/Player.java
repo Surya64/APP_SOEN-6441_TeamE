@@ -1292,7 +1292,9 @@ public class Player {
 	 *
 	 * @param player  The player who is doing fortification.
 	 * @param gameMap GameMap object
+	 * @return true if fortification is possible else false
 	 * @throws IOException throws Input-Output exception
+	 * 
 	 */
 	public boolean startGameFortification(GamePlayer player, GameMap gameMap) throws IOException {
 		if (player.getPlayerCountries().size() >= 2) {
@@ -1332,12 +1334,14 @@ public class Player {
 	}
 
 	/**
+	 * 
 	 * This method takes the values for each player from the startFortification
 	 * method and does the manipulation of armies and assign the armies
 	 *
 	 * @param fromCountry The country from where player want to move army
 	 * @param toCountry   The country to where player want to move army
 	 * @param armiesCount Count of armies player wish to move
+	 * @return true if armies are moved else false
 	 */
 	public boolean moveArmies(Country fromCountry, Country toCountry, int armiesCount) {
 		boolean neighbourCountries = false;
